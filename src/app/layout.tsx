@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     url: "/",
     images: [
       {
-        url: "/og.png",
-        width: 1729,
-        height: 910,
+        url: "/icon.png",
+        width: 1254,
+        height: 1254,
         alt: ja.metadata.openGraphImageAlt,
       },
     ],
@@ -47,10 +47,14 @@ export const metadata: Metadata = {
     description: ja.metadata.description,
     images: [
       {
-        url: "/og.png",
+        url: "/icon.png",
         alt: ja.metadata.openGraphImageAlt,
       },
     ],
+  },
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/icon.png", type: "image/png" }],
   },
   manifest: "/manifest.webmanifest",
 };

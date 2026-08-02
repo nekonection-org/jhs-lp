@@ -1,4 +1,5 @@
-import { ArrowUp, ExternalLink, Shield } from "lucide-react";
+import { ArrowUp, ExternalLink } from "lucide-react";
+import Image from "next/image";
 
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
@@ -18,8 +19,14 @@ export function Footer() {
               className="inline-flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
               href="#top"
             >
-              <span className="grid size-9 place-items-center rounded-lg border border-[var(--border-strong)] bg-[var(--surface-secondary)] text-[var(--accent-strong)]">
-                <Shield aria-hidden="true" className="size-[1.1rem]" />
+              <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface-secondary)]">
+                <Image
+                  alt=""
+                  className="object-cover"
+                  fill
+                  sizes="36px"
+                  src="/icon.png"
+                />
               </span>
               <span className="font-bold tracking-[-0.025em]">
                 Japan Hideaway Server

@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Menu, Shield, X } from "lucide-react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
@@ -120,11 +121,13 @@ export function Header() {
           className="group mr-auto inline-flex min-h-11 items-center gap-3 rounded-lg pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
           href="#top"
         >
-          <span className="grid size-9 place-items-center rounded-lg border border-[var(--border-strong)] bg-[var(--surface)] text-[var(--accent-strong)] transition-colors group-hover:border-[var(--accent)]">
-            <Shield
-              aria-hidden="true"
-              className="size-[1.15rem]"
-              strokeWidth={1.8}
+          <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface)] transition-[border-color,transform] duration-200 group-hover:scale-[1.04] group-hover:border-[var(--accent)]">
+            <Image
+              alt=""
+              className="object-cover"
+              fill
+              sizes="36px"
+              src="/icon.png"
             />
           </span>
           <span className="flex flex-col">

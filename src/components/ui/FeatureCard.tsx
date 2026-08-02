@@ -30,13 +30,17 @@ export function FeatureCard({
   return (
     <article
       className={cn(
-        "interactive-card surface-card flex h-full flex-col p-5 sm:p-6",
+        "interactive-card surface-card group relative flex h-full flex-col overflow-hidden p-5 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_18px_40px_color-mix(in_srgb,var(--background)_22%,transparent)] sm:p-6",
         important && "rule-card",
         className,
       )}
       data-important={important || undefined}
     >
-      <div className="mb-5 grid size-10 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] text-[var(--accent-strong)]">
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-[var(--accent)] transition-transform duration-200 group-hover:scale-x-100"
+      />
+      <div className="mb-5 grid size-10 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] text-[var(--accent-strong)] transition-[transform,border-color] duration-200 group-hover:-rotate-2 group-hover:scale-105 group-hover:border-[color-mix(in_srgb,var(--accent)_40%,var(--border))]">
         <ContentIcon className="size-5" name={icon} />
       </div>
       <h3 className="text-lg font-bold tracking-[-0.025em] text-[var(--text-primary)]">

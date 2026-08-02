@@ -25,6 +25,9 @@ test("トップページに必須セクションと単一の見出しが表示�
     page.getByRole("heading", { level: 1, name: "Japan Hideaway Server" }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+  await expect(page.locator('header img[src*="icon.png"]')).toBeVisible();
+  await expect(page.locator('#top img[src*="icon.png"]')).toHaveCount(2);
+  await expect(page.getByText("確認済み", { exact: true })).toHaveCount(0);
 
   for (const id of sectionIds) {
     await expect(page.locator(`#${id}`)).toHaveCount(1);

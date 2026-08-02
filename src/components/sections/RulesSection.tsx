@@ -11,7 +11,7 @@ import { getMatchingItem } from "@/lib/content";
 export function RulesSection() {
   return (
     <section
-      className="section-shell border-y border-[var(--border)] bg-[var(--surface-secondary)]"
+      className="section-shell border-y border-[var(--border)] bg-[linear-gradient(135deg,var(--surface-secondary),color-mix(in_srgb,var(--surface)_58%,var(--surface-secondary)))]"
       id="rules"
     >
       <Container>

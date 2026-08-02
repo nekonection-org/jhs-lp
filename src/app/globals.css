@@ -142,58 +142,6 @@ html[data-locale="en"] [data-locale-content="en"] {
   box-shadow: 0 1px 0 color-mix(in srgb, var(--text-primary) 4%, transparent);
 }
 
-.hero-atmosphere {
-  isolation: isolate;
-  background:
-    radial-gradient(
-      circle at 78% 24%,
-      color-mix(in srgb, var(--accent) 14%, transparent),
-      transparent 31rem
-    ),
-    linear-gradient(
-      125deg,
-      color-mix(in srgb, var(--surface-secondary) 92%, transparent),
-      var(--background) 62%
-    );
-}
-
-.hero-atmosphere::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--border) 35%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--border) 35%, transparent) 1px,
-      transparent 1px
-    );
-  background-position: center;
-  background-size: 4.25rem 4.25rem;
-  content: "";
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.48), transparent 82%);
-  opacity: 0.32;
-}
-
-.hero-atmosphere::after {
-  position: absolute;
-  right: max(-9rem, -12vw);
-  bottom: -11rem;
-  z-index: -1;
-  width: min(35rem, 78vw);
-  aspect-ratio: 1;
-  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 4rem color-mix(in srgb, var(--accent) 3%, transparent),
-    0 0 0 9rem color-mix(in srgb, var(--accent) 2%, transparent);
-  content: "";
-  opacity: 0.68;
-}
-
 .rule-card[data-important="true"] {
   border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
 }
@@ -231,10 +179,6 @@ html[data-locale="en"] [data-locale-content="en"] {
 @media (max-width: 639px) {
   .section-shell {
     padding-block: 4rem;
-  }
-
-  .hero-atmosphere::before {
-    background-size: 3.25rem 3.25rem;
   }
 }
 

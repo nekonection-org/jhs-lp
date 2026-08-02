@@ -11,7 +11,7 @@ import { getMatchingItem } from "@/lib/content";
 export function FaqSection() {
   return (
     <section
-      className="section-shell border-y border-[var(--border)] bg-[var(--surface-secondary)]"
+      className="section-shell border-y border-[var(--border)] bg-[linear-gradient(225deg,var(--surface-secondary),color-mix(in_srgb,var(--accent)_4%,var(--surface-secondary)))]"
       id="faq"
     >
       <Container className="grid gap-10 lg:grid-cols-[minmax(16rem,0.72fr)_minmax(0,1.28fr)] lg:gap-16">

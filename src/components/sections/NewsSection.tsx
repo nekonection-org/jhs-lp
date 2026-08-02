@@ -30,7 +30,7 @@ export function NewsSection() {
 
   return (
     <section
-      className="section-shell border-y border-[var(--border)] bg-[var(--surface-secondary)]"
+      className="section-shell border-y border-[var(--border)] bg-[linear-gradient(145deg,var(--surface-secondary),color-mix(in_srgb,var(--surface)_62%,var(--surface-secondary)))]"
       id="news"
     >
       <Container>
