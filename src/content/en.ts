@@ -255,34 +255,6 @@ export const en = {
         status: "confirmed",
       },
       {
-        id: "wipe-schedule",
-        question: "When does the server wipe?",
-        answer:
-          "Map and blueprint wipes take place every Friday at 18:00 Japan time.",
-        status: "confirmed",
-      },
-      {
-        id: "team-size",
-        question: "What is the maximum team size?",
-        answer:
-          "The maximum team size is four. Sharing supplies, fighting together, or sharing a base with players outside your team is prohibited.",
-        status: "confirmed",
-      },
-      {
-        id: "raid-window",
-        question: "What are the designated raiding hours?",
-        answer:
-          "Raiding is allowed from 18:00 to 24:00 on weekdays and 12:00 to 24:00 on Saturday and Sunday. Destroying another player's building outside these hours results in a ban until the next wipe.",
-        status: "confirmed",
-      },
-      {
-        id: "reporting",
-        question: "How do I report a rule violation?",
-        answer:
-          "Use Rust's F7 report for suspected cheating. Send recordings and reports of other rule violations to staff through a Discord ticket.",
-        status: "confirmed",
-      },
-      {
         id: "ban-inquiries",
         question: "How can I ask about a ban?",
         answer:
@@ -303,6 +275,13 @@ export const en = {
           "This website can be displayed in Japanese and English. In-game and staff support is provided in Japanese; translation tools are used for other languages.",
         status: "confirmed",
       },
+      {
+        id: "about-streaming",
+        question: "Is streaming or video posting allowed?",
+        answer:
+          "Streaming and video posting are allowed. Please follow Facepunch's Terms of Service and Rust's streaming rules.",
+        status: "confirmed", 
+      }
     ],
   },
   moderator: {

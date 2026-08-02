@@ -254,33 +254,6 @@ export const ja = {
         status: "confirmed",
       },
       {
-        id: "wipe-schedule",
-        question: "ワイプはいつ行われますか？",
-        answer: "Map・BPワイプは、毎週金曜日の日本時間18:00に行います。",
-        status: "confirmed",
-      },
-      {
-        id: "team-size",
-        question: "チーム人数の上限は何人ですか？",
-        answer:
-          "最大4人です。チーム外プレイヤーとの物資共有、共闘、拠点共有は禁止しています。",
-        status: "confirmed",
-      },
-      {
-        id: "raid-window",
-        question: "レイド可能時間を教えてください。",
-        answer:
-          "平日は18:00〜24:00、土・日は12:00〜24:00のみレイド可能です。時間外の建築物破壊は次回ワイプまでのBAN対象となります。",
-        status: "confirmed",
-      },
-      {
-        id: "reporting",
-        question: "ルール違反はどのように報告しますか？",
-        answer:
-          "チートなどが疑われる場合はRust内のF7レポートを利用してください。録画などの証拠やその他のルール違反は、Discordのチケットから運営へご報告ください。",
-        status: "confirmed",
-      },
-      {
         id: "ban-inquiries",
         question: "BANについて問い合わせる方法はありますか？",
         answer:
@@ -301,6 +274,13 @@ export const ja = {
           "このサイトは日本語と英語で表示できます。ゲーム内および運営サポートの対応言語は日本語です。他言語は翻訳ツールの利用をしています。",
         status: "confirmed",
       },
+      {
+        id: "about-streaming",
+        question: "配信や動画投稿は可能ですか？",
+        answer:
+          "配信や動画投稿は可能です。Facepunch 利用規約および RUST の配信ルールに則して行ってください。",
+        status: "confirmed",
+      }
     ],
   },
   moderator: {

@@ -51,13 +51,10 @@ export const vipDetailIds = [
 export const faqItemIds = [
   "joining",
   "beginners",
-  "wipe-schedule",
-  "team-size",
-  "raid-window",
-  "reporting",
   "ban-inquiries",
   "vip-purchase",
   "language-support",
+  "about-streaming",
 ] as const;
 
 export const moderatorDetailIds = [
