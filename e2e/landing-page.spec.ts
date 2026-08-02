@@ -1,0 +1,185 @@
+import { expect, test } from "@playwright/test";
+
+import { en } from "../src/content";
+import { e2eEnvironment } from "./environment";
+
+const sectionIds = [
+  "top",
+  "server",
+  "rules",
+  "vip",
+  "faq",
+  "moderator",
+  "news",
+] as const;
+const requiredViewportWidths = [360, 375, 390, 768, 1024, 1280, 1440] as const;
+
+test.beforeEach(async ({ page }) => {
+  await page.goto("/");
+});
+
+test("トップページに必須セクションと単一の見出しが表示される", async ({
+  page,
+}) => {
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Japan Hideaway Server" }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+
+  for (const id of sectionIds) {
+    await expect(page.locator(`#${id}`)).toHaveCount(1);
+  }
+});
+
+test("初期テーマはダークで、変更内容が再読み込み後も保持される", async ({
+  page,
+}) => {
+  const root = page.locator("html");
+  await expect(root).toHaveClass(/\bdark\b/);
+
+  await page
+    .getByRole("button", { name: /ライト(?:テーマ|モード)に切り替える/i })
+    .click();
+  await expect(root).toHaveClass(/\blight\b/);
+
+  await page.reload();
+  await expect(root).toHaveClass(/\blight\b/);
+});
+
+test("初期言語は日本語で、英語の選択が再読み込み後も保持される", async ({
+  page,
+}) => {
+  const root = page.locator("html");
+  await expect(root).toHaveAttribute("lang", "ja");
+
+  await page.getByRole("button", { name: /English|英語/i }).click();
+  await expect(root).toHaveAttribute("lang", "en");
+  await expect(page).toHaveTitle(en.metadata.title);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Japan Hideaway Server" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { level: 2, name: "Server Information" }),
+  ).toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => window.localStorage.getItem("jhs-locale")))
+    .toBe("en");
+
+  await page.reload();
+  await expect
+    .poll(() => page.evaluate(() => window.localStorage.getItem("jhs-locale")))
+    .toBe("en");
+  await expect(root).toHaveAttribute("lang", "en");
+});
+
+test("モバイルメニュー表示中にデスクトップ幅へ変更すると安全に閉じる", async ({
+  page,
+}) => {
+  await page.setViewportSize({ height: 900, width: 1024 });
+  const menuButton = page.locator('button[aria-controls="mobile-navigation"]');
+
+  await menuButton.click();
+  await expect(menuButton).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+
+  await page.setViewportSize({ height: 900, width: 1280 });
+  await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+});
+
+test("ナビゲーションは JavaScript に依存しないアンカーリンクを持つ", async ({
+  page,
+}) => {
+  for (const id of sectionIds.slice(1)) {
+    const link = page.locator(`a[href="#${id}"]`).first();
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute("href", `#${id}`);
+  }
+
+  await page.locator('a[href="#rules"]').first().click();
+  await expect(page).toHaveURL(/#rules$/);
+  await expect(page.locator("#rules")).toBeVisible();
+});
+
+test("FAQ はネイティブ details 要素で開閉できる", async ({ page }) => {
+  const firstFaq = page.locator("#faq details").first();
+  const summary = firstFaq.locator("summary");
+
+  await expect(firstFaq).not.toHaveAttribute("open", "");
+  await summary.click();
+  await expect(firstFaq).toHaveAttribute("open", "");
+  await summary.click();
+  await expect(firstFaq).not.toHaveAttribute("open", "");
+});
+
+test("Discord の外部リンクは安全な属性と設定 URL を使う", async ({ page }) => {
+  const links = page.locator(`a[href="${e2eEnvironment.discordUrl}"]`);
+
+  await expect(links.first()).toBeVisible();
+  await expect.poll(() => links.count()).toBeGreaterThanOrEqual(2);
+
+  const linkCount = await links.count();
+  for (let index = 0; index < linkCount; index += 1) {
+    const link = links.nth(index);
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", /\bnoopener\b/);
+    await expect(link).toHaveAttribute("rel", /\bnoreferrer\b/);
+  }
+});
+
+test("指定された全幅で主要コンテンツを表示し、横スクロールを発生させない", async ({
+  page,
+}) => {
+  for (const width of requiredViewportWidths) {
+    await page.setViewportSize({ height: 900, width });
+    await page.goto(`/?viewport=${width}`);
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Japan Hideaway Server" }),
+    ).toBeVisible();
+    await expect(
+      page.locator(`#top a[href="${e2eEnvironment.discordUrl}"]`).first(),
+    ).toBeVisible();
+
+    const documentWidth = await page.evaluate(() => ({
+      innerWidth: window.innerWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+    }));
+    expect(
+      documentWidth.scrollWidth,
+      `${width}px viewport must not overflow horizontally`,
+    ).toBeLessThanOrEqual(documentWidth.innerWidth + 1);
+  }
+});
+
+test.describe("360px のモバイル表示", () => {
+  test.use({ viewport: { height: 800, width: 360 } });
+
+  test("メニューをキーボードで開閉でき、横スクロールが発生しない", async ({
+    page,
+  }) => {
+    const menuButton = page.getByRole("button", { name: /メニュー/i });
+
+    await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    await menuButton.focus();
+    await page.keyboard.press("Enter");
+    await expect(menuButton).toHaveAttribute("aria-expanded", "true");
+    await expect(
+      page.locator('#mobile-navigation a[href="#rules"]'),
+    ).toBeVisible();
+
+    const openMenuOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth,
+    );
+    expect(openMenuOverflow).toBeLessThanOrEqual(1);
+
+    await page.keyboard.press("Escape");
+    await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    await expect(menuButton).toBeFocused();
+
+    const closedMenuOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth,
+    );
+    expect(closedMenuOverflow).toBeLessThanOrEqual(1);
+  });
+});
