@@ -45,7 +45,7 @@ export const vipDetailIds = [
   "price",
   "duration",
   "purchase-method",
-  "discord-role",
+  "refund-policy",
 ] as const;
 
 export const faqItemIds = [

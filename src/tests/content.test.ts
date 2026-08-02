@@ -10,6 +10,7 @@ import {
   ja,
   navigationItemIds,
   sectionIds,
+  vipDetailIds,
 } from "@/content";
 import { getMatchingItem } from "@/lib/content";
 
@@ -66,6 +67,11 @@ describe("localized content", () => {
         expect(item.answer.trim()).not.toBe("");
       }
     }
+  });
+
+  it("keeps VIP detail identifiers aligned in both languages", () => {
+    expect(ja.vip.details.map(({ id }) => id)).toEqual(vipDetailIds);
+    expect(en.vip.details.map(({ id }) => id)).toEqual(vipDetailIds);
   });
 
   it("publishes the confirmed server schedule and enforcement rules", () => {

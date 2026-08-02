@@ -216,9 +216,10 @@ export const en = {
         status: "pending",
       },
       {
-        id: "discord-role",
-        label: "Discord Role",
-        value: "Not confirmed",
+        id: "refund-policy",
+        label: "Refund and Service Availability",
+        value:
+          "As a general rule, VIP purchases cannot be refunded once the usage period has begun.",
         status: "pending",
       },
     ],

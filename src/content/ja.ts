@@ -215,9 +215,10 @@ export const ja = {
         status: "pending",
       },
       {
-        id: "discord-role",
-        label: "Discordロール",
-        value: "未確定",
+        id: "refund-policy",
+        label: "返金・稼働方針",
+        value:
+          "購入後に利用期間が開始したVIPは、原則として返金いたしかねます。",
         status: "pending",
       },
     ],
