@@ -20,7 +20,7 @@ export const en = {
     pendingConfirmation: "Pending staff confirmation",
     statusLabels: {
       confirmed: "Confirmed",
-      pending: "Pending confirmation",
+      pending: "In preparation",
     },
   },
   theme: {
@@ -64,9 +64,9 @@ export const en = {
     id: "top",
     eyebrow: "Rust Community Server",
     title: "Japan Hideaway Server",
-    subtitle: "A Rust community server for working adults and students",
+    subtitle: "A Rust server with raid restrictions",
     description:
-      "A community server based on settings close to official servers, with separate raiding hours for weekdays and weekends. It is designed for players with limited time and welcomes Rust beginners.",
+      "A community server with settings close to official servers and designated no-raid hours, where working adults and students can play with peace of mind.",
     primaryAction: {
       id: "hero-discord",
       label: "Join Discord",
@@ -76,7 +76,7 @@ export const en = {
     secondaryAction: {
       id: "hero-rules",
       label: "View Rules",
-      ariaLabel: "View the important server rules",
+      ariaLabel: "View the server rules",
       destination: "rules",
     },
     backgroundAlt: "",
@@ -90,9 +90,9 @@ export const en = {
     items: [
       {
         id: "audience",
-        title: "For Adults, Students, and Beginners",
+        title: "For Working Adults, Students, and Beginners",
         description:
-          "The server is designed to be approachable for players with limited time and for people who are new to Rust.",
+          "We value an environment where players can make the most of limited playtime and feel comfortable joining.",
         icon: "users",
         status: "confirmed",
       },
@@ -106,7 +106,7 @@ export const en = {
       },
       {
         id: "raid-window",
-        title: "Time-Limited Raiding",
+        title: "Raid Restrictions",
         description:
           "Raiding is allowed from 18:00 to 24:00 on weekdays and from 12:00 to 24:00 on Saturday and Sunday. Building raids are prohibited at all other times.",
         icon: "clock",
@@ -129,7 +129,7 @@ export const en = {
     eyebrow: "Rules",
     title: "Important Rules",
     description:
-      "This page will provide a concise overview of the rules that matter most for a safe and welcoming experience.",
+      "This page provides a concise overview of the most important rules for a safe experience. Please check the Discord server for full details.",
     noticeTitle: "Read before joining",
     notice:
       "Raiding outside the permitted hours, teaming, unfair play, and abusive conduct are handled according to the specific rule, with penalties including warnings, kicks, temporary bans, and permanent bans. If you are unsure about an action or make an accidental mistake, contact staff promptly through a Discord ticket.",
@@ -138,7 +138,7 @@ export const en = {
         id: "raid-window",
         title: "Raiding Hours",
         description:
-          "Raiding is allowed from 18:00 to 24:00 on weekdays and 12:00 to 24:00 on Saturday and Sunday. Outside these hours, attacking a building receives a warning for the first offense and a kick from the second; destroying one triggers an automatic ban until the next wipe, and staff will destroy the offender's base after reviewing the logs. Outdoor deployables, code raids, twig or wood-upgrade structures, your own base, and nearby TC pillars are exempt, but boat structures are covered.",
+          "Raiding is allowed from 18:00 to 24:00 on weekdays and 12:00 to 24:00 on Saturday and Sunday. Attacks on buildings outside these hours are penalized automatically. Outdoor deployables, code raids, twig or wood-upgrade structures, your own base, and nearby TC pillars are exempt.",
         icon: "clock",
         status: "confirmed",
         important: true,
@@ -164,7 +164,7 @@ export const en = {
         id: "community-conduct",
         title: "Community Conduct",
         description:
-          "Abuse, inappropriate political or discriminatory statements, excessive taunting, defamation, and persistent personal attacks are prohibited. This applies to chat, voice, buildings, signs, vending machines, bases, and Discord, and problematic structures or objects will be removed. Penalties range from a warning to a permanent ban, with serious cases handled without prior warning; criticism of the server or staff is not itself prohibited.",
+          "Abuse, inappropriate political or discriminatory statements, excessive taunting, defamation, and persistent personal attacks are prohibited. This applies to chat, voice, buildings, signs, vending machines, bases, and Discord, and problematic structures or objects will be removed. Penalties range from a warning to a permanent ban, and serious cases may be penalized without prior warning.",
         icon: "message",
         status: "confirmed",
       },
@@ -172,7 +172,7 @@ export const en = {
         id: "reporting",
         title: "Reporting Violations",
         description:
-          "Use Rust's F7 report for suspected cheating, and send recordings through a Discord ticket when needed. Other rule violations are also handled through tickets. If you accidentally destroy a building outside raiding hours, report it to staff promptly.",
+          "Use Rust's F7 report for suspected cheating, and send recordings through a Discord ticket when needed. Other rule violations are also handled through tickets. If you accidentally destroy a building outside raiding hours, report it promptly.",
         icon: "report",
         status: "confirmed",
       },
@@ -180,7 +180,7 @@ export const en = {
         id: "rule-updates",
         title: "Rule Updates",
         description:
-          "Staff will act as fairly as possible and may change rules without prior notice to maintain a healthy environment. The server is run by volunteers, so a perfect environment and immediate response cannot be guaranteed. Please be considerate toward beginners.",
+          "Staff will act as fairly as possible and may change rules without prior notice to maintain a healthy environment. The server is run by community volunteers, so a perfect environment and immediate response cannot be guaranteed.",
         icon: "refresh",
         status: "confirmed",
       },
@@ -193,9 +193,9 @@ export const en = {
     description:
       "We are preparing an accurate explanation of the VIP program, the benefits actually provided, pricing, and the purchase process.",
     status: "pending",
-    statusTitle: "VIP information is pending staff confirmation",
+    statusTitle: "VIP is in preparation",
     statusDescription:
-      "Benefits and pricing will not be presented as available until the offering has been confirmed.",
+      "Benefits and pricing will not be published until the offering has been finalized.",
     details: [
       {
         id: "price",
@@ -226,12 +226,12 @@ export const en = {
     benefits: [],
     emptyBenefitsTitle: "No confirmed benefits have been published yet",
     emptyBenefitsDescription:
-      "Only benefits verified as actually available will be added after confirmation.",
+      "VIP benefits are in preparation. The latest information will be published once the offering has been finalized.",
     purchaseAction: null,
     purchaseUnavailableMessage:
       "The purchase page will be provided after the offering and official Tebex URL have been confirmed.",
     notice:
-      "Unimplemented benefits or benefits that significantly disrupt game balance will not be presented as currently available.",
+      "VIP does not provide an in-game competitive advantage. The program supports community operations, and any in-game benefits will remain limited. Benefits may change.",
   },
   faq: {
     id: "faq",
@@ -243,8 +243,7 @@ export const en = {
       {
         id: "joining",
         question: "How can I join the server?",
-        answer:
-          "Joining instructions are planned for Discord. The public invite destination and steps are currently being confirmed.",
+        answer: "Joining instructions are currently in preparation.",
         status: "pending",
       },
       {
@@ -293,14 +292,14 @@ export const en = {
         id: "vip-purchase",
         question: "Where can I purchase VIP?",
         answer:
-          "The VIP offering, pricing, and official Tebex purchase page are pending confirmation. No purchase destination is currently published here.",
+          "The VIP offering, pricing, and official purchase page are in preparation. No purchase destination is currently published here.",
         status: "pending",
       },
       {
         id: "language-support",
         question: "Are languages other than Japanese supported?",
         answer:
-          "This website can be displayed in Japanese and English. Supported languages for in-game and staff assistance are still being confirmed.",
+          "This website can be displayed in Japanese and English. In-game and staff support is provided in Japanese; translation tools are used for other languages.",
         status: "confirmed",
       },
     ],
@@ -312,15 +311,15 @@ export const en = {
     description:
       "Information about moderators who can support the community fairly and consistently.",
     status: "pending",
-    statusTitle: "Recruitment details are pending staff confirmation",
+    statusTitle: "Recruitment details are in preparation",
     statusDescription:
-      "The site will not state that applications are open until recruitment status, permissions, duties, and requirements are confirmed.",
+      "Please wait until the recruitment status, permissions, duties, and requirements have been finalized.",
     items: [
       {
         id: "responsibilities",
         title: "Responsibilities",
         description:
-          "Player support and reviewing rule violations are being considered, but the official scope of duties is still under review.",
+          "Player support and reviewing rule violations are being considered, but the official scope of duties is still in preparation.",
         icon: "clipboard",
         status: "pending",
       },
@@ -328,7 +327,7 @@ export const en = {
         id: "requirements",
         title: "Application Requirements",
         description:
-          "Requirements such as activity level, age, and prior experience are pending staff confirmation.",
+          "Requirements such as activity level, age, and prior experience are in preparation.",
         icon: "user-check",
         status: "pending",
       },
@@ -336,14 +335,14 @@ export const en = {
         id: "ideal-candidate",
         title: "Who We Are Looking For",
         description:
-          "Responsibility, fairness, and consistency are priorities. Detailed selection criteria are still under review.",
+          "Responsibility, fairness, and consistency are priorities. Detailed selection criteria are still in preparation.",
         icon: "shield",
         status: "pending",
       },
     ],
     applicationTitle: "How to Apply",
     applicationDescription:
-      "The application destination and process are pending staff confirmation. They will be published after an official Discord channel or form is verified.",
+      "The application destination and process are in preparation. They will be published after an official Discord channel or form is confirmed.",
     applicationAction: null,
   },
   news: {

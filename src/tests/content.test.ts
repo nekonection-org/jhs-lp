@@ -87,7 +87,7 @@ describe("localized content", () => {
     expect(ja.server.items[3].description).toContain("3500");
     expect(ja.rules.items[0].description).toContain("平日18:00〜24:00");
     expect(ja.rules.items[0].description).toContain("土・日12:00〜24:00");
-    expect(ja.rules.items[0].description).toContain("次回ワイプまでBAN");
+    expect(ja.rules.items[0].description).toContain("自動的に処罰");
     expect(ja.rules.items[1].description).toContain("最大4人");
     expect(ja.rules.items[2].description).toContain("永久BAN");
     expect(ja.rules.items[2].description).toContain("#claim-ticket");
@@ -95,7 +95,7 @@ describe("localized content", () => {
 
     expect(en.server.items[3].description).toContain("every Friday at 18:00");
     expect(en.rules.items[0].description).toContain("weekdays");
-    expect(en.rules.items[0].description).toContain("until the next wipe");
+    expect(en.rules.items[0].description).toContain("penalized automatically");
     expect(en.rules.items[1].description).toContain("four players");
     expect(en.rules.items[2].description).toContain("permanent ban");
     expect(en.rules.items[4].description).toContain("F7 report");
