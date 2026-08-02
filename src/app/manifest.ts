@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Japan Hideaway Serverのサーバー情報、ルール、VIP、FAQ、お知らせを案内する公式LPです。",
     start_url: "/",
     display: "standalone",
-    background_color: "#090c0a",
-    theme_color: "#090c0a",
+    background_color: "#08090b",
+    theme_color: "#08090b",
     lang: "ja",
     icons: [
       {

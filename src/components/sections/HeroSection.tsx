@@ -44,7 +44,7 @@ export function HeroSection() {
           fill
           priority
           sizes="100vw"
-          src="/icon.png"
+          src="/main-image.png"
         />
       </motion.div>
       <div
