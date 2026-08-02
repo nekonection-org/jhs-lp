@@ -33,6 +33,38 @@ pnpm dev
 
 `NEXT_PUBLIC_` で始まる値はビルド時にクライアントコードへ埋め込まれ、ブラウザから参照できます。Bot Token、RCONパスワード、APIキーなどの秘密情報は設定しないでください。
 
+## お知らせの追加
+
+お知らせは`src/content/ja.ts`と`src/content/en.ts`にある`news.items`へ追加します。両言語で同じ`id`、`publishedAt`、`category`を使用し、新しい項目を配列の先頭へ置いてください。
+
+```ts
+items: [
+  {
+    id: "announcement-id",
+    publishedAt: "2026-08-03",
+    category: "notice",
+    title: "実際のお知らせタイトル",
+    description: "実際のお知らせ概要",
+  },
+],
+```
+
+英語側にも同じIDで対応する翻訳を追加します。
+
+```ts
+items: [
+  {
+    id: "announcement-id",
+    publishedAt: "2026-08-03",
+    category: "notice",
+    title: "Actual announcement title",
+    description: "Actual announcement summary",
+  },
+],
+```
+
+`category`には`notice`、`maintenance`、`update`、`event`、`important`、`incident`を指定できます。Discord投稿などへリンクする場合は、両言語の項目へHTTPSの`url`を追加してください。架空のお知らせは本番へ追加しないでください。
+
 ## 品質チェック
 
 ```powershell
