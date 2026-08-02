@@ -66,7 +66,7 @@ export const ja = {
     title: "Japan Hideaway Server",
     subtitle: "社会人・学生向けのRustコミュニティサーバー",
     description:
-      "限られた時間でもしっかり遊べるよう、レイド可能時間を設けたコミュニティサーバーです。具体的な開催時間や参加条件は、確定した情報から順次ご案内します。",
+      "公式サーバーの仕様に近いゲームバランスを基に、平日と土・日でレイド可能時間を設定しています。限られた時間でも遊びやすく、初心者にも配慮したコミュニティサーバーです。",
     primaryAction: {
       id: "hero-discord",
       label: "Discordに参加",
@@ -90,39 +90,39 @@ export const ja = {
     items: [
       {
         id: "audience",
-        title: "社会人・学生向け",
+        title: "社会人・学生・初心者向け",
         description:
-          "限られたプレイ時間でも参加しやすいコミュニティを目指しています。",
+          "限られたプレイ時間でもしっかり遊べることと、Rust初心者が参加しやすい環境を大切にしています。",
         icon: "users",
         status: "confirmed",
       },
       {
         id: "community",
-        title: "コミュニティサーバー",
+        title: "公式仕様に近い設定",
         description:
-          "プレイヤー同士が安心して遊べる環境づくりを大切にするRustコミュニティサーバーです。",
+          "公式サーバーに近い仕様を基に、生活リズムへ配慮したルールを加えたコミュニティサーバーです。",
         icon: "community",
         status: "confirmed",
       },
       {
         id: "raid-window",
-        title: "レイド可能時間あり",
+        title: "時間限定レイド",
         description:
-          "生活リズムに配慮したレイド可能時間を設けます。具体的な曜日と時刻は運営確認中です。",
+          "レイド可能時間は平日18:00〜24:00、土・日12:00〜24:00です。それ以外の時間帯は建築物へのレイドを禁止します。",
         icon: "clock",
-        status: "pending",
+        status: "confirmed",
       },
       {
         id: "operations",
-        title: "運営情報を確認中",
+        title: "毎週ワイプ・最大4人",
         description:
-          "チーム人数上限、ワイプ日時、ゲーム設定などの具体値は、確定後に掲載します。",
+          "Map・BPワイプは毎週金曜日の日本時間18:00、チームは最大4人、マップサイズは3500です。",
         icon: "settings",
-        status: "pending",
+        status: "confirmed",
       },
     ],
     pendingNotice:
-      "具体的な数値や日時は運営確認中です。未確定情報を確定事項として掲載しません。",
+      "ワイプ時刻は日本時間です。ルールや設定は変更される場合があるため、参加時に最新の案内もご確認ください。",
   },
   rules: {
     id: "rules",
@@ -130,59 +130,59 @@ export const ja = {
     title: "重要なルール",
     description:
       "参加者が安心して遊べるよう、LPでは特に重要な項目を簡潔にご案内します。",
-    noticeTitle: "ルール文面を確認中です",
+    noticeTitle: "参加前に必ず確認してください",
     notice:
-      "以下は掲載予定の項目です。具体的な時間、数値、違反時の対応を含む正式な内容は、運営確認が完了するまで確定ルールとして扱わないでください。",
+      "時間外レイド、チーミング、不正行為、他者への不適切な言動には、違反内容に応じて各ルールに定める警告・キック・有期BAN・永久BANを適用します。判断に迷う場合や誤操作があった場合は、速やかにDiscordのチケットから運営へご連絡ください。",
     items: [
       {
         id: "raid-window",
         title: "レイド可能時間",
         description:
-          "レイドを行える曜日と時刻、時間外の扱いについて、正式なルールを確認中です。",
+          "平日18:00〜24:00、土・日12:00〜24:00のみレイド可能です。時間外の建築物への攻撃は1回目警告・2回目以降キック、破壊は自動的に次回ワイプまでBANとなり、ログ確認後に違反者の拠点を破壊します。野外設置物、パスコードレイド、藁・木強化建築、自拠点と周辺TC柱の破壊は対象外ですが、ボート建築は対象です。",
         icon: "clock",
-        status: "pending",
+        status: "confirmed",
         important: true,
       },
       {
         id: "team-size",
         title: "チーム人数上限",
         description:
-          "チームに参加できる人数と、同盟・協力行為の扱いを運営確認中です。",
+          "チームは最大4人です。チーム外プレイヤーとの物資共有、共闘、拠点共有は禁止し、違反は警告から永久BANの対象となります。引退時に物資を譲渡した場合は寝袋・TCなどの権限を解除し、速やかにログアウトして当該ワイプ中のプレイを控えてください。",
         icon: "users",
-        status: "pending",
+        status: "confirmed",
         important: true,
       },
       {
         id: "fair-play",
         title: "不正行為への対応",
         description:
-          "チート、グリッチ、不正ツールなどの禁止範囲と対応方針を確認中です。",
+          "チート、グリッチ、不正ツールなど、公式サーバーで禁止されている行為は永久BAN対象です。検知状況により自動・一時的なキックやBANを行う場合があり、異議申し立てはDiscordの#claim-ticketで受け付けます。",
         icon: "shield",
-        status: "pending",
+        status: "confirmed",
       },
       {
         id: "community-conduct",
         title: "コミュニティでの振る舞い",
         description:
-          "暴言、差別、過度な煽りや攻撃的な行為に関する基準を確認中です。",
+          "暴言、政治的・差別的な不適切発言、過度な煽り、誹謗中傷や執拗な個人攻撃は禁止です。チャット、VC、建築物、看板、自販機、拠点、Discordも対象で、問題のある設置物等は撤去します。違反は警告から永久BANの対象となり、悪質な場合は事前警告なく処分しますが、サーバーや運営への意見・批判自体は禁止しません。",
         icon: "message",
-        status: "pending",
+        status: "confirmed",
       },
       {
         id: "reporting",
         title: "違反の報告方法",
         description:
-          "F7レポートを含む報告手順と、提出が必要な情報を運営確認中です。",
+          "チートなどが疑われる場合はRust内のF7レポートを利用し、録画などの証拠は必要に応じてDiscordのチケットへお送りください。その他の違反報告もチケットで受け付けます。時間外に誤って建築物を破壊した場合も、速やかに運営へ報告してください。",
         icon: "report",
-        status: "pending",
+        status: "confirmed",
       },
       {
         id: "rule-updates",
         title: "ルールの更新",
         description:
-          "ルール変更時の告知方法と適用時期を確認中です。公開後も最新の案内をご確認ください。",
+          "運営は可能な限り公平に対応し、健全な環境を保つためルールを予告なく変更する場合があります。ボランティア運営のため、完全な環境や即時対応を保証するものではありません。初心者への配慮をお願いします。",
         icon: "refresh",
-        status: "pending",
+        status: "confirmed",
       },
     ],
   },
@@ -251,41 +251,42 @@ export const ja = {
         id: "beginners",
         question: "Rust初心者でも参加できますか？",
         answer:
-          "初心者の参加条件やサポート範囲は運営確認中です。確定後に案内を更新します。",
-        status: "pending",
+          "参加できます。限られた時間でも遊びやすく、初心者にも配慮したルールを設けています。プレイヤーの皆さまも初心者へできる限り優しく接してください。",
+        status: "confirmed",
       },
       {
         id: "wipe-schedule",
         question: "ワイプはいつ行われますか？",
-        answer: "曜日と時刻を含む正式なワイプスケジュールは運営確認中です。",
-        status: "pending",
+        answer: "Map・BPワイプは、毎週金曜日の日本時間18:00に行います。",
+        status: "confirmed",
       },
       {
         id: "team-size",
         question: "チーム人数の上限は何人ですか？",
-        answer: "チーム人数上限と協力行為に関する条件は運営確認中です。",
-        status: "pending",
+        answer:
+          "最大4人です。チーム外プレイヤーとの物資共有、共闘、拠点共有は禁止しています。",
+        status: "confirmed",
       },
       {
         id: "raid-window",
         question: "レイド可能時間を教えてください。",
         answer:
-          "レイド可能時間を設ける方針です。具体的な曜日、時刻、時間外の扱いは運営確認中です。",
-        status: "pending",
+          "平日は18:00〜24:00、土・日は12:00〜24:00のみレイド可能です。時間外の建築物破壊は次回ワイプまでのBAN対象となります。",
+        status: "confirmed",
       },
       {
         id: "reporting",
         question: "ルール違反はどのように報告しますか？",
         answer:
-          "F7レポートを含む正式な報告手順と、必要な証拠・情報を運営確認中です。",
-        status: "pending",
+          "チートなどが疑われる場合はRust内のF7レポートを利用してください。録画などの証拠やその他のルール違反は、Discordのチケットから運営へご報告ください。",
+        status: "confirmed",
       },
       {
         id: "ban-inquiries",
         question: "BANについて問い合わせる方法はありますか？",
         answer:
-          "問い合わせ窓口、必要情報、回答方針を運営確認中です。正式な窓口の公開後にご連絡ください。",
-        status: "pending",
+          "チート・グリッチ・不正ツールに関する処分への異議申し立ては、Discordの#claim-ticketから受け付けます。",
+        status: "confirmed",
       },
       {
         id: "vip-purchase",

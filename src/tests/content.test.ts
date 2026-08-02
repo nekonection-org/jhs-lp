@@ -68,6 +68,39 @@ describe("localized content", () => {
     }
   });
 
+  it("publishes the confirmed server schedule and enforcement rules", () => {
+    expect(ja.server.items.every(({ status }) => status === "confirmed")).toBe(
+      true,
+    );
+    expect(en.server.items.every(({ status }) => status === "confirmed")).toBe(
+      true,
+    );
+    expect(ja.rules.items.every(({ status }) => status === "confirmed")).toBe(
+      true,
+    );
+    expect(en.rules.items.every(({ status }) => status === "confirmed")).toBe(
+      true,
+    );
+
+    expect(ja.server.items[3].description).toContain("毎週金曜日");
+    expect(ja.server.items[3].description).toContain("最大4人");
+    expect(ja.server.items[3].description).toContain("3500");
+    expect(ja.rules.items[0].description).toContain("平日18:00〜24:00");
+    expect(ja.rules.items[0].description).toContain("土・日12:00〜24:00");
+    expect(ja.rules.items[0].description).toContain("次回ワイプまでBAN");
+    expect(ja.rules.items[1].description).toContain("最大4人");
+    expect(ja.rules.items[2].description).toContain("永久BAN");
+    expect(ja.rules.items[2].description).toContain("#claim-ticket");
+    expect(ja.rules.items[4].description).toContain("F7レポート");
+
+    expect(en.server.items[3].description).toContain("every Friday at 18:00");
+    expect(en.rules.items[0].description).toContain("weekdays");
+    expect(en.rules.items[0].description).toContain("until the next wipe");
+    expect(en.rules.items[1].description).toContain("four players");
+    expect(en.rules.items[2].description).toContain("permanent ban");
+    expect(en.rules.items[4].description).toContain("F7 report");
+  });
+
   it("limits news to the LP range and requires valid ISO calendar dates", () => {
     for (const content of getLocalizedContent()) {
       expect(content.news.items.length).toBeLessThanOrEqual(5);

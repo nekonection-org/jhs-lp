@@ -66,7 +66,7 @@ export const en = {
     title: "Japan Hideaway Server",
     subtitle: "A Rust community server for working adults and students",
     description:
-      "A community server with designated raiding hours, designed to be enjoyable even when your playtime is limited. Specific hours and participation requirements will be published as they are confirmed.",
+      "A community server based on settings close to official servers, with separate raiding hours for weekdays and weekends. It is designed for players with limited time and welcomes Rust beginners.",
     primaryAction: {
       id: "hero-discord",
       label: "Join Discord",
@@ -90,39 +90,39 @@ export const en = {
     items: [
       {
         id: "audience",
-        title: "For Working Adults and Students",
+        title: "For Adults, Students, and Beginners",
         description:
-          "We aim to build a community that is approachable even when players have limited time to play.",
+          "The server is designed to be approachable for players with limited time and for people who are new to Rust.",
         icon: "users",
         status: "confirmed",
       },
       {
         id: "community",
-        title: "Community Server",
+        title: "Close to Official Server Settings",
         description:
-          "A Rust community server focused on creating a place where players can enjoy the game with confidence.",
+          "A community server based on settings close to official servers, with additional rules that respect everyday schedules.",
         icon: "community",
         status: "confirmed",
       },
       {
         id: "raid-window",
-        title: "Designated Raiding Hours",
+        title: "Time-Limited Raiding",
         description:
-          "Raiding hours will be set with everyday schedules in mind. The exact days and times are pending staff confirmation.",
+          "Raiding is allowed from 18:00 to 24:00 on weekdays and from 12:00 to 24:00 on Saturday and Sunday. Building raids are prohibited at all other times.",
         icon: "clock",
-        status: "pending",
+        status: "confirmed",
       },
       {
         id: "operations",
-        title: "Operational Details Pending",
+        title: "Weekly Wipes and Four-Player Teams",
         description:
-          "Exact values such as the team limit, wipe schedule, and game settings will be published after confirmation.",
+          "Map and blueprint wipes take place every Friday at 18:00 Japan time. Teams are limited to four players and the map size is 3500.",
         icon: "settings",
-        status: "pending",
+        status: "confirmed",
       },
     ],
     pendingNotice:
-      "Exact numbers and schedules are pending staff confirmation. Unconfirmed information is not presented as final.",
+      "The wipe time is stated in Japan time. Rules and settings may change, so check the latest announcement when joining.",
   },
   rules: {
     id: "rules",
@@ -130,59 +130,59 @@ export const en = {
     title: "Important Rules",
     description:
       "This page will provide a concise overview of the rules that matter most for a safe and welcoming experience.",
-    noticeTitle: "Rule wording is under review",
+    noticeTitle: "Read before joining",
     notice:
-      "The following entries are planned topics. Until staff review is complete, do not treat them as final rules, including any schedules, limits, or enforcement details.",
+      "Raiding outside the permitted hours, teaming, unfair play, and abusive conduct are handled according to the specific rule, with penalties including warnings, kicks, temporary bans, and permanent bans. If you are unsure about an action or make an accidental mistake, contact staff promptly through a Discord ticket.",
     items: [
       {
         id: "raid-window",
         title: "Raiding Hours",
         description:
-          "The official days and times for raiding, together with how activity outside those hours is handled, are under review.",
+          "Raiding is allowed from 18:00 to 24:00 on weekdays and 12:00 to 24:00 on Saturday and Sunday. Outside these hours, attacking a building receives a warning for the first offense and a kick from the second; destroying one triggers an automatic ban until the next wipe, and staff will destroy the offender's base after reviewing the logs. Outdoor deployables, code raids, twig or wood-upgrade structures, your own base, and nearby TC pillars are exempt, but boat structures are covered.",
         icon: "clock",
-        status: "pending",
+        status: "confirmed",
         important: true,
       },
       {
         id: "team-size",
         title: "Team Size Limit",
         description:
-          "The team size limit and the treatment of alliances or cooperative play are pending staff confirmation.",
+          "Teams are limited to four players. Sharing supplies, fighting together, or sharing a base with players outside your team is prohibited and may result in penalties ranging from a warning to a permanent ban. If you transfer supplies when retiring, clear sleeping bag and TC authorization, log out promptly, and do not play again during that wipe.",
         icon: "users",
-        status: "pending",
+        status: "confirmed",
         important: true,
       },
       {
         id: "fair-play",
         title: "Unfair Play and Exploits",
         description:
-          "The prohibited scope and enforcement policy for cheats, glitches, and unauthorized tools are under review.",
+          "Cheats, glitches, unauthorized tools, and other conduct prohibited on official servers are subject to a permanent ban. Automated or temporary kicks and bans may also be applied, and appeals are handled in the Discord #claim-ticket channel.",
         icon: "shield",
-        status: "pending",
+        status: "confirmed",
       },
       {
         id: "community-conduct",
         title: "Community Conduct",
         description:
-          "Standards concerning abuse, discrimination, excessive taunting, and targeted attacks are under review.",
+          "Abuse, inappropriate political or discriminatory statements, excessive taunting, defamation, and persistent personal attacks are prohibited. This applies to chat, voice, buildings, signs, vending machines, bases, and Discord, and problematic structures or objects will be removed. Penalties range from a warning to a permanent ban, with serious cases handled without prior warning; criticism of the server or staff is not itself prohibited.",
         icon: "message",
-        status: "pending",
+        status: "confirmed",
       },
       {
         id: "reporting",
         title: "Reporting Violations",
         description:
-          "The reporting process, including whether to use F7 reports and what information to submit, is under review.",
+          "Use Rust's F7 report for suspected cheating, and send recordings through a Discord ticket when needed. Other rule violations are also handled through tickets. If you accidentally destroy a building outside raiding hours, report it to staff promptly.",
         icon: "report",
-        status: "pending",
+        status: "confirmed",
       },
       {
         id: "rule-updates",
         title: "Rule Updates",
         description:
-          "How rule changes will be announced and when they take effect are under review. Check the latest notice after publication.",
+          "Staff will act as fairly as possible and may change rules without prior notice to maintain a healthy environment. The server is run by volunteers, so a perfect environment and immediate response cannot be guaranteed. Please be considerate toward beginners.",
         icon: "refresh",
-        status: "pending",
+        status: "confirmed",
       },
     ],
   },
@@ -251,43 +251,43 @@ export const en = {
         id: "beginners",
         question: "Can Rust beginners join?",
         answer:
-          "Beginner eligibility and the available level of support are pending staff confirmation. This answer will be updated once confirmed.",
-        status: "pending",
+          "Yes. The rules are designed to make the server approachable for players with limited time and for beginners. Players are also asked to be as welcoming to beginners as possible.",
+        status: "confirmed",
       },
       {
         id: "wipe-schedule",
         question: "When does the server wipe?",
         answer:
-          "The official wipe schedule, including the day and time, is pending staff confirmation.",
-        status: "pending",
+          "Map and blueprint wipes take place every Friday at 18:00 Japan time.",
+        status: "confirmed",
       },
       {
         id: "team-size",
         question: "What is the maximum team size?",
         answer:
-          "The team size limit and conditions concerning cooperative play are pending staff confirmation.",
-        status: "pending",
+          "The maximum team size is four. Sharing supplies, fighting together, or sharing a base with players outside your team is prohibited.",
+        status: "confirmed",
       },
       {
         id: "raid-window",
         question: "What are the designated raiding hours?",
         answer:
-          "The server is intended to use designated raiding hours. The exact days, times, and treatment of activity outside those hours are pending confirmation.",
-        status: "pending",
+          "Raiding is allowed from 18:00 to 24:00 on weekdays and 12:00 to 24:00 on Saturday and Sunday. Destroying another player's building outside these hours results in a ban until the next wipe.",
+        status: "confirmed",
       },
       {
         id: "reporting",
         question: "How do I report a rule violation?",
         answer:
-          "The official reporting process, including F7 reports and the required evidence or information, is under review.",
-        status: "pending",
+          "Use Rust's F7 report for suspected cheating. Send recordings and reports of other rule violations to staff through a Discord ticket.",
+        status: "confirmed",
       },
       {
         id: "ban-inquiries",
         question: "How can I ask about a ban?",
         answer:
-          "The contact channel, required information, and response policy are under review. Please use the official channel after it is published.",
-        status: "pending",
+          "Appeals concerning penalties for cheats, glitches, or unauthorized tools are accepted through the Discord #claim-ticket channel.",
+        status: "confirmed",
       },
       {
         id: "vip-purchase",
