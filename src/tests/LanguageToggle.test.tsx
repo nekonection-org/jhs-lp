@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
-import { ja } from "@/content";
+import { en, ja } from "@/content";
 
 function renderLanguageToggle() {
   return render(
@@ -32,6 +32,7 @@ describe("LanguageToggle", () => {
     expect(document.documentElement).toHaveAttribute("data-locale", "en");
     expect(window.localStorage.getItem("jhs-locale")).toBe("en");
     expect(english).toHaveAttribute("aria-pressed", "true");
+    await waitFor(() => expect(document.title).toBe(en.metadata.title));
   });
 
   it("restores a saved language on mount", async () => {
@@ -44,6 +45,19 @@ describe("LanguageToggle", () => {
       ).toHaveAttribute("aria-pressed", "true"),
     );
     expect(document.documentElement.lang).toBe("en");
+    expect(document.title).toBe(en.metadata.title);
+  });
+
+  it("restores the selected language title after a head update", async () => {
+    const user = userEvent.setup();
+    renderLanguageToggle();
+
+    await user.click(screen.getByRole("button", { name: ja.language.english }));
+    await waitFor(() => expect(document.title).toBe(en.metadata.title));
+
+    document.title = ja.metadata.title;
+
+    await waitFor(() => expect(document.title).toBe(en.metadata.title));
   });
 
   it("ignores unsupported saved locale values", async () => {

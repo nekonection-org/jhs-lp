@@ -68,13 +68,25 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   useEffect(() => {
     applyDocumentLocale(locale);
+    const expectedTitle = getContent(locale).metadata.title;
 
-    const frameId = window.requestAnimationFrame(() => {
-      document.title = getContent(locale).metadata.title;
+    function syncTitle() {
+      if (document.title !== expectedTitle) {
+        document.title = expectedTitle;
+      }
+    }
+
+    syncTitle();
+
+    const observer = new MutationObserver(syncTitle);
+    observer.observe(document.head, {
+      childList: true,
+      characterData: true,
+      subtree: true,
     });
 
     return () => {
-      window.cancelAnimationFrame(frameId);
+      observer.disconnect();
     };
   }, [locale]);
 
