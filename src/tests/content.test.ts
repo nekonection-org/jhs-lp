@@ -74,6 +74,21 @@ describe("localized content", () => {
     expect(en.vip.details.map(({ id }) => id)).toEqual(vipDetailIds);
   });
 
+  it("keeps terms articles structurally aligned in both languages", () => {
+    expect(en.terms.introduction).toHaveLength(ja.terms.introduction.length);
+    expect(en.terms.articles.map(({ id }) => id)).toEqual(
+      ja.terms.articles.map(({ id }) => id),
+    );
+
+    for (const article of ja.terms.articles) {
+      const englishArticle = getMatchingItem(en.terms.articles, article.id);
+      expect(englishArticle.paragraphs).toHaveLength(article.paragraphs.length);
+      expect(englishArticle.items ?? []).toHaveLength(
+        (article.items ?? []).length,
+      );
+    }
+  });
+
   it("publishes the confirmed server schedule and enforcement rules", () => {
     expect(ja.server.items.every(({ status }) => status === "confirmed")).toBe(
       true,

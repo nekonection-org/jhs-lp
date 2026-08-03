@@ -116,6 +116,26 @@ test("FAQ はネイティブ details 要素で開閉できる", async ({ page })
   await expect(firstFaq).not.toHaveAttribute("open", "");
 });
 
+test("利用規約はモーダルで表示され、Escキーで閉じられる", async ({ page }) => {
+  const trigger = page.getByRole("button", { name: "利用規約を表示" });
+  await trigger.click();
+
+  const dialog = page.getByRole("dialog", {
+    name: "Japan Hideaway Server 利用規約",
+  });
+  await expect(dialog).toBeVisible();
+  await expect(
+    dialog.getByRole("heading", { name: "第1条（適用範囲）" }),
+  ).toBeVisible();
+  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+
+  await page.keyboard.press("Escape");
+
+  await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+});
+
 test("Discord の外部リンクは安全な属性と設定 URL を使う", async ({ page }) => {
   const links = page.locator(`a[href="${e2eEnvironment.discordUrl}"]`);
 

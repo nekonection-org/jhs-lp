@@ -282,11 +282,25 @@ export interface NewsContent extends SectionIntroduction<"news"> {
   readonly emptyDescription: string;
 }
 
-export interface FinalCtaContent {
+export interface TermsArticleContent {
+  readonly id: string;
+  readonly title: string;
+  readonly paragraphs: readonly string[];
+  readonly items?: readonly string[];
+}
+
+export interface TermsContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly description: string;
-  readonly action: ExternalActionContent;
+  readonly openLabel: string;
+  readonly closeLabel: string;
+  readonly dialogLabel: string;
+  readonly introduction: readonly string[];
+  readonly articles: readonly TermsArticleContent[];
+  readonly supplementaryNote: string;
+  readonly lastUpdatedLabel: string;
+  readonly lastUpdated: string;
 }
 
 export interface FooterContent {
@@ -312,6 +326,6 @@ export interface SiteContent {
   readonly faq: FaqContent;
   readonly moderator: ModeratorContent;
   readonly news: NewsContent;
-  readonly finalCta: FinalCtaContent;
+  readonly terms: TermsContent;
   readonly footer: FooterContent;
 }
