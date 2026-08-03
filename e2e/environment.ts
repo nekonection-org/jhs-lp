@@ -4,5 +4,4 @@ export const e2eEnvironment = {
   rustServerAddress: "play.jhs.nekonection.com",
   siteUrl: "http://127.0.0.1:3100",
   tebexUrl: "https://jhs-test.tebex.io",
-  xUrl: "https://x.com/jhs_test",
 } as const;

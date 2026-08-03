@@ -52,7 +52,6 @@ export const externalUrls = {
   moderatorApplication: parseHttpUrl(
     process.env.NEXT_PUBLIC_MODERATOR_APPLICATION_URL,
   ),
-  x: parseHttpUrl(process.env.NEXT_PUBLIC_X_URL),
 } as const;
 
 const rustServerAddress = parseRustServerAddress(

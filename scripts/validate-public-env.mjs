@@ -6,7 +6,6 @@ const requiredVariables = [
 const optionalVariables = [
   "NEXT_PUBLIC_TEBEX_URL",
   "NEXT_PUBLIC_MODERATOR_APPLICATION_URL",
-  "NEXT_PUBLIC_X_URL",
 ];
 const reservedHostnames = new Set(["localhost", "127.0.0.1", "::1"]);
 const reservedSuffixes = [".example", ".invalid", ".localhost", ".test"];

@@ -1,11 +1,10 @@
-import { ArrowUp, ExternalLink } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import Image from "next/image";
 
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
-import { externalUrls } from "@/lib/constants";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -72,28 +71,6 @@ export function Footer() {
                     </li>
                   );
                 })}
-                {externalUrls.x ? (
-                  <li>
-                    <a
-                      className="inline-flex items-center gap-1 rounded-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
-                      href={externalUrls.x}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      X
-                      <span className="sr-only">
-                        {" "}
-                        (
-                        <LocalizedText
-                          ja={ja.common.opensInNewTab}
-                          en={en.common.opensInNewTab}
-                        />
-                        )
-                      </span>
-                      <ExternalLink aria-hidden="true" className="size-3.5" />
-                    </a>
-                  </li>
-                ) : null}
               </ul>
             </nav>
           </div>

@@ -6,7 +6,6 @@ const environmentKeys = [
   "NEXT_PUBLIC_RUST_SERVER_ADDRESS",
   "NEXT_PUBLIC_TEBEX_URL",
   "NEXT_PUBLIC_MODERATOR_APPLICATION_URL",
-  "NEXT_PUBLIC_X_URL",
 ] as const;
 
 afterEach(() => {
@@ -23,7 +22,6 @@ describe("public URL configuration", () => {
       NEXT_PUBLIC_TEBEX_URL: "https://japan-hideaway.tebex.io",
       NEXT_PUBLIC_MODERATOR_APPLICATION_URL:
         "https://forms.example.test/jhs-moderator",
-      NEXT_PUBLIC_X_URL: "https://x.com/japan_hideaway",
     } as const;
 
     for (const key of environmentKeys) {
@@ -42,7 +40,6 @@ describe("public URL configuration", () => {
       moderatorApplication: new URL(
         configuredUrls.NEXT_PUBLIC_MODERATOR_APPLICATION_URL,
       ).href,
-      x: new URL(configuredUrls.NEXT_PUBLIC_X_URL).href,
     });
     expect(getExternalUrl("discord")).toBe(externalUrls.discord);
     expect(getExternalUrl("tebex")).toBe(externalUrls.tebex);
@@ -61,7 +58,6 @@ describe("public URL configuration", () => {
     vi.stubEnv("NEXT_PUBLIC_DISCORD_INVITE_URL", "javascript:alert(1)");
     vi.stubEnv("NEXT_PUBLIC_TEBEX_URL", "not a URL");
     vi.stubEnv("NEXT_PUBLIC_MODERATOR_APPLICATION_URL", "data:text/plain,no");
-    vi.stubEnv("NEXT_PUBLIC_X_URL", "file:///tmp/account");
     vi.stubEnv(
       "NEXT_PUBLIC_RUST_SERVER_ADDRESS",
       "play.jhs.nekonection.com;quit",
@@ -75,7 +71,6 @@ describe("public URL configuration", () => {
       discord: null,
       tebex: null,
       moderatorApplication: null,
-      x: null,
     });
     expect(rustConnection).toBeNull();
   });
