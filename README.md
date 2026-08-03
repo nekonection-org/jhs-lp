@@ -27,11 +27,18 @@ pnpm dev
 | --------------------------------------- | ------------------------------------------- |
 | `NEXT_PUBLIC_SITE_URL`                  | 公開サイトのcanonical URL、OGP、sitemapなど |
 | `NEXT_PUBLIC_DISCORD_INVITE_URL`        | Discord参加リンク                           |
+| `NEXT_PUBLIC_RUST_SERVER_ADDRESS`       | F1コマンド・Steam起動ボタン用の接続先       |
 | `NEXT_PUBLIC_TEBEX_URL`                 | VIP購入ページへの外部リンク                 |
 | `NEXT_PUBLIC_MODERATOR_APPLICATION_URL` | モデレーター応募チャンネルまたはフォーム    |
 | `NEXT_PUBLIC_X_URL`                     | 公式Xアカウントへの外部リンク               |
 
 `NEXT_PUBLIC_` で始まる値はビルド時にクライアントコードへ埋め込まれ、ブラウザから参照できます。Bot Token、RCONパスワード、APIキーなどの秘密情報は設定しないでください。
+
+Rustの接続先にはURLではなく、ホスト名と必要に応じてポートを指定します。Heroのカードには、この値からF1用コマンドとSteam起動リンクが自動生成されます。
+
+```env
+NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
+```
 
 ## お知らせの追加
 

@@ -2,21 +2,37 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
-import { ArrowRight, Clock3, ShieldCheck } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Clock3,
+  Copy,
+  Gamepad2,
+  ShieldCheck,
+  Terminal,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import {
   LocalizedExternalAction,
   LocalizedSectionAction,
 } from "@/components/ui/ActionLink";
 import { Container } from "@/components/ui/Container";
+import { Button, buttonStyles } from "@/components/ui/Button";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
-import { externalUrls } from "@/lib/constants";
+import { externalUrls, rustConnection } from "@/lib/constants";
+
+type CopyState = "idle" | "copied" | "error";
 
 export function HeroSection() {
   const reduceMotion = useReducedMotion();
+  const { locale } = useLanguage();
+  const [copyState, setCopyState] = useState<CopyState>("idle");
+  const copyResetTimer = useRef<number | null>(null);
   const audienceFeature = ja.server.items[0];
   const audienceFeatureEn = getMatchingItem(
     en.server.items,
@@ -24,6 +40,34 @@ export function HeroSection() {
   );
   const raidFeature = ja.server.items[2];
   const raidFeatureEn = getMatchingItem(en.server.items, raidFeature.id);
+
+  useEffect(
+    () => () => {
+      if (copyResetTimer.current !== null) {
+        window.clearTimeout(copyResetTimer.current);
+      }
+    },
+    [],
+  );
+
+  async function copyConnectionCommand() {
+    if (!rustConnection) return;
+
+    try {
+      await navigator.clipboard.writeText(rustConnection.command);
+      setCopyState("copied");
+    } catch {
+      setCopyState("error");
+    }
+
+    if (copyResetTimer.current !== null) {
+      window.clearTimeout(copyResetTimer.current);
+    }
+
+    copyResetTimer.current = window.setTimeout(() => {
+      setCopyState("idle");
+    }, 2_000);
+  }
 
   return (
     <section
@@ -191,6 +235,99 @@ export function HeroSection() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-4 rounded-lg border border-[color-mix(in_srgb,var(--accent)_28%,var(--border))] bg-[color-mix(in_srgb,var(--background)_72%,transparent)] p-4">
+              <div className="flex items-start gap-3">
+                <Terminal
+                  aria-hidden="true"
+                  className="mt-0.5 size-4 shrink-0 text-[var(--accent-strong)]"
+                />
+                <div>
+                  <p className="font-bold">
+                    <LocalizedText
+                      ja={ja.hero.connection.title}
+                      en={en.hero.connection.title}
+                    />
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">
+                    <LocalizedText
+                      ja={ja.hero.connection.description}
+                      en={en.hero.connection.description}
+                    />
+                  </p>
+                </div>
+              </div>
+
+              {rustConnection ? (
+                <div className="mt-4">
+                  <p className="text-xs font-bold tracking-[0.08em] text-[var(--text-muted)] uppercase">
+                    <LocalizedText
+                      ja={ja.hero.connection.commandLabel}
+                      en={en.hero.connection.commandLabel}
+                    />
+                  </p>
+                  <code className="mt-2 block overflow-x-auto rounded-md border border-[var(--border)] bg-[var(--surface-secondary)] px-3 py-2.5 text-sm text-[var(--text-primary)]">
+                    {rustConnection.command}
+                  </code>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    <Button
+                      aria-live="polite"
+                      className="w-full"
+                      onClick={copyConnectionCommand}
+                      size="compact"
+                      variant="secondary"
+                    >
+                      {copyState === "copied" ? (
+                        <Check aria-hidden="true" className="size-4" />
+                      ) : (
+                        <Copy aria-hidden="true" className="size-4" />
+                      )}
+                      <LocalizedText
+                        ja={
+                          copyState === "copied"
+                            ? ja.hero.connection.copiedLabel
+                            : copyState === "error"
+                              ? ja.hero.connection.copyErrorLabel
+                              : ja.hero.connection.copyLabel
+                        }
+                        en={
+                          copyState === "copied"
+                            ? en.hero.connection.copiedLabel
+                            : copyState === "error"
+                              ? en.hero.connection.copyErrorLabel
+                              : en.hero.connection.copyLabel
+                        }
+                      />
+                    </Button>
+                    <a
+                      aria-label={
+                        locale === "ja"
+                          ? ja.hero.connection.steamAriaLabel
+                          : en.hero.connection.steamAriaLabel
+                      }
+                      className={buttonStyles({
+                        className: "w-full",
+                        size: "compact",
+                      })}
+                      href={rustConnection.steamUrl}
+                    >
+                      <Gamepad2 aria-hidden="true" className="size-4" />
+                      <LocalizedText
+                        ja={ja.hero.connection.steamLabel}
+                        en={en.hero.connection.steamLabel}
+                      />
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <p className="mt-3 text-xs leading-5 text-[var(--text-muted)]">
+                  <LocalizedText
+                    ja={ja.hero.connection.unavailable}
+                    en={en.hero.connection.unavailable}
+                  />
+                </p>
+              )}
             </div>
           </div>
         </Reveal>

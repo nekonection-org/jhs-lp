@@ -162,6 +162,17 @@ export interface HeroContent {
   readonly primaryAction: ExternalActionContent;
   readonly secondaryAction: SectionActionContent;
   readonly backgroundAlt: string;
+  readonly connection: {
+    readonly title: string;
+    readonly description: string;
+    readonly commandLabel: string;
+    readonly copyLabel: string;
+    readonly copiedLabel: string;
+    readonly copyErrorLabel: string;
+    readonly steamLabel: string;
+    readonly steamAriaLabel: string;
+    readonly unavailable: string;
+  };
 }
 
 export interface SectionIntroduction<Id extends SectionId> {

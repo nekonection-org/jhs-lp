@@ -32,6 +32,7 @@ export default defineConfig({
       NEXT_PUBLIC_DISCORD_INVITE_URL: e2eEnvironment.discordUrl,
       NEXT_PUBLIC_MODERATOR_APPLICATION_URL:
         e2eEnvironment.moderatorApplicationUrl,
+      NEXT_PUBLIC_RUST_SERVER_ADDRESS: e2eEnvironment.rustServerAddress,
       NEXT_PUBLIC_SITE_URL: e2eEnvironment.siteUrl,
       NEXT_PUBLIC_TEBEX_URL: e2eEnvironment.tebexUrl,
       NEXT_PUBLIC_X_URL: e2eEnvironment.xUrl,

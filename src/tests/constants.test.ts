@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const environmentKeys = [
   "NEXT_PUBLIC_SITE_URL",
   "NEXT_PUBLIC_DISCORD_INVITE_URL",
+  "NEXT_PUBLIC_RUST_SERVER_ADDRESS",
   "NEXT_PUBLIC_TEBEX_URL",
   "NEXT_PUBLIC_MODERATOR_APPLICATION_URL",
   "NEXT_PUBLIC_X_URL",
@@ -18,6 +19,7 @@ describe("public URL configuration", () => {
     const configuredUrls = {
       NEXT_PUBLIC_SITE_URL: "https://japan-hideaway.example/base",
       NEXT_PUBLIC_DISCORD_INVITE_URL: "https://discord.gg/japan-hideaway",
+      NEXT_PUBLIC_RUST_SERVER_ADDRESS: "play.jhs.nekonection.com:28015",
       NEXT_PUBLIC_TEBEX_URL: "https://japan-hideaway.tebex.io",
       NEXT_PUBLIC_MODERATOR_APPLICATION_URL:
         "https://forms.example.test/jhs-moderator",
@@ -28,7 +30,7 @@ describe("public URL configuration", () => {
       vi.stubEnv(key, configuredUrls[key]);
     }
 
-    const { externalUrls, getExternalUrl, siteUrl } =
+    const { externalUrls, getExternalUrl, rustConnection, siteUrl } =
       await import("@/lib/constants");
 
     expect(siteUrl.href).toBe(
@@ -47,6 +49,11 @@ describe("public URL configuration", () => {
     expect(getExternalUrl("moderatorApplication")).toBe(
       externalUrls.moderatorApplication,
     );
+    expect(rustConnection).toEqual({
+      address: configuredUrls.NEXT_PUBLIC_RUST_SERVER_ADDRESS,
+      command: `client.connect ${configuredUrls.NEXT_PUBLIC_RUST_SERVER_ADDRESS}`,
+      steamUrl: `steam://run/252490//+connect%20${configuredUrls.NEXT_PUBLIC_RUST_SERVER_ADDRESS}`,
+    });
   });
 
   it("rejects unsafe or malformed public URLs", async () => {
@@ -55,8 +62,13 @@ describe("public URL configuration", () => {
     vi.stubEnv("NEXT_PUBLIC_TEBEX_URL", "not a URL");
     vi.stubEnv("NEXT_PUBLIC_MODERATOR_APPLICATION_URL", "data:text/plain,no");
     vi.stubEnv("NEXT_PUBLIC_X_URL", "file:///tmp/account");
+    vi.stubEnv(
+      "NEXT_PUBLIC_RUST_SERVER_ADDRESS",
+      "play.jhs.nekonection.com;quit",
+    );
 
-    const { externalUrls, siteUrl } = await import("@/lib/constants");
+    const { externalUrls, rustConnection, siteUrl } =
+      await import("@/lib/constants");
 
     expect(siteUrl.href).toBe("http://localhost:3000/");
     expect(externalUrls).toEqual({
@@ -65,5 +77,6 @@ describe("public URL configuration", () => {
       moderatorApplication: null,
       x: null,
     });
+    expect(rustConnection).toBeNull();
   });
 });

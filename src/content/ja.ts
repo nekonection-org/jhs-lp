@@ -80,6 +80,18 @@ export const ja = {
       destination: "rules",
     },
     backgroundAlt: "",
+    connection: {
+      title: "サーバーへ接続",
+      description:
+        "F1コンソールへコマンドを貼り付けるか、SteamからRustを起動して接続できます。",
+      commandLabel: "F1接続コマンド",
+      copyLabel: "コマンドをコピー",
+      copiedLabel: "コピーしました",
+      copyErrorLabel: "コピーできませんでした",
+      steamLabel: "Steamで起動",
+      steamAriaLabel: "Steamを起動してJapan Hideaway Serverへ接続する",
+      unavailable: "接続先の設定後に利用できます。",
+    },
   },
   server: {
     id: "server",

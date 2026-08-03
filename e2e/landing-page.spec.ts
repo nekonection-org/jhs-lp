@@ -151,6 +151,23 @@ test("Discord の外部リンクは安全な属性と設定 URL を使う", asyn
   }
 });
 
+test("HeroからF1接続コマンドとSteam起動リンクを利用できる", async ({
+  page,
+}) => {
+  const command = `client.connect ${e2eEnvironment.rustServerAddress}`;
+  const steamUrl = `steam://run/252490//+connect%20${e2eEnvironment.rustServerAddress}`;
+
+  await expect(page.locator("#top code")).toHaveText(command);
+  await expect(
+    page.getByRole("button", { name: "コマンドをコピー" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", {
+      name: "Steamを起動してJapan Hideaway Serverへ接続する",
+    }),
+  ).toHaveAttribute("href", steamUrl);
+});
+
 test("指定された全幅で主要コンテンツを表示し、横スクロールを発生させない", async ({
   page,
 }) => {

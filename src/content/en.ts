@@ -80,6 +80,18 @@ export const en = {
       destination: "rules",
     },
     backgroundAlt: "",
+    connection: {
+      title: "Connect to the Server",
+      description:
+        "Paste the command into the F1 console, or launch Rust through Steam and connect directly.",
+      commandLabel: "F1 connection command",
+      copyLabel: "Copy command",
+      copiedLabel: "Copied",
+      copyErrorLabel: "Could not copy",
+      steamLabel: "Launch with Steam",
+      steamAriaLabel: "Launch Steam and connect to Japan Hideaway Server",
+      unavailable: "Available after the server address is configured.",
+    },
   },
   server: {
     id: "server",

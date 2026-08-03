@@ -13,6 +13,29 @@ const reservedSuffixes = [".example", ".invalid", ".localhost", ".test"];
 const documentationDomains = ["example.com", "example.net", "example.org"];
 const errors = [];
 
+function validateRustServerAddress() {
+  const name = "NEXT_PUBLIC_RUST_SERVER_ADDRESS";
+  const value = process.env[name]?.trim();
+
+  if (!value) return;
+
+  if (
+    value.length > 253 ||
+    !/^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)*[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?::\d{1,5})?$/.test(
+      value,
+    )
+  ) {
+    errors.push(`${name} must be a hostname with an optional port.`);
+    return;
+  }
+
+  const port = value.match(/:(\d{1,5})$/)?.[1];
+
+  if (port && (Number(port) < 1 || Number(port) > 65_535)) {
+    errors.push(`${name} must use a port between 1 and 65535.`);
+  }
+}
+
 function validatePublicUrl(name, required) {
   const value = process.env[name]?.trim();
 
@@ -53,6 +76,8 @@ for (const name of requiredVariables) {
 for (const name of optionalVariables) {
   validatePublicUrl(name, false);
 }
+
+validateRustServerAddress();
 
 if (errors.length > 0) {
   console.error("Public environment validation failed:");
