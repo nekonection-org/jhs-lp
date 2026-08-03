@@ -348,7 +348,7 @@ export const en = {
     eyebrow: "Terms of Service",
     title: "Terms of Service",
     description:
-      "Review the conditions for using Japan Hideaway Server in a modal without extending the page.",
+      "By using the Japan Hideaway Server, you are deemed to have agreed to these Terms of Service. Please be sure to read them carefully.",
     openLabel: "View Terms of Service",
     closeLabel: "Close Terms of Service",
     dialogLabel: "Japan Hideaway Server Terms of Service",

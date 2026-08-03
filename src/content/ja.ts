@@ -346,7 +346,7 @@ export const ja = {
     eyebrow: "Terms of Service",
     title: "利用規約",
     description:
-      "Japan Hideaway Serverの利用条件を、ページを長くせずモーダル内で確認できます。",
+      "Japan Hideaway Serverを利用した時点で、本利用規約に同意したものとみなします。必ずご確認ください。",
     openLabel: "利用規約を表示",
     closeLabel: "利用規約を閉じる",
     dialogLabel: "Japan Hideaway Server 利用規約",
