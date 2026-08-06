@@ -1,6 +1,9 @@
+name: jhs-lp
+
 services:
   web:
     image: jhs-lp:local
+
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,16 +13,74 @@ services:
         NEXT_PUBLIC_RUST_SERVER_ADDRESS: ${NEXT_PUBLIC_RUST_SERVER_ADDRESS:-}
         NEXT_PUBLIC_TEBEX_URL: ${NEXT_PUBLIC_TEBEX_URL:-}
         NEXT_PUBLIC_MODERATOR_APPLICATION_URL: ${NEXT_PUBLIC_MODERATOR_APPLICATION_URL:-}
+
     environment:
       NODE_ENV: production
       HOSTNAME: 0.0.0.0
       PORT: 3000
+
     init: true
     restart: unless-stopped
-    ports:
-      - "3000:3000"
+
+    expose:
+      - "3000"
+
+    networks:
+      - tunnel
+
     security_opt:
       - no-new-privileges:true
+
     cap_drop:
       - ALL
+
     stop_grace_period: 10s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+
+    command:
+      - tunnel
+      - --no-autoupdate
+      - run
+      - --token-file
+      - /run/secrets/cloudflare_tunnel_token
+
+    init: true
+    restart: unless-stopped
+
+    depends_on:
+      web:
+        condition: service_healthy
+
+    secrets:
+      - cloudflare_tunnel_token
+
+    networks:
+      - tunnel
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  tunnel:
+    driver: bridge
+
+secrets:
+  cloudflare_tunnel_token:
+    file: ./secrets/cloudflare-tunnel-token
