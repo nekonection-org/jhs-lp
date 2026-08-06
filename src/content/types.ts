@@ -49,7 +49,6 @@ export const vipDetailIds = [
 ] as const;
 
 export const faqItemIds = [
-  "joining",
   "beginners",
   "ban-inquiries",
   "vip-purchase",

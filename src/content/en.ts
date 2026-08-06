@@ -254,12 +254,6 @@ export const en = {
       "Answers to common questions before joining, limited to information that can currently be verified.",
     items: [
       {
-        id: "joining",
-        question: "How can I join the server?",
-        answer: "Joining instructions are currently in preparation.",
-        status: "pending",
-      },
-      {
         id: "beginners",
         question: "Can Rust beginners join?",
         answer:

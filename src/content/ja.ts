@@ -253,12 +253,6 @@ export const ja = {
       "参加前によく寄せられる質問と、現在確認できている回答をまとめています。",
     items: [
       {
-        id: "joining",
-        question: "サーバーへはどのように参加できますか？",
-        answer: "現在準備中です。",
-        status: "pending",
-      },
-      {
         id: "beginners",
         question: "Rust初心者でも参加できますか？",
         answer:
@@ -276,7 +270,7 @@ export const ja = {
         id: "vip-purchase",
         question: "VIPはどこで購入できますか？",
         answer:
-          "VIPの提供内容、料金、正式な購入ページは準備中です。現在は購入先を掲載していません。",
+          "VIPの提供内容、料金、正式な購入ページは準備中です。",
         status: "pending",
       },
       {
