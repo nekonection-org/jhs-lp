@@ -343,7 +343,15 @@ export const ja = {
       important: "重要",
       incident: "障害情報",
     },
-    items: [],
+    items: [
+      {
+        id: "announcement-id",
+        publishedAt: "2026-08-06",
+        category: "notice",
+        title: "公式Webサイトを公開",
+        description: "Japan Hideaway Serverの公式Webサイトを公開しました。",
+      }
+    ],
     emptyTitle: "現在、掲載中のお知らせはありません",
     emptyDescription:
       "確認済みのお知らせが用意でき次第、最新のものから掲載します。",

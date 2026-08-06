@@ -345,7 +345,15 @@ export const en = {
       important: "Important",
       incident: "Incident",
     },
-    items: [],
+    items: [
+      {
+        id: "announcement-id",
+        publishedAt: "2026-08-06",
+        category: "notice",
+        title: "Official Website Launch",
+        description: "The official website for Japan Hideaway Server is now live.",
+      }
+    ],
     emptyTitle: "There are no published announcements",
     emptyDescription:
       "Verified announcements will be listed here from newest to oldest when available.",
