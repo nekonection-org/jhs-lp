@@ -19,3 +19,16 @@ export function formatPublishedDate(value: string, locale: Locale) {
     timeZone: "UTC",
   }).format(date);
 }
+
+export function formatAnnouncementDate(value: Date, locale: Locale) {
+  if (Number.isNaN(value.getTime())) {
+    return "";
+  }
+
+  return new Intl.DateTimeFormat(localeNames[locale], {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "Asia/Tokyo",
+  }).format(value);
+}

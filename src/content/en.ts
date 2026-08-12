@@ -345,18 +345,15 @@ export const en = {
       important: "Important",
       incident: "Incident",
     },
-    items: [
-      {
-        id: "announcement-id",
-        publishedAt: "2026-08-06",
-        category: "notice",
-        title: "Official Website Launch",
-        description: "The official website for Japan Hideaway Server is now live.",
-      }
-    ],
     emptyTitle: "There are no published announcements",
     emptyDescription:
       "Verified announcements will be listed here from newest to oldest when available.",
+    unavailableTitle: "Announcements are temporarily unavailable",
+    unavailableDescription:
+      "We could not load announcements. Please try again in a few minutes.",
+    translationPendingTitle: "English translation in progress",
+    translationPendingDescription:
+      "The English version of this announcement is not available yet.",
   },
   terms: {
     eyebrow: "Terms of Service",

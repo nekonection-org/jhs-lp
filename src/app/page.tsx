@@ -11,6 +11,8 @@ import { VipSection } from "@/components/sections/VipSection";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { en, ja } from "@/content";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>

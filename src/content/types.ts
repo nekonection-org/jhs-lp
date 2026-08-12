@@ -276,20 +276,14 @@ export interface ModeratorContent extends SectionIntroduction<"moderator"> {
   readonly applicationAction: ExternalActionContent | null;
 }
 
-export interface NewsItem {
-  readonly id: string;
-  readonly publishedAt: string;
-  readonly category: NewsCategory;
-  readonly title: string;
-  readonly description: string;
-  readonly url?: string;
-}
-
 export interface NewsContent extends SectionIntroduction<"news"> {
   readonly categoryLabels: Readonly<Record<NewsCategory, string>>;
-  readonly items: readonly NewsItem[];
   readonly emptyTitle: string;
   readonly emptyDescription: string;
+  readonly unavailableTitle: string;
+  readonly unavailableDescription: string;
+  readonly translationPendingTitle: string;
+  readonly translationPendingDescription: string;
 }
 
 export interface TermsArticleContent {

@@ -87,3 +87,17 @@ export async function findAdminAnnouncement(id: string) {
 
   return announcement ? mapAnnouncementRecord(announcement) : null;
 }
+
+export async function listPublishedAnnouncements(now = new Date()) {
+  const announcements = await getPrismaClient().announcement.findMany({
+    where: {
+      status: DatabaseStatus.PUBLISHED,
+      publishedAt: { lte: now },
+    },
+    include: announcementWithTranslations,
+    orderBy: [{ publishedAt: "desc" }, { id: "desc" }],
+    take: 5,
+  });
+
+  return announcements.map(mapAnnouncementRecord);
+}

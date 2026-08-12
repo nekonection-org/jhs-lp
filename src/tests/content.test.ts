@@ -122,16 +122,22 @@ describe("localized content", () => {
     expect(en.rules.items[4].description).toContain("F7 report");
   });
 
-  it("limits news to the LP range and requires valid ISO calendar dates", () => {
+  it("keeps database-backed news labels and fallback messages complete", () => {
     for (const content of getLocalizedContent()) {
-      expect(content.news.items.length).toBeLessThanOrEqual(5);
-
-      for (const item of content.news.items) {
-        expect(item.publishedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-        const parsedDate = new Date(`${item.publishedAt}T00:00:00Z`);
-        expect(Number.isNaN(parsedDate.getTime())).toBe(false);
-        expect(parsedDate.toISOString().slice(0, 10)).toBe(item.publishedAt);
-      }
+      expect(Object.keys(content.news.categoryLabels)).toEqual([
+        "notice",
+        "maintenance",
+        "update",
+        "event",
+        "important",
+        "incident",
+      ]);
+      expect(content.news.emptyTitle.trim()).not.toBe("");
+      expect(content.news.emptyDescription.trim()).not.toBe("");
+      expect(content.news.unavailableTitle.trim()).not.toBe("");
+      expect(content.news.unavailableDescription.trim()).not.toBe("");
+      expect(content.news.translationPendingTitle.trim()).not.toBe("");
+      expect(content.news.translationPendingDescription.trim()).not.toBe("");
     }
   });
 

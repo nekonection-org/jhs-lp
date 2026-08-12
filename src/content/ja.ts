@@ -269,8 +269,7 @@ export const ja = {
       {
         id: "vip-purchase",
         question: "VIPはどこで購入できますか？",
-        answer:
-          "VIPの提供内容、料金、正式な購入ページは準備中です。",
+        answer: "VIPの提供内容、料金、正式な購入ページは準備中です。",
         status: "pending",
       },
       {
@@ -343,18 +342,15 @@ export const ja = {
       important: "重要",
       incident: "障害情報",
     },
-    items: [
-      {
-        id: "announcement-id",
-        publishedAt: "2026-08-06",
-        category: "notice",
-        title: "公式Webサイトを公開",
-        description: "Japan Hideaway Serverの公式Webサイトを公開しました。",
-      }
-    ],
     emptyTitle: "現在、掲載中のお知らせはありません",
     emptyDescription:
       "確認済みのお知らせが用意でき次第、最新のものから掲載します。",
+    unavailableTitle: "お知らせを取得できません",
+    unavailableDescription:
+      "一時的にお知らせを読み込めません。時間を置いてからもう一度お試しください。",
+    translationPendingTitle: "英語版を準備中です",
+    translationPendingDescription:
+      "英語版が公開されるまで、しばらくお待ちください。",
   },
   terms: {
     eyebrow: "Terms of Service",
