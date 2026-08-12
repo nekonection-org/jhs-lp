@@ -73,6 +73,7 @@ export async function listAdminAnnouncements() {
   const announcements = await getPrismaClient().announcement.findMany({
     include: announcementWithTranslations,
     orderBy: { updatedAt: "desc" },
+    take: 100,
   });
 
   return announcements.map(mapAnnouncementRecord);

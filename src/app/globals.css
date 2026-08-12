@@ -17,6 +17,8 @@
   --accent-strong: #b5dc9f;
   --accent-contrast: #101a0d;
   --danger: #d87878;
+  --info: #8ecae6;
+  --warning: #e6b566;
   --focus: #b7df9f;
   --header: rgba(8, 9, 11, 0.9);
   --hero-overlay: rgba(8, 9, 11, 0.58);
@@ -38,6 +40,8 @@
   --accent-strong: #416a34;
   --accent-contrast: #ffffff;
   --danger: #b84f4f;
+  --info: #216a8a;
+  --warning: #815d16;
   --focus: #426b35;
   --header: rgba(244, 245, 246, 0.9);
   --hero-overlay: rgba(236, 239, 241, 0.7);
