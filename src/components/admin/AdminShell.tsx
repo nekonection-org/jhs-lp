@@ -1,4 +1,4 @@
-import { FileClock, Home, Newspaper } from "lucide-react";
+import { FileClock, Home, Newspaper, ScrollText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -34,6 +34,7 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
 
           <nav aria-label="管理メニュー" className="flex items-center gap-1">
             <Link
+              aria-label="お知らせ管理"
               className="inline-flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
               href="/admin/news"
             >
@@ -41,6 +42,15 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
               <span className="hidden sm:inline">お知らせ</span>
             </Link>
             <Link
+              aria-label="操作ログ"
+              className="inline-flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+              href="/admin/audit"
+            >
+              <ScrollText aria-hidden="true" className="size-4" />
+              <span className="hidden sm:inline">操作ログ</span>
+            </Link>
+            <Link
+              aria-label="公開サイト"
               className="inline-flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
               href="/"
             >
