@@ -4,6 +4,10 @@ import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
 afterEach(() => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
   cleanup();
   window.localStorage.clear();
   document.documentElement.className = "";
@@ -13,20 +17,22 @@ afterEach(() => {
   document.body.style.overflow = "";
 });
 
-Object.defineProperty(window, "matchMedia", {
-  configurable: true,
-  value: vi.fn().mockImplementation((query: string) => ({
-    addEventListener: vi.fn(),
-    addListener: vi.fn(),
-    dispatchEvent: vi.fn(() => true),
-    matches: false,
-    media: query,
-    onchange: null,
-    removeEventListener: vi.fn(),
-    removeListener: vi.fn(),
-  })),
-  writable: true,
-});
+if (typeof window !== "undefined") {
+  Object.defineProperty(window, "matchMedia", {
+    configurable: true,
+    value: vi.fn().mockImplementation((query: string) => ({
+      addEventListener: vi.fn(),
+      addListener: vi.fn(),
+      dispatchEvent: vi.fn(() => true),
+      matches: false,
+      media: query,
+      onchange: null,
+      removeEventListener: vi.fn(),
+      removeListener: vi.fn(),
+    })),
+    writable: true,
+  });
+}
 
 class IntersectionObserverMock implements IntersectionObserver {
   readonly root = null;
@@ -39,11 +45,13 @@ class IntersectionObserverMock implements IntersectionObserver {
   unobserve = vi.fn();
 }
 
-Object.defineProperty(window, "IntersectionObserver", {
-  configurable: true,
-  value: IntersectionObserverMock,
-  writable: true,
-});
+if (typeof window !== "undefined") {
+  Object.defineProperty(window, "IntersectionObserver", {
+    configurable: true,
+    value: IntersectionObserverMock,
+    writable: true,
+  });
+}
 
 class ResizeObserverMock implements ResizeObserver {
   disconnect = vi.fn();
@@ -51,8 +59,10 @@ class ResizeObserverMock implements ResizeObserver {
   unobserve = vi.fn();
 }
 
-Object.defineProperty(window, "ResizeObserver", {
-  configurable: true,
-  value: ResizeObserverMock,
-  writable: true,
-});
+if (typeof window !== "undefined") {
+  Object.defineProperty(window, "ResizeObserver", {
+    configurable: true,
+    value: ResizeObserverMock,
+    writable: true,
+  });
+}
