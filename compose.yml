@@ -43,41 +43,41 @@ services:
         max-file: "3"
 
   cloudflared:
-  image: cloudflare/cloudflared:latest
+    image: cloudflare/cloudflared:latest
 
-  user: "0:0"
+    user: "0:0"
 
-  command:
-    - tunnel
-    - --no-autoupdate
-    - run
-    - --token-file
-    - /run/secrets/cloudflare_tunnel_token
+    command:
+      - tunnel
+      - --no-autoupdate
+      - run
+      - --token-file
+      - /run/secrets/cloudflare_tunnel_token
 
-  init: true
-  restart: unless-stopped
+    init: true
+    restart: unless-stopped
 
-  depends_on:
-    web:
-      condition: service_healthy
+    depends_on:
+      web:
+        condition: service_healthy
 
-  secrets:
-    - cloudflare_tunnel_token
+    secrets:
+      - cloudflare_tunnel_token
 
-  networks:
-    - tunnel
+    networks:
+      - tunnel
 
-  security_opt:
-    - no-new-privileges:true
+    security_opt:
+      - no-new-privileges:true
 
-  cap_drop:
-    - ALL
+    cap_drop:
+      - ALL
 
-  logging:
-    driver: json-file
-    options:
-      max-size: "10m"
-      max-file: "3"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 networks:
   tunnel:
