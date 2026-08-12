@@ -1,4 +1,4 @@
-import { Archive, ArrowLeft } from "lucide-react";
+import { Archive, ArrowLeft, Eye } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -11,7 +11,7 @@ import {
   type AnnouncementFormValues,
 } from "@/components/admin/AnnouncementForm";
 import { AnnouncementStatusBadge } from "@/components/admin/AnnouncementStatusBadge";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonStyles } from "@/components/ui/Button";
 import { requireAdmin } from "@/lib/auth/admin";
 import { findAdminAnnouncement } from "@/lib/announcements/repository";
 import { formatJapanDateTimeLocal } from "@/lib/announcements/validation";
@@ -64,15 +64,27 @@ export default async function EditAnnouncementPage({
           <ArrowLeft aria-hidden="true" className="size-4" />
           お知らせ一覧へ戻る
         </Link>
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <p className="section-eyebrow">Edit</p>
-          <AnnouncementStatusBadge status={status} />
+        <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="section-eyebrow">Edit</p>
+              <AnnouncementStatusBadge status={status} />
+            </div>
+            <h1 className="mt-3 text-3xl font-bold tracking-[-0.04em] sm:text-4xl">
+              {status === "archived"
+                ? "アーカイブ済みのお知らせ"
+                : "お知らせを編集"}
+            </h1>
+          </div>
+
+          <Link
+            className={buttonStyles({ variant: "secondary", size: "compact" })}
+            href={`/admin/news/${announcement.id}/preview`}
+          >
+            <Eye aria-hidden="true" className="size-4" />
+            プレビュー
+          </Link>
         </div>
-        <h1 className="mt-3 text-3xl font-bold tracking-[-0.04em] sm:text-4xl">
-          {status === "archived"
-            ? "アーカイブ済みのお知らせ"
-            : "お知らせを編集"}
-        </h1>
       </div>
 
       {query.saved ? (
