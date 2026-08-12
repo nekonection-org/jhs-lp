@@ -41,6 +41,19 @@ ENV NEXT_PUBLIC_MODERATOR_APPLICATION_URL=${NEXT_PUBLIC_MODERATOR_APPLICATION_UR
 
 RUN pnpm validate:env && mkdir -p public && pnpm build
 
+FROM dependencies AS migrator
+
+WORKDIR /app
+
+COPY prisma ./prisma
+COPY prisma.config.ts ./prisma.config.ts
+
+ENV NODE_ENV=production
+
+USER node
+
+CMD ["pnpm", "db:migrate:deploy"]
+
 FROM base AS runner
 
 WORKDIR /app

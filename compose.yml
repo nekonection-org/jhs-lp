@@ -1,6 +1,84 @@
 name: jhs-lp
 
 services:
+  mysql:
+    image: mysql:8.4.10
+
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME:-jhs}
+      MYSQL_USER: ${DATABASE_USER:-jhs_app}
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      TZ: UTC
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    secrets:
+      - mysql_password
+      - mysql_root_password
+
+    networks:
+      - database
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          MYSQL_PWD="$$(cat "$${MYSQL_PASSWORD_FILE}")"
+          mysql --protocol=TCP --host=127.0.0.1
+          --user="$${MYSQL_USER}" --database="$${MYSQL_DATABASE}"
+          --execute="SELECT 1" --silent
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 12
+
+    restart: unless-stopped
+
+    security_opt:
+      - no-new-privileges:true
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  migrate:
+    image: jhs-lp-migrator:local
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrator
+
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      DATABASE_USER: ${DATABASE_USER:-jhs_app}
+      DATABASE_PASSWORD_FILE: /run/secrets/mysql_password
+      DATABASE_NAME: ${DATABASE_NAME:-jhs}
+      PRISMA_REQUIRE_DATABASE_CONFIG: "true"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    secrets:
+      - mysql_password
+
+    networks:
+      - database
+
+    restart: "no"
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
   web:
     image: jhs-lp:local
 
@@ -18,6 +96,21 @@ services:
       NODE_ENV: production
       HOSTNAME: 0.0.0.0
       PORT: 3000
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      DATABASE_USER: ${DATABASE_USER:-jhs_app}
+      DATABASE_PASSWORD_FILE: /run/secrets/mysql_password
+      DATABASE_NAME: ${DATABASE_NAME:-jhs}
+      CLOUDFLARE_ACCESS_TEAM_DOMAIN: ${CLOUDFLARE_ACCESS_TEAM_DOMAIN:-}
+      CLOUDFLARE_ACCESS_AUD: ${CLOUDFLARE_ACCESS_AUD:-}
+      ADMIN_ALLOWED_EMAILS: ${ADMIN_ALLOWED_EMAILS:-}
+
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+    secrets:
+      - mysql_password
 
     init: true
     restart: unless-stopped
@@ -27,6 +120,7 @@ services:
 
     networks:
       - tunnel
+      - database
 
     security_opt:
       - no-new-privileges:true
@@ -82,7 +176,17 @@ services:
 networks:
   tunnel:
     driver: bridge
+  database:
+    driver: bridge
+    internal: true
+
+volumes:
+  mysql_data:
 
 secrets:
   cloudflare_tunnel_token:
     file: ./secrets/cloudflare-tunnel-token
+  mysql_password:
+    file: ./secrets/mysql-password
+  mysql_root_password:
+    file: ./secrets/mysql-root-password
