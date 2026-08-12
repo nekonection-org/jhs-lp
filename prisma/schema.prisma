@@ -1,0 +1,82 @@
+generator client {
+  provider   = "prisma-client"
+  output     = "../src/generated/prisma"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum AnnouncementCategory {
+  NOTICE      @map("notice")
+  MAINTENANCE @map("maintenance")
+  UPDATE      @map("update")
+  EVENT       @map("event")
+  IMPORTANT   @map("important")
+  INCIDENT    @map("incident")
+}
+
+enum AnnouncementStatus {
+  DRAFT     @map("draft")
+  PUBLISHED @map("published")
+  ARCHIVED  @map("archived")
+}
+
+enum AnnouncementLocale {
+  JA @map("ja")
+  EN @map("en")
+}
+
+enum AuditAction {
+  CREATE  @map("create")
+  UPDATE  @map("update")
+  ARCHIVE @map("archive")
+}
+
+model Announcement {
+  id           String                    @id @default(uuid()) @db.Char(36)
+  category     AnnouncementCategory
+  status       AnnouncementStatus        @default(DRAFT)
+  publishedAt  DateTime?                 @map("published_at") @db.DateTime(3)
+  externalUrl  String?                   @map("external_url") @db.VarChar(2048)
+  version      Int                       @default(1)
+  createdAt    DateTime                  @default(now()) @map("created_at") @db.DateTime(3)
+  updatedAt    DateTime                  @updatedAt @map("updated_at") @db.DateTime(3)
+  translations AnnouncementTranslation[]
+  auditLogs    AuditLog[]
+
+  @@index([status, publishedAt], map: "announcement_publication_idx")
+  @@index([updatedAt], map: "announcement_updated_at_idx")
+  @@map("announcements")
+}
+
+model AnnouncementTranslation {
+  announcementId String             @map("announcement_id") @db.Char(36)
+  locale         AnnouncementLocale
+  title          String             @db.VarChar(160)
+  description    String             @db.VarChar(600)
+  createdAt      DateTime           @default(now()) @map("created_at") @db.DateTime(3)
+  updatedAt      DateTime           @updatedAt @map("updated_at") @db.DateTime(3)
+  announcement   Announcement       @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@id([announcementId, locale])
+  @@map("announcement_translations")
+}
+
+model AuditLog {
+  id             String        @id @default(uuid()) @db.Char(36)
+  announcementId String?       @map("announcement_id") @db.Char(36)
+  action         AuditAction
+  actorSub       String        @map("actor_sub") @db.VarChar(255)
+  actorEmail     String        @map("actor_email") @db.VarChar(320)
+  requestId      String?       @map("request_id") @db.VarChar(128)
+  beforeData     Json?         @map("before_data")
+  afterData      Json?         @map("after_data")
+  createdAt      DateTime      @default(now()) @map("created_at") @db.DateTime(3)
+  announcement   Announcement? @relation(fields: [announcementId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt], map: "audit_log_created_at_idx")
+  @@index([announcementId, createdAt], map: "audit_log_announcement_idx")
+  @@map("audit_logs")
+}
