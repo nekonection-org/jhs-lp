@@ -1,6 +1,23 @@
 import { defineConfig, devices } from "@playwright/test";
+import { fileURLToPath } from "node:url";
 
 import { e2eEnvironment } from "./e2e/environment";
+
+const adminE2eEnvironment: Record<string, string> =
+  process.env.E2E_ADMIN_ENABLED === "true"
+    ? {
+        ADMIN_ALLOWED_EMAILS: "e2e-admin@example.com",
+        ADMIN_DEV_BYPASS: "true",
+        ADMIN_DEV_EMAIL: "e2e-admin@example.com",
+        DATABASE_HOST: process.env.DATABASE_HOST ?? "",
+        DATABASE_NAME: process.env.DATABASE_NAME ?? "",
+        DATABASE_PASSWORD: process.env.DATABASE_PASSWORD ?? "",
+        DATABASE_PORT: process.env.DATABASE_PORT ?? "3306",
+        DATABASE_USER: process.env.DATABASE_USER ?? "",
+      }
+    : {};
+const nextCliPath = fileURLToPath(import.meta.resolve("next/dist/bin/next"));
+const webServerCommand = `"${process.execPath}" "${nextCliPath}" dev --hostname 127.0.0.1 --port 3100`;
 
 export default defineConfig({
   expect: {
@@ -27,8 +44,9 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command: "pnpm dev --hostname 127.0.0.1 --port 3100",
+    command: webServerCommand,
     env: {
+      ...adminE2eEnvironment,
       NEXT_PUBLIC_DISCORD_INVITE_URL: e2eEnvironment.discordUrl,
       NEXT_PUBLIC_MODERATOR_APPLICATION_URL:
         e2eEnvironment.moderatorApplicationUrl,

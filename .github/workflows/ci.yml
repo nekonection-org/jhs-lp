@@ -20,8 +20,28 @@ jobs:
     name: Quality checks
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    services:
+      mysql:
+        image: mysql:8.4.10
+        env:
+          MYSQL_DATABASE: jhs_test
+          MYSQL_USER: jhs_app
+          MYSQL_PASSWORD: integration-password
+          MYSQL_ROOT_PASSWORD: integration-root-password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="MYSQL_PWD=integration-password mysql --protocol=TCP --host=127.0.0.1 --user=jhs_app --database=jhs_test --execute='SELECT 1' --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
     env:
       CI: true
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PORT: 3306
+      DATABASE_USER: jhs_app
+      DATABASE_PASSWORD: integration-password
+      DATABASE_NAME: jhs_test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,6 +68,14 @@ jobs:
 
       - name: Run unit tests
         run: pnpm test
+
+      - name: Apply database migrations
+        run: pnpm db:migrate:deploy
+
+      - name: Run MySQL integration tests
+        run: pnpm test:integration
+        env:
+          RUN_DATABASE_INTEGRATION: true
 
       - name: Build production application
         run: pnpm build
