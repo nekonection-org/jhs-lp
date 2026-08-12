@@ -1,0 +1,9 @@
+# Local development override. Production must use compose.yml alone.
+services:
+  mysql:
+    ports:
+      - "127.0.0.1:3307:3306"
+
+networks:
+  database:
+    internal: false
