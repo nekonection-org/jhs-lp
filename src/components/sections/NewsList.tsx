@@ -53,6 +53,7 @@ export function NewsList({ result }: NewsListProps) {
   return (
     <div className="mt-10 grid gap-4 lg:mt-12">
       {result.items.map((item, index) => {
+        const publishedAt = new Date(item.publishedAt);
         const english = item.translations.en ?? {
           title: en.news.translationPendingTitle,
           description: en.news.translationPendingDescription,
@@ -65,13 +66,13 @@ export function NewsList({ result }: NewsListProps) {
               <div className="flex flex-wrap items-center gap-2 sm:block">
                 <time
                   className="text-sm font-semibold text-[var(--text-secondary)]"
-                  dateTime={item.publishedAt.toISOString()}
+                  dateTime={item.publishedAt}
                 >
                   <span data-locale-content="ja">
-                    {formatAnnouncementDate(item.publishedAt, "ja")}
+                    {formatAnnouncementDate(publishedAt, "ja")}
                   </span>
                   <span data-locale-content="en">
-                    {formatAnnouncementDate(item.publishedAt, "en")}
+                    {formatAnnouncementDate(publishedAt, "en")}
                   </span>
                 </time>
                 <p className="mt-0 text-xs font-bold uppercase tracking-[0.08em] text-[var(--accent-strong)] sm:mt-2">

@@ -27,7 +27,7 @@ describe("public announcements", () => {
     expect(toPublicAnnouncement(announcement)).toEqual({
       id: "announcement-1",
       category: "notice",
-      publishedAt,
+      publishedAt: publishedAt.toISOString(),
       externalUrl: "https://example.com/news",
       translations: {
         ja: { title: "公開のお知らせ", description: "日本語の概要" },

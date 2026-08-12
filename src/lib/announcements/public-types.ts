@@ -7,7 +7,7 @@ import { getTranslation } from "@/lib/announcements/types";
 export interface PublicAnnouncement {
   id: string;
   category: AnnouncementCategory;
-  publishedAt: Date;
+  publishedAt: string;
   externalUrl: string | null;
   translations: {
     ja: { title: string; description: string };
@@ -33,7 +33,7 @@ export function toPublicAnnouncement(
   return {
     id: announcement.id,
     category: announcement.category,
-    publishedAt: announcement.publishedAt,
+    publishedAt: announcement.publishedAt.toISOString(),
     externalUrl: announcement.externalUrl,
     translations: {
       ja: {
