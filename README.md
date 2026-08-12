@@ -11,12 +11,17 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - Discord、Tebex、モデレーター応募先への外部リンク
 - ネイティブ`details`を使用したFAQ
 - ボタンから開く利用規約モーダル
-- TypeScriptコンテンツによるルール・FAQ・お知らせ管理
+- TypeScriptコンテンツによるルール・FAQ管理
+- MySQLと管理画面によるお知らせの下書き・予約公開・公開管理
+- Cloudflare Accessとアプリ内権限検証による管理画面保護
+- お知らせ変更の操作ログと、管理者限定プレビュー
 - Reduced Motion、キーボード操作、レスポンシブ表示への対応
 
 ## 技術構成
 
 - Next.js 16 / React 19 / TypeScript
+- Prisma ORM / MySQL 8.4 LTS
+- Cloudflare Access / Cloudflare Tunnel
 - Tailwind CSS v4
 - Motion for React
 - next-themes
@@ -27,7 +32,7 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 
 - Node.js 24（CI・Dockerでは`24.18.0`）
 - pnpm 10（正確なバージョンは`package.json`を参照）
-- Docker / Docker Compose（コンテナで実行する場合）
+- Docker / Docker Compose（MySQLと本番コンテナで使用）
 
 ## ローカル開発
 
@@ -50,6 +55,16 @@ NEXT_PUBLIC_DISCORD_INVITE_URL=https://discord.gg/example
 NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 NEXT_PUBLIC_TEBEX_URL=
 NEXT_PUBLIC_MODERATOR_APPLICATION_URL=
+
+DATABASE_HOST=127.0.0.1
+DATABASE_PORT=3306
+DATABASE_USER=jhs_app
+DATABASE_PASSWORD=
+DATABASE_NAME=jhs
+
+CLOUDFLARE_ACCESS_TEAM_DOMAIN=https://your-team.cloudflareaccess.com
+CLOUDFLARE_ACCESS_AUD=
+ADMIN_ALLOWED_EMAILS=
 ```
 
 | 変数                                    | 必須             | 用途                                             |
@@ -61,6 +76,22 @@ NEXT_PUBLIC_MODERATOR_APPLICATION_URL=
 | `NEXT_PUBLIC_MODERATOR_APPLICATION_URL` | 任意             | モデレーター応募チャンネルまたは応募フォーム     |
 
 `NEXT_PUBLIC_`で始まる値はビルド時にブラウザ向けコードへ埋め込まれます。Bot Token、RCONパスワード、APIキーなどの秘密情報は設定しないでください。
+
+DB接続情報、Cloudflare Access設定、管理者メールアドレスはサーバー側だけで使用します。`DATABASE_PASSWORD`はローカル開発用です。本番Dockerでは環境変数へパスワードを直接設定せず、`secrets/mysql-password`を読み込みます。
+
+| サーバー側変数                  | 用途                                                          |
+| ------------------------------- | ------------------------------------------------------------- |
+| `DATABASE_HOST`                 | MySQLホスト。本番Composeでは`mysql`                           |
+| `DATABASE_PORT`                 | MySQLポート。既定値は`3306`                                   |
+| `DATABASE_USER`                 | アプリ専用MySQLユーザー                                       |
+| `DATABASE_PASSWORD`             | ローカル開発用パスワード                                      |
+| `DATABASE_PASSWORD_FILE`        | Docker secretのファイルパス。Composeが自動設定                |
+| `DATABASE_NAME`                 | データベース名                                                |
+| `CLOUDFLARE_ACCESS_TEAM_DOMAIN` | `https://<team>.cloudflareaccess.com`形式のAccess Team Domain |
+| `CLOUDFLARE_ACCESS_AUD`         | Self-hosted applicationのApplication Audience（AUD）          |
+| `ADMIN_ALLOWED_EMAILS`          | 管理を許可するメールアドレスのカンマ区切り一覧                |
+| `ADMIN_DEV_BYPASS`              | 開発環境だけで有効なローカル認証バイパス                      |
+| `ADMIN_DEV_EMAIL`               | 開発バイパスで使用する、許可リスト内のメールアドレス          |
 
 ### Discord URLの設定場所
 
@@ -96,19 +127,14 @@ NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 
 ### お知らせの追加
 
-`ja.ts`と`en.ts`の`news.items`へ、同じID・公開日・カテゴリを持つ項目を追加します。新しいお知らせは配列の先頭へ置きます。
+お知らせはTypeScriptへ直接追加せず、Cloudflare Accessで保護された`/admin/news`から管理します。下書きでは英語を省略できますが、公開または予約公開には日本語・英語の両方が必要です。
 
-```ts
-{
-  id: "announcement-id",
-  publishedAt: "2026-08-03",
-  category: "notice",
-  title: "実際のお知らせタイトル",
-  description: "実際のお知らせ概要",
-}
-```
+- `下書き`: 公開サイトには表示されず、管理画面内だけでプレビューできます。
+- `公開`: 公開日時が現在以前なら公開サイトへ表示されます。
+- `予約公開`: 公開状態のまま未来の公開日時を指定します。日時は日本時間（JST）で入力し、DBにはUTCで保存します。
+- `アーカイブ`: 公開対象から外します。お知らせと操作ログは削除しません。
 
-英語側には同じ`id`で翻訳を追加します。カテゴリには`notice`、`maintenance`、`update`、`event`、`important`、`incident`を指定できます。Discord投稿などへ誘導する場合は、両言語の項目へHTTPSの`url`を追加できます。架空のお知らせは本番へ掲載しないでください。
+公開サイトは公開日時が新しい順に最大5件を表示します。予約時刻の到来は最大約60秒のキャッシュ遅延が生じる場合があります。管理画面からの保存時は公開キャッシュを即時無効化します。
 
 ### 利用規約の更新
 
@@ -130,6 +156,7 @@ pnpm typecheck
 pnpm lint
 pnpm format:check
 pnpm test
+pnpm db:validate
 pnpm build
 ```
 
@@ -140,26 +167,96 @@ pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
+MySQL統合テストはマイグレーション済みのテストDBに対して実行します。`RUN_DATABASE_INTEGRATION=true`を指定しない通常のUnit Testでは、このテストだけをスキップします。CIではMySQL 8.4.10を起動し、マイグレーション適用後に自動実行します。
+
 ## Docker
 
-Docker Composeはプロジェクト直下の`.env`をビルド引数として読み込みます。
+Docker ComposeはMySQL、1回限りのマイグレーター、Next.js、Cloudflare Tunnelを起動します。MySQLとWebのポートはホストへ公開せず、Cloudflare Tunnelだけを本番入口にします。
+
+最初に環境変数とDocker secretsを用意します。生成したファイルは`.gitignore`対象です。
 
 ```powershell
 Copy-Item .env.example .env
-docker compose build
-docker compose up -d
-docker compose ps
+New-Item -ItemType Directory -Force secrets | Out-Null
+[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32)) | Set-Content -NoNewline secrets/mysql-password
+[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32)) | Set-Content -NoNewline secrets/mysql-root-password
+Read-Host "Cloudflare Tunnel token" | Set-Content -NoNewline secrets/cloudflare-tunnel-token
 ```
 
-本番イメージのビルドでは`NEXT_PUBLIC_SITE_URL`と`NEXT_PUBLIC_DISCORD_INVITE_URL`を必須とし、HTTPSの公開URLであることを検証します。空欄、localhost、予約済みテスト用ドメインではビルドに失敗します。Rust接続先を設定した場合は、ホスト名と`1`から`65535`までの任意ポートだけを許可します。
+`.env`へ公開URL、Access設定、DB名とDBユーザーを設定してから起動します。
+
+```powershell
+docker compose build
+docker compose up -d
+docker compose ps -a
+```
+
+`migrate`が終了コード0で完了してから`web`が起動します。本番イメージのビルドでは`NEXT_PUBLIC_SITE_URL`と`NEXT_PUBLIC_DISCORD_INVITE_URL`を必須とし、HTTPSの公開URLであることを検証します。空欄、localhost、予約済みテスト用ドメインではビルドに失敗します。
 
 ログは次のコマンドで確認できます。
 
 ```powershell
+docker compose logs migrate
 docker compose logs -f web
 ```
 
-コンテナはNext.jsのstandalone出力を非rootユーザーで実行し、ポート`3000`を公開します。HTTPヘルスチェックの状態は`docker compose ps`で確認できます。
+Next.jsとマイグレーターは非rootユーザーで実行します。MySQLは永続volume`mysql_data`へ保存されます。公開サイトはDB障害時にもページ全体を500にせず、お知らせ欄へ取得失敗を表示します。管理画面は認証設定が欠けている場合に503で閉じます。
+
+### ローカル管理画面開発
+
+ローカル開発時だけ`compose.dev.yml`を重ね、MySQLを`127.0.0.1:3307`へ限定公開できます。本番ではこの上書きファイルを使用しません。
+
+```powershell
+docker compose -f compose.yml -f compose.dev.yml up -d mysql migrate
+```
+
+`.env.local`では`DATABASE_PORT=3307`と、`secrets/mysql-password`に生成した値を`DATABASE_PASSWORD`へ設定します。Cloudflareログインを使わないローカル開発に限り、次を設定できます。
+
+```env
+ADMIN_ALLOWED_EMAILS=local-admin@example.com
+ADMIN_DEV_BYPASS=true
+ADMIN_DEV_EMAIL=local-admin@example.com
+```
+
+このバイパスは`NODE_ENV=development`以外では必ず無効になります。本番で`ADMIN_DEV_BYPASS=true`を設定しても認証を通過しません。
+
+### バックアップ
+
+本番更新とマイグレーションの前にMySQLをバックアップします。PowerShellでは出力文字コードをUTF-8へ固定します。
+
+```powershell
+docker compose exec -T mysql sh -c 'MYSQL_PWD="$(cat "$MYSQL_ROOT_PASSWORD_FILE")" mysqldump --single-transaction --routines --triggers --user=root "$MYSQL_DATABASE"' | Out-File -Encoding utf8 jhs-backup.sql
+```
+
+復元は停止時間と対象DBを確認したうえで実施してください。
+
+```powershell
+Get-Content -Raw jhs-backup.sql | docker compose exec -T mysql sh -c 'MYSQL_PWD="$(cat "$MYSQL_ROOT_PASSWORD_FILE")" mysql --user=root "$MYSQL_DATABASE"'
+```
+
+本番では`prisma migrate dev`を実行しません。`docker compose up -d`が`prisma migrate deploy`専用コンテナを実行します。マイグレーション失敗時はWebを起動せず、既存コンテナとバックアップを維持して原因を確認します。
+
+## Cloudflare Access
+
+Cloudflare側のAccess ApplicationとAllow policyはリポジトリから自動作成されません。本番公開前にZero Trust管理画面で設定してください。
+
+1. TunnelのPublic Hostnameを`web:3000`へ向けます。オリジンのポートはインターネットへ直接公開しません。
+2. Self-hosted applicationで、公開ホストの`/admin`と`/admin/*`の両方を保護します。Cloudflare Accessでは`/admin/*`だけでは親の`/admin`を含みません。
+3. Allow policyには管理者のメールアドレスを明示します。管理画面で`Everyone`や`Bypass`を使用せず、セッション時間も必要最小限にします。
+4. Application Audience（AUD）とTeam Domainを`.env`へ設定し、同じ管理者を`ADMIN_ALLOWED_EMAILS`へ登録します。
+5. 必要に応じてBinding Cookieを有効化します。Tunnel経由でServer ActionのHost不一致が起きる場合だけ、正確な本番ホストを`serverActions.allowedOrigins`へ追加します。ワイルドカードは使用しません。
+
+アプリは`Cf-Access-Jwt-Assertion`をCloudflareのリモートJWKSで検証し、署名、issuer、audience、有効期限、token type、subject、emailを確認します。その後、メールアドレスの許可リストを全管理ページと全更新処理で再確認します。メールヘッダーだけを信用せず、JWTやCookieを操作ログへ保存しません。
+
+- JWTなし・不正: 401
+- JWTは有効だが許可リスト外: 403
+- Access設定または鍵取得に問題がある: 503
+
+いずれもキャッシュせず、検証エラーやトークン内容をレスポンスへ公開しません。
+
+## 操作ログ
+
+お知らせの作成・更新・アーカイブと操作ログは同じMySQLトランザクションで保存します。操作ログの保存に失敗した場合、お知らせ変更もロールバックされます。`/admin/audit`では最新100件の操作者、操作、対象ID、変更前後を参照できますが、編集・削除機能は提供しません。
 
 ## CIとコンテナ公開
 
@@ -170,6 +267,8 @@ Pull Requestと`main`へのpushでは、GitHub Actionsが次の処理を実行�
 - ESLint
 - Prettier
 - Unit Test
+- MySQLマイグレーション
+- MySQL統合テスト（予約公開、監査ログ、トランザクションロールバック）
 - Production Build
 
 `main`へのpushに対するCIが成功した場合、検証済みコミットからDockerイメージをビルドしてGHCRへ公開します。
@@ -183,12 +282,13 @@ Repository Variablesには、`.env.example`と同名の公開設定を登録し�
 
 ```text
 src/
-├── app/          # App Router、metadata、manifest、robots、sitemap
-├── components/   # Header、Footer、各セクション、共通UI、Provider
+├── app/          # App Router、公開LP、Access保護された管理画面
+├── components/   # Header、各セクション、管理画面、共通UI
 ├── content/      # 日本語・英語コンテンツと型定義
 ├── hooks/        # アクティブセクションなどのHooks
-├── lib/          # URL・接続先設定、共通関数
+├── lib/          # 認証、DB、お知らせ、操作ログ、共通関数
 └── tests/        # Unit / Component Test
+prisma/           # MySQLスキーマとマイグレーション
 e2e/              # Playwright E2E Test
 public/           # 公式アイコンとHero画像
 ```
