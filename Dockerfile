@@ -48,11 +48,13 @@ WORKDIR /app
 COPY prisma ./prisma
 COPY prisma.config.ts ./prisma.config.ts
 
+RUN chown -R node:node /app/node_modules/.pnpm/@prisma+engines@*/node_modules/@prisma/engines
+
 ENV NODE_ENV=production
 
 USER node
 
-CMD ["pnpm", "db:migrate:deploy"]
+CMD ["./node_modules/.bin/prisma", "migrate", "deploy"]
 
 FROM base AS runner
 

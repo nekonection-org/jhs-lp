@@ -8,6 +8,14 @@
     "node": ">=24 <25",
     "pnpm": ">=10 <11"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "prisma",
+      "sharp",
+      "unrs-resolver"
+    ]
+  },
   "scripts": {
     "predev": "prisma generate",
     "dev": "next dev",
