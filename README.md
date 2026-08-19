@@ -11,10 +11,10 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - Discord、Tebex、モデレーター応募先への外部リンク
 - ネイティブ`details`を使用したFAQ
 - ボタンから開く利用規約モーダル
-- TypeScriptコンテンツによるルール・FAQ管理
-- MySQLと管理画面によるお知らせの下書き・予約公開・公開管理
+- TypeScriptコンテンツによるルールなどの静的コンテンツ管理
+- MySQLと管理画面によるお知らせ・FAQの下書き、公開、アーカイブ管理
 - Cloudflare Accessとアプリ内権限検証による管理画面保護
-- お知らせ変更の操作ログと、管理者限定プレビュー
+- お知らせ・FAQ変更の操作ログと、お知らせの管理者限定プレビュー
 - Reduced Motion、キーボード操作、レスポンシブ表示への対応
 
 ## 技術構成
@@ -118,12 +118,12 @@ NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 
 ## コンテンツの更新
 
-主要な文章は次の2ファイルで管理しています。
+見出しや案内文などの静的な文章は次の2ファイルで管理しています。
 
 - `src/content/ja.ts`: 日本語
 - `src/content/en.ts`: 英語
 
-項目を追加・削除する場合は両言語で同じ`id`を使用し、必要に応じて`src/content/types.ts`のID一覧と型も更新してください。日英でIDが一致しない場合、表示時に`Localized content item is missing`エラーになります。
+静的な項目を追加・削除する場合は両言語で同じ`id`を使用し、必要に応じて`src/content/types.ts`のID一覧と型も更新してください。日英でIDが一致しない場合、表示時に`Localized content item is missing`エラーになります。お知らせとFAQの本文はTypeScriptではなく管理画面から更新します。
 
 ### お知らせの追加
 
@@ -135,6 +135,18 @@ NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 - `アーカイブ`: 公開対象から外します。お知らせと操作ログは削除しません。
 
 公開サイトは公開日時が新しい順に最大5件を表示します。予約時刻の到来は最大約60秒のキャッシュ遅延が生じる場合があります。管理画面からの保存時は公開キャッシュを即時無効化します。
+
+### FAQの更新
+
+FAQはCloudflare Accessで保護された`/admin/faqs`から管理します。日本語の質問と回答は常に必須で、公開時は英語も必須です。
+
+- `下書き`: 公開サイトには表示されません。英語は省略できます。
+- `公開`: 日英の質問と回答を公開サイトへ表示します。
+- `表示順`: 0から9999までの整数を指定し、数字が小さいFAQから表示します。
+- `確認済み / 準備中`: 回答内容の確認状態です。準備中の場合は公開サイトにも状態を表示します。
+- `アーカイブ`: 公開対象から外します。FAQと操作ログは削除しません。
+
+既存のFAQはマイグレーションでDBへ移行されます。公開FAQは最大約60秒キャッシュされますが、管理画面からの保存時はFAQキャッシュを即時無効化します。
 
 ### 利用規約の更新
 
@@ -167,7 +179,7 @@ pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-MySQL統合テストはマイグレーション済みのテストDBに対して実行します。`RUN_DATABASE_INTEGRATION=true`を指定しない通常のUnit Testでは、このテストだけをスキップします。CIではMySQL 8.4.10を起動し、マイグレーション適用後に自動実行します。
+MySQL統合テストはマイグレーション済みのテストDBに対して実行します。`RUN_DATABASE_INTEGRATION=true`を指定しない通常のUnit Testでは、DB統合テストをスキップします。CIではMySQL 8.4.10を起動し、マイグレーション適用後にお知らせとFAQの統合テストを自動実行します。
 
 ## Docker
 
@@ -200,7 +212,7 @@ docker compose logs migrate
 docker compose logs -f web
 ```
 
-Next.jsとマイグレーターは非rootユーザーで実行します。MySQLは永続volume`mysql_data`へ保存されます。公開サイトはDB障害時にもページ全体を500にせず、お知らせ欄へ取得失敗を表示します。管理画面は認証設定が欠けている場合に503で閉じます。
+Next.jsとマイグレーターは非rootユーザーで実行します。MySQLは永続volume`mysql_data`へ保存されます。公開サイトはDB障害時にもページ全体を500にせず、お知らせ欄とFAQ欄へ取得失敗を表示します。管理画面は認証設定が欠けている場合に503で閉じます。
 
 ### ローカル管理画面開発
 
@@ -256,7 +268,7 @@ Cloudflare側のAccess ApplicationとAllow policyはリポジトリから自動�
 
 ## 操作ログ
 
-お知らせの作成・更新・アーカイブと操作ログは同じMySQLトランザクションで保存します。操作ログの保存に失敗した場合、お知らせ変更もロールバックされます。`/admin/audit`では最新100件の操作者、操作、対象ID、変更前後を参照できますが、編集・削除機能は提供しません。
+お知らせとFAQの作成・更新・アーカイブは、それぞれの操作ログと同じMySQLトランザクションで保存します。操作ログの保存に失敗した場合、コンテンツ変更もロールバックされます。`/admin/audit`では最新100件の操作者、操作、対象種別とID、変更前後を参照できますが、編集・削除機能は提供しません。
 
 ## CIとコンテナ公開
 
@@ -268,7 +280,7 @@ Pull Requestと`main`へのpushでは、GitHub Actionsが次の処理を実行�
 - Prettier
 - Unit Test
 - MySQLマイグレーション
-- MySQL統合テスト（予約公開、監査ログ、トランザクションロールバック）
+- MySQL統合テスト（予約公開、FAQ表示順、監査ログ、トランザクションロールバック）
 - Production Build
 
 `main`へのpushに対するCIが成功した場合、検証済みコミットからDockerイメージをビルドしてGHCRへ公開します。
@@ -286,7 +298,7 @@ src/
 ├── components/   # Header、各セクション、管理画面、共通UI
 ├── content/      # 日本語・英語コンテンツと型定義
 ├── hooks/        # アクティブセクションなどのHooks
-├── lib/          # 認証、DB、お知らせ、操作ログ、共通関数
+├── lib/          # 認証、DB、お知らせ、FAQ、操作ログ、共通関数
 └── tests/        # Unit / Component Test
 prisma/           # MySQLスキーマとマイグレーション
 e2e/              # Playwright E2E Test
