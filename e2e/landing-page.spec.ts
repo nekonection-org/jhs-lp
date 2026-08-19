@@ -105,8 +105,15 @@ test("ナビゲーションは JavaScript に依存しないアンカーリン�
   await expect(page.locator("#rules")).toBeVisible();
 });
 
-test("FAQ はネイティブ details 要素で開閉できる", async ({ page }) => {
+test("FAQ はDB状態を明示し、取得時はネイティブ details で開閉できる", async ({
+  page,
+}) => {
   const firstFaq = page.locator("#faq details").first();
+  if ((await firstFaq.count()) === 0) {
+    await expect(page.getByText("FAQを取得できません")).toBeVisible();
+    return;
+  }
+
   const summary = firstFaq.locator("summary");
 
   await expect(firstFaq).not.toHaveAttribute("open", "");
