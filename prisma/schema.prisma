@@ -34,6 +34,22 @@ enum AuditAction {
   ARCHIVE @map("archive")
 }
 
+enum FaqStatus {
+  DRAFT     @map("draft")
+  PUBLISHED @map("published")
+  ARCHIVED  @map("archived")
+}
+
+enum FaqContentStatus {
+  CONFIRMED @map("confirmed")
+  PENDING   @map("pending")
+}
+
+enum FaqLocale {
+  JA @map("ja")
+  EN @map("en")
+}
+
 model Announcement {
   id           String                    @id @default(uuid()) @db.Char(36)
   category     AnnouncementCategory
@@ -64,9 +80,39 @@ model AnnouncementTranslation {
   @@map("announcement_translations")
 }
 
+model FaqItem {
+  id            String           @id @default(uuid()) @db.Char(36)
+  status        FaqStatus        @default(DRAFT)
+  contentStatus FaqContentStatus @default(CONFIRMED) @map("content_status")
+  sortOrder     Int              @map("sort_order")
+  version       Int              @default(1)
+  createdAt     DateTime         @default(now()) @map("created_at") @db.DateTime(3)
+  updatedAt     DateTime         @updatedAt @map("updated_at") @db.DateTime(3)
+  translations  FaqTranslation[]
+  auditLogs     AuditLog[]
+
+  @@index([status, sortOrder], map: "faq_publication_order_idx")
+  @@index([updatedAt], map: "faq_updated_at_idx")
+  @@map("faq_items")
+}
+
+model FaqTranslation {
+  faqItemId String    @map("faq_item_id") @db.Char(36)
+  locale    FaqLocale
+  question  String    @db.VarChar(240)
+  answer    String    @db.Text
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(3)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.DateTime(3)
+  faqItem   FaqItem   @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
+
+  @@id([faqItemId, locale])
+  @@map("faq_translations")
+}
+
 model AuditLog {
   id             String        @id @default(uuid()) @db.Char(36)
   announcementId String?       @map("announcement_id") @db.Char(36)
+  faqItemId      String?       @map("faq_item_id") @db.Char(36)
   action         AuditAction
   actorSub       String        @map("actor_sub") @db.VarChar(255)
   actorEmail     String        @map("actor_email") @db.VarChar(320)
@@ -75,8 +121,10 @@ model AuditLog {
   afterData      Json?         @map("after_data")
   createdAt      DateTime      @default(now()) @map("created_at") @db.DateTime(3)
   announcement   Announcement? @relation(fields: [announcementId], references: [id], onDelete: SetNull)
+  faqItem        FaqItem?      @relation(fields: [faqItemId], references: [id], onDelete: SetNull)
 
   @@index([createdAt], map: "audit_log_created_at_idx")
   @@index([announcementId, createdAt], map: "audit_log_announcement_idx")
+  @@index([faqItemId, createdAt], map: "audit_log_faq_item_idx")
   @@map("audit_logs")
 }
