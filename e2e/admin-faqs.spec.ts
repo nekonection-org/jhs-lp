@@ -32,14 +32,18 @@ test.describe("FAQ administration", () => {
     await page.getByRole("button", { name: "変更を保存" }).click();
 
     await expect(page).toHaveURL(/\?saved=updated$/);
-    await expect(page.getByText("公開", { exact: true })).toBeVisible();
+    await expect(
+      page.locator("span").filter({ hasText: /^公開$/ }),
+    ).toBeVisible();
 
     await page.goto("/#faq");
     const summary = page.locator("#faq summary").filter({ hasText: marker });
     await expect(summary).toBeVisible();
     await summary.click();
     await expect(
-      page.getByText("管理画面のE2Eテストで作成した回答です。"),
+      summary
+        .locator("..")
+        .getByText("管理画面のE2Eテストで作成した回答です。"),
     ).toBeVisible();
 
     await page.goto("/admin/audit");
