@@ -251,42 +251,11 @@ export const ja = {
     title: "よくある質問",
     description:
       "参加前によく寄せられる質問と、現在確認できている回答をまとめています。",
-    items: [
-      {
-        id: "beginners",
-        question: "Rust初心者でも参加できますか？",
-        answer:
-          "参加できます。限られた時間でも遊びやすく、初心者にも配慮したルールを設けています。プレイヤーの皆さまも初心者へできる限り優しく接してください。",
-        status: "confirmed",
-      },
-      {
-        id: "ban-inquiries",
-        question: "BANについて問い合わせる方法はありますか？",
-        answer:
-          "チート・グリッチ・不正ツールに関する処分への異議申し立ては、Discordの#claim-ticketから受け付けます。",
-        status: "confirmed",
-      },
-      {
-        id: "vip-purchase",
-        question: "VIPはどこで購入できますか？",
-        answer: "VIPの提供内容、料金、正式な購入ページは準備中です。",
-        status: "pending",
-      },
-      {
-        id: "language-support",
-        question: "日本語以外にも対応していますか？",
-        answer:
-          "このサイトは日本語と英語で表示できます。ゲーム内および運営サポートの対応言語は日本語です。他言語は翻訳ツールの利用をしています。",
-        status: "confirmed",
-      },
-      {
-        id: "about-streaming",
-        question: "配信や動画投稿は可能ですか？",
-        answer:
-          "配信や動画投稿は可能です。Facepunch 利用規約および RUST の配信ルールに則して行ってください。",
-        status: "confirmed",
-      },
-    ],
+    emptyTitle: "現在、掲載中のFAQはありません",
+    emptyDescription: "公開準備が整い次第、こちらへ追加します。",
+    unavailableTitle: "FAQを取得できません",
+    unavailableDescription:
+      "一時的にFAQを読み込めません。時間を置いてからもう一度お試しください。",
   },
   moderator: {
     id: "moderator",

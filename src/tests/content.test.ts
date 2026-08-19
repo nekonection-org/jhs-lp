@@ -4,7 +4,6 @@ import {
   contentByLocale,
   defaultLocale,
   en,
-  faqItemIds,
   getContent,
   isLocale,
   ja,
@@ -57,15 +56,12 @@ describe("localized content", () => {
     }
   });
 
-  it("keeps FAQ entries complete and structurally equivalent", () => {
-    expect(ja.faq.items.map(({ id }) => id)).toEqual(faqItemIds);
-    expect(en.faq.items.map(({ id }) => id)).toEqual(faqItemIds);
-
+  it("keeps database-backed FAQ fallback messages complete", () => {
     for (const content of getLocalizedContent()) {
-      for (const item of content.faq.items) {
-        expect(item.question.trim()).not.toBe("");
-        expect(item.answer.trim()).not.toBe("");
-      }
+      expect(content.faq.emptyTitle.trim()).not.toBe("");
+      expect(content.faq.emptyDescription.trim()).not.toBe("");
+      expect(content.faq.unavailableTitle.trim()).not.toBe("");
+      expect(content.faq.unavailableDescription.trim()).not.toBe("");
     }
   });
 

@@ -2,55 +2,87 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
-import { LanguageProvider } from "@/components/providers/LanguageProvider";
-import { FaqSection } from "@/components/sections/FaqSection";
-import { faqItemIds, ja } from "@/content";
+import { FaqList } from "@/components/sections/FaqList";
+import { toPublicFaq } from "@/lib/faqs/public-types";
+import type { FaqRecord } from "@/lib/faqs/types";
 
-function renderFaq() {
-  return render(
-    <LanguageProvider>
-      <FaqSection />
-    </LanguageProvider>,
-  );
-}
+const now = new Date("2026-08-20T03:00:00.000Z");
+const faq: FaqRecord = {
+  id: "faq-1",
+  status: "published",
+  contentStatus: "pending",
+  sortOrder: 10,
+  version: 1,
+  createdAt: now,
+  updatedAt: now,
+  translations: [
+    {
+      locale: "ja",
+      question: "参加方法を教えてください。",
+      answer: "Discordでサーバー情報をご確認ください。",
+    },
+    {
+      locale: "en",
+      question: "How can I join?",
+      answer: "See the server information on Discord.",
+    },
+  ],
+};
 
-describe("FaqSection", () => {
-  it("renders every FAQ as native details and summary elements", () => {
-    const { container } = renderFaq();
-    const section = container.querySelector<HTMLElement>("section#faq");
-    const details = section?.querySelectorAll("details");
+describe("database-backed FAQ", () => {
+  it("maps and renders a bilingual FAQ as native details", () => {
+    const item = toPublicFaq(faq);
+    expect(item).not.toBeNull();
 
-    expect(section).not.toBeNull();
-    expect(details).toHaveLength(faqItemIds.length);
+    const { container } = render(
+      <FaqList result={{ status: "ready", items: item ? [item] : [] }} />,
+    );
 
-    for (const item of ja.faq.items) {
-      const question = screen.getByText(item.question);
-      expect(question.closest("summary")).not.toBeNull();
-      expect(screen.getByText(item.answer)).toBeInTheDocument();
-    }
+    expect(container.querySelectorAll("details")).toHaveLength(1);
+    expect(
+      screen.getByText("参加方法を教えてください。").closest("summary"),
+    ).not.toBeNull();
+    expect(screen.getByText("How can I join?")).toBeInTheDocument();
+    expect(screen.getByText("準備中")).toBeInTheDocument();
   });
 
   it("opens and closes an answer through its summary control", async () => {
     const user = userEvent.setup();
-    renderFaq();
+    const item = toPublicFaq(faq);
+    render(<FaqList result={{ status: "ready", items: item ? [item] : [] }} />);
 
     const summary = screen
-      .getByText(ja.faq.items[0].question)
+      .getByText("参加方法を教えてください。")
       .closest("summary");
-    if (!summary) {
-      throw new Error("The first FAQ must be wrapped in a summary element");
+    const details = summary?.closest("details");
+
+    if (!summary || !details) {
+      throw new Error("The FAQ must use native details and summary elements.");
     }
 
-    const details = summary.closest("details");
-    if (!details) {
-      throw new Error("The first FAQ summary must be wrapped in details");
-    }
     expect(details).not.toHaveAttribute("open");
-
     await user.click(summary);
     expect(details).toHaveAttribute("open");
-
     await user.click(summary);
     expect(details).not.toHaveAttribute("open");
+  });
+
+  it("rejects incomplete translations and distinguishes empty from unavailable", () => {
+    expect(
+      toPublicFaq({
+        ...faq,
+        translations: faq.translations.filter(({ locale }) => locale !== "en"),
+      }),
+    ).toBeNull();
+
+    const { rerender } = render(
+      <FaqList result={{ status: "ready", items: [] }} />,
+    );
+    expect(
+      screen.getByText("現在、掲載中のFAQはありません"),
+    ).toBeInTheDocument();
+
+    rerender(<FaqList result={{ status: "unavailable", items: [] }} />);
+    expect(screen.getByText("FAQを取得できません")).toBeInTheDocument();
   });
 });

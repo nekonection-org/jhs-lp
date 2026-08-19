@@ -252,43 +252,11 @@ export const en = {
     title: "Frequently Asked Questions",
     description:
       "Answers to common questions before joining, limited to information that can currently be verified.",
-    items: [
-      {
-        id: "beginners",
-        question: "Can Rust beginners join?",
-        answer:
-          "Yes. The rules are designed to make the server approachable for players with limited time and for beginners. Players are also asked to be as welcoming to beginners as possible.",
-        status: "confirmed",
-      },
-      {
-        id: "ban-inquiries",
-        question: "How can I ask about a ban?",
-        answer:
-          "Appeals concerning penalties for cheats, glitches, or unauthorized tools are accepted through the Discord #claim-ticket channel.",
-        status: "confirmed",
-      },
-      {
-        id: "vip-purchase",
-        question: "Where can I purchase VIP?",
-        answer:
-          "The VIP offering, pricing, and official purchase page are in preparation. No purchase destination is currently published here.",
-        status: "pending",
-      },
-      {
-        id: "language-support",
-        question: "Are languages other than Japanese supported?",
-        answer:
-          "This website can be displayed in Japanese and English. In-game and staff support is provided in Japanese; translation tools are used for other languages.",
-        status: "confirmed",
-      },
-      {
-        id: "about-streaming",
-        question: "Is streaming or video posting allowed?",
-        answer:
-          "Streaming and video posting are allowed. Please follow Facepunch's Terms of Service and Rust's streaming rules.",
-        status: "confirmed",
-      },
-    ],
+    emptyTitle: "No FAQs are currently published",
+    emptyDescription: "New answers will appear here when they are ready.",
+    unavailableTitle: "FAQs are unavailable",
+    unavailableDescription:
+      "FAQs could not be loaded temporarily. Please try again later.",
   },
   moderator: {
     id: "moderator",

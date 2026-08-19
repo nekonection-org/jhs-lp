@@ -48,14 +48,6 @@ export const vipDetailIds = [
   "refund-policy",
 ] as const;
 
-export const faqItemIds = [
-  "beginners",
-  "ban-inquiries",
-  "vip-purchase",
-  "language-support",
-  "about-streaming",
-] as const;
-
 export const moderatorDetailIds = [
   "responsibilities",
   "requirements",
@@ -243,17 +235,11 @@ export interface VipContent extends SectionIntroduction<"vip"> {
   readonly notice: string;
 }
 
-export type FaqItems = IdentifiedItems<
-  typeof faqItemIds,
-  {
-    readonly question: string;
-    readonly answer: string;
-    readonly status: ContentStatus;
-  }
->;
-
 export interface FaqContent extends SectionIntroduction<"faq"> {
-  readonly items: FaqItems;
+  readonly emptyTitle: string;
+  readonly emptyDescription: string;
+  readonly unavailableTitle: string;
+  readonly unavailableDescription: string;
 }
 
 export type ModeratorDetailItems = IdentifiedItems<
