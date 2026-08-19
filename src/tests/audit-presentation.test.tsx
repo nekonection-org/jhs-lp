@@ -6,6 +6,7 @@ import {
   auditActionLabels,
   formatAuditDate,
   formatAuditSnapshot,
+  getAuditTarget,
 } from "@/lib/audit/presentation";
 
 describe("audit presentation", () => {
@@ -19,6 +20,15 @@ describe("audit presentation", () => {
     expect(auditActionLabels.create.label).toBe("作成");
     expect(auditActionLabels.update.label).toBe("更新");
     expect(auditActionLabels.archive.label).toBe("アーカイブ");
+  });
+
+  it("distinguishes announcement and FAQ audit targets", () => {
+    expect(
+      getAuditTarget({ announcementId: "announcement-1", faqItemId: null }),
+    ).toEqual({ label: "お知らせ", id: "announcement-1" });
+    expect(
+      getAuditTarget({ announcementId: null, faqItemId: "faq-1" }),
+    ).toEqual({ label: "FAQ", id: "faq-1" });
   });
 
   it("renders snapshots as escaped text", () => {

@@ -30,3 +30,19 @@ export function formatAuditSnapshot(value: unknown | null) {
 
   return JSON.stringify(value, null, 2) ?? null;
 }
+
+export function getAuditTarget({
+  announcementId,
+  faqItemId,
+}: {
+  announcementId: string | null;
+  faqItemId: string | null;
+}) {
+  if (announcementId) {
+    return { label: "お知らせ", id: announcementId };
+  }
+  if (faqItemId) {
+    return { label: "FAQ", id: faqItemId };
+  }
+  return { label: "対象なし", id: null };
+}

@@ -1,6 +1,10 @@
 import { AuditSnapshotDetails } from "@/components/admin/AuditSnapshotDetails";
 import { requireAdmin } from "@/lib/auth/admin";
-import { auditActionLabels, formatAuditDate } from "@/lib/audit/presentation";
+import {
+  auditActionLabels,
+  formatAuditDate,
+  getAuditTarget,
+} from "@/lib/audit/presentation";
 import { AUDIT_LOG_LIMIT, listLatestAuditLogs } from "@/lib/audit/repository";
 
 export default async function AdminAuditPage() {
@@ -15,7 +19,7 @@ export default async function AdminAuditPage() {
           操作ログ
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">
-          お知らせの作成、更新、アーカイブを新しい順に表示します。最新
+          お知らせとFAQの作成、更新、アーカイブを新しい順に表示します。最新
           {AUDIT_LOG_LIMIT}件まで確認できます。
         </p>
       </div>
@@ -24,6 +28,7 @@ export default async function AdminAuditPage() {
         <div className="grid gap-3">
           {auditLogs.map((auditLog) => {
             const action = auditActionLabels[auditLog.action];
+            const target = getAuditTarget(auditLog);
 
             return (
               <article
@@ -58,10 +63,12 @@ export default async function AdminAuditPage() {
                   </div>
                   <div className="min-w-0">
                     <dt className="text-xs font-semibold text-[var(--text-muted)]">
-                      対象のお知らせID
+                      対象
                     </dt>
                     <dd className="mt-1 break-all font-mono text-xs text-[var(--text-secondary)]">
-                      {auditLog.announcementId ?? "対象なし"}
+                      {target.id
+                        ? `${target.label}: ${target.id}`
+                        : target.label}
                     </dd>
                   </div>
                 </dl>

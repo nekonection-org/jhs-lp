@@ -1,4 +1,10 @@
-import { FileClock, Home, Newspaper, ScrollText } from "lucide-react";
+import {
+  CircleHelp,
+  FileClock,
+  Home,
+  Newspaper,
+  ScrollText,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -27,7 +33,7 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
                 JHS 管理画面
               </span>
               <span className="block text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                News Administration
+                Content Administration
               </span>
             </span>
           </Link>
@@ -40,6 +46,14 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
             >
               <Newspaper aria-hidden="true" className="size-4" />
               <span className="hidden sm:inline">お知らせ</span>
+            </Link>
+            <Link
+              aria-label="FAQ管理"
+              className="inline-flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+              href="/admin/faqs"
+            >
+              <CircleHelp aria-hidden="true" className="size-4" />
+              <span className="hidden sm:inline">FAQ</span>
             </Link>
             <Link
               aria-label="操作ログ"
