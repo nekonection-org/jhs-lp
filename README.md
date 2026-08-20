@@ -219,10 +219,23 @@ Next.jsとマイグレーターは非rootユーザーで実行します。MySQL�
 ローカル開発時だけ`compose.dev.yml`を重ね、MySQLを`127.0.0.1:3307`へ限定公開できます。本番ではこの上書きファイルを使用しません。
 
 ```powershell
+docker compose -f compose.yml -f compose.dev.yml build migrate
 docker compose -f compose.yml -f compose.dev.yml up -d mysql migrate
 ```
 
-`.env.local`では`DATABASE_PORT=3307`と、`secrets/mysql-password`に生成した値を`DATABASE_PASSWORD`へ設定します。Cloudflareログインを使わないローカル開発に限り、次を設定できます。
+マイグレーションを追加した後は、古い`jhs-lp-migrator:local`を再利用しないよう、先に`build migrate`を実行してください。
+
+`.env.local`ではローカル公開ポート`3307`とsecretファイルを指定します。パスワード値を`.env.local`へ複製する必要はありません。
+
+```env
+DATABASE_HOST=127.0.0.1
+DATABASE_PORT=3307
+DATABASE_USER=jhs_app
+DATABASE_PASSWORD_FILE=secrets/mysql-password
+DATABASE_NAME=jhs
+```
+
+Cloudflareログインを使わないローカル開発に限り、次を設定できます。
 
 ```env
 ADMIN_ALLOWED_EMAILS=local-admin@example.com
@@ -230,7 +243,7 @@ ADMIN_DEV_BYPASS=true
 ADMIN_DEV_EMAIL=local-admin@example.com
 ```
 
-このバイパスは`NODE_ENV=development`以外では必ず無効になります。本番で`ADMIN_DEV_BYPASS=true`を設定しても認証を通過しません。
+環境変数を変更した場合は、起動中の`pnpm dev`を再起動してください。このバイパスは`NODE_ENV=development`以外では必ず無効になります。本番で`ADMIN_DEV_BYPASS=true`を設定しても認証を通過しません。
 
 ### バックアップ
 
