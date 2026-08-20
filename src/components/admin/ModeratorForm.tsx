@@ -171,17 +171,24 @@ export function ModeratorForm({ action, values }: ModeratorFormProps) {
               </select>
               <FieldError name="status" state={state} />
             </div>
-            <label className="flex min-h-11 items-center gap-3 self-end rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] px-4 text-sm font-semibold">
-              <input
-                className="size-4 accent-[var(--accent)]"
-                defaultChecked={Boolean(
-                  ja.applicationAction && en.applicationAction,
-                )}
-                name="applicationEnabled"
-                type="checkbox"
-              />
-              応募ボタンを表示する
-            </label>
+            <div className="grid content-start gap-2 text-sm font-semibold">
+              <span>応募ボタンの表示</span>
+              <label
+                className="flex h-11 items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] px-4"
+                data-testid="moderator-application-toggle"
+              >
+                <input
+                  className="size-4 accent-[var(--accent)]"
+                  defaultChecked={Boolean(
+                    ja.applicationAction && en.applicationAction,
+                  )}
+                  name="applicationEnabled"
+                  type="checkbox"
+                />
+                応募ボタンを表示する
+              </label>
+              <span aria-hidden="true" className="min-h-5" />
+            </div>
           </div>
         </section>
 

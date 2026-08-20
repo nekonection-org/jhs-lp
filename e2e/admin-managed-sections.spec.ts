@@ -1,4 +1,20 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
+
+async function expectControlsToMatch(dropdown: Locator, toggle: Locator) {
+  const [dropdownBox, toggleBox] = await Promise.all([
+    dropdown.boundingBox(),
+    toggle.boundingBox(),
+  ]);
+
+  expect(dropdownBox).not.toBeNull();
+  expect(toggleBox).not.toBeNull();
+  expect(
+    Math.abs((dropdownBox?.y ?? 0) - (toggleBox?.y ?? 0)),
+  ).toBeLessThanOrEqual(1);
+  expect(
+    Math.abs((dropdownBox?.height ?? 0) - (toggleBox?.height ?? 0)),
+  ).toBeLessThanOrEqual(1);
+}
 
 test.describe("managed section administration", () => {
   test.skip(
@@ -13,6 +29,10 @@ test.describe("managed section administration", () => {
 
     await page.goto("/admin/vip");
     await expect(page.getByRole("heading", { name: "VIP管理" })).toBeVisible();
+    await expectControlsToMatch(
+      page.getByLabel("内容の確認状態"),
+      page.getByTestId("vip-purchase-toggle"),
+    );
     const japaneseTitle = page.getByLabel("状態の見出し");
     const englishTitle = page.getByLabel("Status title");
     const originalJapaneseTitle = await japaneseTitle.inputValue();
@@ -50,6 +70,10 @@ test.describe("managed section administration", () => {
     await expect(
       page.getByRole("heading", { name: "モデレーター募集管理" }),
     ).toBeVisible();
+    await expectControlsToMatch(
+      page.getByLabel("募集内容の確認状態"),
+      page.getByTestId("moderator-application-toggle"),
+    );
     const japaneseTitle = page.getByLabel("募集状態の見出し");
     const englishTitle = page.getByLabel("Recruitment status title");
     const originalJapaneseTitle = await japaneseTitle.inputValue();
