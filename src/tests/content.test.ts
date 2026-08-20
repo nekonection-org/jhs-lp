@@ -9,6 +9,7 @@ import {
   ja,
   navigationItemIds,
   sectionIds,
+  serverSettingIds,
   vipDetailIds,
 } from "@/content";
 import { getMatchingItem } from "@/lib/content";
@@ -86,12 +87,14 @@ describe("localized content", () => {
   });
 
   it("publishes the confirmed server schedule and enforcement rules", () => {
-    expect(ja.server.items.every(({ status }) => status === "confirmed")).toBe(
-      true,
-    );
-    expect(en.server.items.every(({ status }) => status === "confirmed")).toBe(
-      true,
-    );
+    expect(
+      ja.server.highlights.every(({ status }) => status === "confirmed"),
+    ).toBe(true);
+    expect(
+      en.server.highlights.every(({ status }) => status === "confirmed"),
+    ).toBe(true);
+    expect(ja.server.settings.map(({ id }) => id)).toEqual(serverSettingIds);
+    expect(en.server.settings.map(({ id }) => id)).toEqual(serverSettingIds);
     expect(ja.rules.items.every(({ status }) => status === "confirmed")).toBe(
       true,
     );
@@ -99,11 +102,19 @@ describe("localized content", () => {
       true,
     );
 
-    expect(ja.server.items[3].description).toContain("毎週金曜日");
-    expect(ja.server.items[3].description).toContain("18:00 JST");
-    expect(ja.server.items[3].description).toContain("毎日04:00 JST");
-    expect(ja.server.items[3].description).toContain("最大4人");
-    expect(ja.server.items[3].description).toContain("3500");
+    expect(getMatchingItem(ja.server.settings, "team-limit").value).toBe(
+      "最大4人（Solo / Duo / Trio / Quad）",
+    );
+    expect(getMatchingItem(ja.server.settings, "map-size").value).toBe("3500");
+    expect(getMatchingItem(ja.server.settings, "map-bp-wipe").value).toBe(
+      "毎週金曜日 18:00 JST",
+    );
+    expect(getMatchingItem(ja.server.settings, "daily-restart").value).toBe(
+      "毎日 04:00 JST",
+    );
+    expect(ja.server.welcomeDescription).toContain("初心者から上級者まで");
+    expect(ja.server.welcomeDescription).toContain("プレイスタイルを尊重");
+    expect(ja.server.welcomeDescription).toContain("公平で快適な環境");
     expect(ja.rules.items[0].description).toContain("平日18:00〜24:00");
     expect(ja.rules.items[0].description).toContain("土・日12:00〜24:00");
     expect(ja.rules.items[0].description).toContain("自動的に処罰");
@@ -112,8 +123,14 @@ describe("localized content", () => {
     expect(ja.rules.items[2].description).toContain("#claim-ticket");
     expect(ja.rules.items[4].description).toContain("F7レポート");
 
-    expect(en.server.items[3].description).toContain("every Friday at 18:00");
-    expect(en.server.items[3].description).toContain("daily at 04:00 JST");
+    expect(getMatchingItem(en.server.settings, "map-bp-wipe").value).toBe(
+      "Every Friday at 18:00 JST",
+    );
+    expect(getMatchingItem(en.server.settings, "daily-restart").value).toBe(
+      "Daily at 04:00 JST",
+    );
+    expect(en.server.welcomeDescription).toContain("beginners to veterans");
+    expect(en.server.welcomeDescription).toContain("fair and comfortable");
     expect(en.rules.items[0].description).toContain("weekdays");
     expect(en.rules.items[0].description).toContain("penalized automatically");
     expect(en.rules.items[1].description).toContain("four players");

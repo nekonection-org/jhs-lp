@@ -25,11 +25,15 @@ export const navigationItemIds = [
   "news",
 ] as const satisfies readonly NavigableSectionId[];
 
-export const serverFeatureIds = [
-  "audience",
-  "community",
-  "raid-window",
-  "operations",
+export const serverHighlightIds = ["audience", "raid-window"] as const;
+
+export const serverSettingIds = [
+  "team-limit",
+  "map-size",
+  "map-bp-wipe",
+  "daily-restart",
+  "weekday-raids",
+  "weekend-raids",
 ] as const;
 
 export const ruleItemIds = [
@@ -173,8 +177,8 @@ export interface SectionIntroduction<Id extends SectionId> {
   readonly description: string;
 }
 
-export type ServerFeatureItems = IdentifiedItems<
-  typeof serverFeatureIds,
+export type ServerHighlightItems = IdentifiedItems<
+  typeof serverHighlightIds,
   {
     readonly title: string;
     readonly description: string;
@@ -183,8 +187,21 @@ export type ServerFeatureItems = IdentifiedItems<
   }
 >;
 
+export type ServerSettingItems = IdentifiedItems<
+  typeof serverSettingIds,
+  {
+    readonly label: string;
+    readonly value: string;
+  }
+>;
+
 export interface ServerContent extends SectionIntroduction<"server"> {
-  readonly items: ServerFeatureItems;
+  readonly settingsTitle: string;
+  readonly settingsDescription: string;
+  readonly welcomeTitle: string;
+  readonly welcomeDescription: string;
+  readonly highlights: ServerHighlightItems;
+  readonly settings: ServerSettingItems;
   readonly pendingNotice: string;
 }
 

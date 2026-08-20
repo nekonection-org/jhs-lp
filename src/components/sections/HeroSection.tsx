@@ -33,13 +33,13 @@ export function HeroSection() {
   const { locale } = useLanguage();
   const [copyState, setCopyState] = useState<CopyState>("idle");
   const copyResetTimer = useRef<number | null>(null);
-  const audienceFeature = ja.server.items[0];
+  const audienceFeature = ja.server.highlights[0];
   const audienceFeatureEn = getMatchingItem(
-    en.server.items,
+    en.server.highlights,
     audienceFeature.id,
   );
-  const raidFeature = ja.server.items[2];
-  const raidFeatureEn = getMatchingItem(en.server.items, raidFeature.id);
+  const raidFeature = ja.server.highlights[1];
+  const raidFeatureEn = getMatchingItem(en.server.highlights, raidFeature.id);
 
   useEffect(
     () => () => {

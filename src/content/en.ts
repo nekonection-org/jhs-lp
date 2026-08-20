@@ -99,21 +99,19 @@ export const en = {
     title: "Server Information",
     description:
       "Learn about the guiding principles of Japan Hideaway Server and what to know before joining.",
-    items: [
+    settingsTitle: "Settings",
+    settingsDescription:
+      "Server settings and operating times are listed separately below. Further details are also available on Discord.",
+    welcomeTitle: "Welcome to Japan Hideaway Server!",
+    welcomeDescription:
+      "We are a Rust community server where players from beginners to veterans, including working adults and students, respect each other's playstyles and work toward a fair and comfortable environment. To make limited playtime enjoyable, our game balance stays close to official servers, with raid hours and operating rules designed around everyday schedules.",
+    highlights: [
       {
         id: "audience",
         title: "For Working Adults, Students, and Beginners",
         description:
           "We value an environment where players can make the most of limited playtime and feel comfortable joining.",
         icon: "users",
-        status: "confirmed",
-      },
-      {
-        id: "community",
-        title: "Close to Official Server Settings",
-        description:
-          "A community server based on settings close to official servers, with additional rules that respect everyday schedules.",
-        icon: "community",
         status: "confirmed",
       },
       {
@@ -124,13 +122,33 @@ export const en = {
         icon: "clock",
         status: "confirmed",
       },
+    ],
+    settings: [
       {
-        id: "operations",
-        title: "Wipes and Daily Restarts",
-        description:
-          "Map and blueprint wipes take place every Friday at 18:00 JST, and the server restarts daily at 04:00 JST. Teams are limited to four players and the map size is 3500.",
-        icon: "settings",
-        status: "confirmed",
+        id: "team-limit",
+        label: "Team limit",
+        value: "Up to 4 players (Solo / Duo / Trio / Quad)",
+      },
+      { id: "map-size", label: "Map size", value: "3500" },
+      {
+        id: "map-bp-wipe",
+        label: "Map / BP wipe",
+        value: "Every Friday at 18:00 JST",
+      },
+      {
+        id: "daily-restart",
+        label: "Daily restart",
+        value: "Daily at 04:00 JST",
+      },
+      {
+        id: "weekday-raids",
+        label: "Raid hours (weekdays)",
+        value: "18:00–24:00 JST",
+      },
+      {
+        id: "weekend-raids",
+        label: "Raid hours (weekends)",
+        value: "12:00–24:00 JST",
       },
     ],
     pendingNotice:

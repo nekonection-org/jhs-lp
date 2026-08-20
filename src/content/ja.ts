@@ -99,21 +99,19 @@ export const ja = {
     title: "サーバー情報",
     description:
       "Japan Hideaway Serverの基本方針と、参加前に知っておきたい情報をご案内します。",
-    items: [
+    settingsTitle: "設定",
+    settingsDescription:
+      "サーバー設定と運用時刻を項目ごとにご案内します。詳細はDiscordでもご確認いただけます。",
+    welcomeTitle: "Japan Hideaway Serverへようこそ！",
+    welcomeDescription:
+      "社会人や学生を含む初心者から上級者まで、幅広いプレイヤーがそれぞれのプレイスタイルを尊重しながら楽しめる、公平で快適な環境を目指すRustコミュニティサーバーです。限られた時間でも遊びやすいよう、公式サーバーに近いゲームバランスを基に、生活リズムへ配慮したレイド可能時間と運用ルールを設けています。",
+    highlights: [
       {
         id: "audience",
         title: "社会人・学生・初心者向け",
         description:
           "限られたプレイ時間でもしっかり遊べることと、参加しやすい環境を大切にしています。",
         icon: "users",
-        status: "confirmed",
-      },
-      {
-        id: "community",
-        title: "公式仕様に近い設定",
-        description:
-          "公式サーバーに近い仕様を基に、生活リズムへ配慮したルールを加えたコミュニティサーバーです。",
-        icon: "community",
         status: "confirmed",
       },
       {
@@ -124,13 +122,33 @@ export const ja = {
         icon: "clock",
         status: "confirmed",
       },
+    ],
+    settings: [
       {
-        id: "operations",
-        title: "ワイプ・定期再起動",
-        description:
-          "マップ・BPワイプは毎週金曜日18:00 JST、デイリーリスタートは毎日04:00 JSTです。チームは最大4人、マップサイズは3500です。",
-        icon: "settings",
-        status: "confirmed",
+        id: "team-limit",
+        label: "チーム上限",
+        value: "最大4人（Solo / Duo / Trio / Quad）",
+      },
+      { id: "map-size", label: "マップサイズ", value: "3500" },
+      {
+        id: "map-bp-wipe",
+        label: "マップ・BPワイプ",
+        value: "毎週金曜日 18:00 JST",
+      },
+      {
+        id: "daily-restart",
+        label: "デイリーリスタート",
+        value: "毎日 04:00 JST",
+      },
+      {
+        id: "weekday-raids",
+        label: "レイド可能時間（平日）",
+        value: "18:00〜24:00 JST",
+      },
+      {
+        id: "weekend-raids",
+        label: "レイド可能時間（土・日）",
+        value: "12:00〜24:00 JST",
       },
     ],
     pendingNotice:
