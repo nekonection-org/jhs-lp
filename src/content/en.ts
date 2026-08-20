@@ -126,15 +126,15 @@ export const en = {
       },
       {
         id: "operations",
-        title: "Weekly Wipes and Four-Player Teams",
+        title: "Wipes and Daily Restarts",
         description:
-          "Map and blueprint wipes take place every Friday at 18:00 Japan time. Teams are limited to four players and the map size is 3500.",
+          "Map and blueprint wipes take place every Friday at 18:00 JST, and the server restarts daily at 04:00 JST. Teams are limited to four players and the map size is 3500.",
         icon: "settings",
         status: "confirmed",
       },
     ],
     pendingNotice:
-      "The wipe time is stated in Japan time. Rules and settings may change, so check the latest announcement when joining.",
+      "Wipe and daily restart times are stated in JST. Rules and settings may change, so check the latest announcement when joining.",
   },
   rules: {
     id: "rules",

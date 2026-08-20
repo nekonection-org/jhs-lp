@@ -100,6 +100,8 @@ describe("localized content", () => {
     );
 
     expect(ja.server.items[3].description).toContain("毎週金曜日");
+    expect(ja.server.items[3].description).toContain("18:00 JST");
+    expect(ja.server.items[3].description).toContain("毎日04:00 JST");
     expect(ja.server.items[3].description).toContain("最大4人");
     expect(ja.server.items[3].description).toContain("3500");
     expect(ja.rules.items[0].description).toContain("平日18:00〜24:00");
@@ -111,6 +113,7 @@ describe("localized content", () => {
     expect(ja.rules.items[4].description).toContain("F7レポート");
 
     expect(en.server.items[3].description).toContain("every Friday at 18:00");
+    expect(en.server.items[3].description).toContain("daily at 04:00 JST");
     expect(en.rules.items[0].description).toContain("weekdays");
     expect(en.rules.items[0].description).toContain("penalized automatically");
     expect(en.rules.items[1].description).toContain("four players");
