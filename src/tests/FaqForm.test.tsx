@@ -25,6 +25,9 @@ describe("FaqForm", () => {
     expect(screen.getByLabelText("公開状態")).toHaveValue("published");
     expect(screen.getByLabelText("内容の確認状態")).toHaveValue("pending");
     expect(screen.getByLabelText("表示順")).toHaveValue(30);
+    expect(
+      screen.getByText("数字が小さいFAQから上に表示します。"),
+    ).toBeVisible();
     expect(screen.getByLabelText("質問")).toHaveValue(
       "VIPはどこで購入できますか？",
     );

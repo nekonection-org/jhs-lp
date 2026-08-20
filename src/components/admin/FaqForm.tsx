@@ -42,14 +42,15 @@ function FieldError({
   state: FaqActionState;
 }) {
   const message = state.fieldErrors[field];
-  return message ? (
+  return (
     <p
-      className="mt-1.5 text-xs font-semibold text-[var(--danger)]"
+      aria-live="polite"
+      className="text-xs font-semibold text-[var(--danger)] sm:min-h-5"
       id={`${field}-error`}
     >
       {message}
     </p>
-  ) : null;
+  );
 }
 
 function fieldDescriptionId(
@@ -83,7 +84,7 @@ function TranslationFields({
 
   return (
     <section className="surface-card grid content-start gap-5 p-5 sm:p-6">
-      <div>
+      <div className="lg:min-h-[5.25rem]">
         <p className="section-eyebrow">{japanese ? "Japanese" : "English"}</p>
         <h2 className="mt-2 text-xl font-bold tracking-[-0.025em]">
           {japanese ? "日本語" : "英語"}
@@ -163,8 +164,13 @@ export function FaqForm({ action, submitLabel, values }: FaqFormProps) {
           </div>
 
           <div className="grid gap-5 sm:grid-cols-3">
-            <div className="grid gap-2 text-sm font-semibold">
-              <label htmlFor="faq-status">公開状態</label>
+            <div className="grid content-start gap-2 text-sm font-semibold">
+              <label
+                className="sm:flex sm:min-h-10 sm:items-end"
+                htmlFor="faq-status"
+              >
+                公開状態
+              </label>
               <select
                 aria-describedby={fieldDescriptionId("status", state)}
                 aria-invalid={Boolean(state.fieldErrors.status)}
@@ -176,11 +182,17 @@ export function FaqForm({ action, submitLabel, values }: FaqFormProps) {
                 <option value="draft">下書き</option>
                 <option value="published">公開</option>
               </select>
+              <span aria-hidden="true" className="hidden min-h-5 sm:block" />
               <FieldError field="status" state={state} />
             </div>
 
-            <div className="grid gap-2 text-sm font-semibold">
-              <label htmlFor="faq-content-status">内容の確認状態</label>
+            <div className="grid content-start gap-2 text-sm font-semibold">
+              <label
+                className="sm:flex sm:min-h-10 sm:items-end"
+                htmlFor="faq-content-status"
+              >
+                内容の確認状態
+              </label>
               <select
                 aria-describedby={fieldDescriptionId("contentStatus", state)}
                 aria-invalid={Boolean(state.fieldErrors.contentStatus)}
@@ -192,11 +204,17 @@ export function FaqForm({ action, submitLabel, values }: FaqFormProps) {
                 <option value="confirmed">確認済み</option>
                 <option value="pending">準備中</option>
               </select>
+              <span aria-hidden="true" className="hidden min-h-5 sm:block" />
               <FieldError field="contentStatus" state={state} />
             </div>
 
-            <div className="grid gap-2 text-sm font-semibold">
-              <label htmlFor="faq-sort-order">表示順</label>
+            <div className="grid content-start gap-2 text-sm font-semibold">
+              <label
+                className="sm:flex sm:min-h-10 sm:items-end"
+                htmlFor="faq-sort-order"
+              >
+                表示順
+              </label>
               <input
                 aria-describedby={fieldDescriptionId(
                   "sortOrder",

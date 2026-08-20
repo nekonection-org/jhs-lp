@@ -1,10 +1,54 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
+
+async function expectControlsToAlign(...controls: Locator[]) {
+  const positions = await Promise.all(
+    controls.map(async (control) => {
+      const box = await control.boundingBox();
+      expect(box).not.toBeNull();
+      return box?.y ?? 0;
+    }),
+  );
+  const [firstPosition, ...remainingPositions] = positions;
+
+  if (firstPosition === undefined) {
+    throw new Error("At least one control is required for alignment checks.");
+  }
+
+  for (const position of remainingPositions) {
+    expect(Math.abs(position - firstPosition)).toBeLessThanOrEqual(1);
+  }
+}
 
 test.describe("FAQ administration", () => {
   test.skip(
     process.env.E2E_ADMIN_ENABLED !== "true",
     "Set E2E_ADMIN_ENABLED=true with a migrated test database.",
   );
+
+  test("keeps FAQ creation controls aligned with hints and validation errors", async ({
+    page,
+  }) => {
+    await page.goto("/admin/faqs/new");
+
+    await expectControlsToAlign(
+      page.getByLabel("公開状態"),
+      page.getByLabel("内容の確認状態"),
+      page.getByLabel("表示順"),
+    );
+    await expectControlsToAlign(
+      page.getByLabel("質問"),
+      page.getByLabel("Question"),
+    );
+
+    await page.getByRole("button", { name: "FAQを保存" }).click();
+    await expect(
+      page.getByText("日本語の質問を入力してください。"),
+    ).toBeVisible();
+    await expectControlsToAlign(
+      page.getByLabel("回答"),
+      page.getByLabel("Answer"),
+    );
+  });
 
   test("creates, publishes, displays, audits, and archives an FAQ", async ({
     page,

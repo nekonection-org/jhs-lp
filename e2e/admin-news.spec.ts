@@ -1,10 +1,57 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
+
+async function expectControlsToAlign(...controls: Locator[]) {
+  const positions = await Promise.all(
+    controls.map(async (control) => {
+      const box = await control.boundingBox();
+      expect(box).not.toBeNull();
+      return box?.y ?? 0;
+    }),
+  );
+  const [firstPosition, ...remainingPositions] = positions;
+
+  if (firstPosition === undefined) {
+    throw new Error("At least one control is required for alignment checks.");
+  }
+
+  for (const position of remainingPositions) {
+    expect(Math.abs(position - firstPosition)).toBeLessThanOrEqual(1);
+  }
+}
 
 test.describe("news administration", () => {
   test.skip(
     process.env.E2E_ADMIN_ENABLED !== "true",
     "Set E2E_ADMIN_ENABLED=true with a migrated test database.",
   );
+
+  test("keeps announcement creation controls aligned with hints and validation errors", async ({
+    page,
+  }) => {
+    await page.goto("/admin/news/new");
+
+    await expectControlsToAlign(
+      page.getByLabel("カテゴリ"),
+      page.getByLabel("公開状態"),
+    );
+    await expectControlsToAlign(
+      page.getByLabel("公開日時（日本時間）"),
+      page.getByLabel("外部リンク（任意）"),
+    );
+    await expectControlsToAlign(
+      page.getByLabel("タイトル"),
+      page.getByLabel("Title"),
+    );
+
+    await page.getByRole("button", { name: "お知らせを保存" }).click();
+    await expect(
+      page.getByText("日本語タイトルを入力してください。"),
+    ).toBeVisible();
+    await expectControlsToAlign(
+      page.getByLabel("概要"),
+      page.getByLabel("Description"),
+    );
+  });
 
   test("creates, previews, schedules, and audits an announcement", async ({
     page,

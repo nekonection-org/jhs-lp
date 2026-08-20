@@ -31,9 +31,17 @@ describe("AnnouncementForm", () => {
 
     expect(screen.getByLabelText("カテゴリ")).toHaveValue("maintenance");
     expect(screen.getByLabelText("公開状態")).toHaveValue("draft");
+    expect(
+      screen.getByText(
+        "公開日時が未来の場合は、その時刻まで予約公開として扱います。",
+      ),
+    ).toBeVisible();
     expect(screen.getByLabelText("公開日時（日本時間）")).toHaveValue(
       "2026-08-13T18:30",
     );
+    expect(
+      screen.getByText("公開状態では必須です。時刻はJSTとして保存されます。"),
+    ).toBeVisible();
     expect(screen.getByLabelText("タイトル")).toHaveValue(
       "メンテナンスのお知らせ",
     );

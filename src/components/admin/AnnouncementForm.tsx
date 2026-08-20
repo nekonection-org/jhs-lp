@@ -53,14 +53,15 @@ interface FieldErrorProps {
 function FieldError({ field, state }: FieldErrorProps) {
   const message = state.fieldErrors[field];
 
-  return message ? (
+  return (
     <p
-      className="mt-1.5 text-xs font-semibold text-[var(--danger)]"
+      aria-live="polite"
+      className="text-xs font-semibold text-[var(--danger)] sm:min-h-5"
       id={`${field}-error`}
     >
       {message}
     </p>
-  ) : null;
+  );
 }
 
 function fieldDescriptionId(
@@ -112,8 +113,13 @@ export function AnnouncementForm({
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2">
-            <div className="grid gap-2 text-sm font-semibold">
-              <label htmlFor="announcement-category">カテゴリ</label>
+            <div className="grid content-start gap-2 text-sm font-semibold">
+              <label
+                className="sm:flex sm:min-h-10 sm:items-end"
+                htmlFor="announcement-category"
+              >
+                カテゴリ
+              </label>
               <select
                 aria-describedby={fieldDescriptionId("category", state)}
                 aria-invalid={Boolean(state.fieldErrors.category)}
@@ -128,11 +134,17 @@ export function AnnouncementForm({
                   </option>
                 ))}
               </select>
+              <span aria-hidden="true" className="hidden min-h-5 sm:block" />
               <FieldError field="category" state={state} />
             </div>
 
-            <div className="grid gap-2 text-sm font-semibold">
-              <label htmlFor="announcement-status">公開状態</label>
+            <div className="grid content-start gap-2 text-sm font-semibold">
+              <label
+                className="sm:flex sm:min-h-10 sm:items-end"
+                htmlFor="announcement-status"
+              >
+                公開状態
+              </label>
               <select
                 aria-describedby={fieldDescriptionId(
                   "status",
@@ -159,8 +171,11 @@ export function AnnouncementForm({
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2">
-            <div className="grid gap-2 text-sm font-semibold">
-              <label htmlFor="announcement-published-at">
+            <div className="grid content-start gap-2 text-sm font-semibold">
+              <label
+                className="sm:flex sm:min-h-10 sm:items-end"
+                htmlFor="announcement-published-at"
+              >
                 公開日時（日本時間）
               </label>
               <input
@@ -186,8 +201,11 @@ export function AnnouncementForm({
               <FieldError field="publishedAt" state={state} />
             </div>
 
-            <div className="grid gap-2 text-sm font-semibold">
-              <label htmlFor="announcement-external-url">
+            <div className="grid content-start gap-2 text-sm font-semibold">
+              <label
+                className="sm:flex sm:min-h-10 sm:items-end"
+                htmlFor="announcement-external-url"
+              >
                 外部リンク（任意）
               </label>
               <input
@@ -201,6 +219,7 @@ export function AnnouncementForm({
                 placeholder="https://discord.com/channels/..."
                 type="url"
               />
+              <span aria-hidden="true" className="hidden min-h-5 sm:block" />
               <FieldError field="externalUrl" state={state} />
             </div>
           </div>
@@ -208,7 +227,7 @@ export function AnnouncementForm({
 
         <div className="grid gap-5 lg:grid-cols-2">
           <section className="surface-card grid content-start gap-5 p-5 sm:p-6">
-            <div>
+            <div className="lg:min-h-[5.25rem]">
               <p className="section-eyebrow">Japanese</p>
               <h2 className="mt-2 text-xl font-bold tracking-[-0.025em]">
                 日本語
@@ -248,7 +267,7 @@ export function AnnouncementForm({
           </section>
 
           <section className="surface-card grid content-start gap-5 p-5 sm:p-6">
-            <div>
+            <div className="lg:min-h-[5.25rem]">
               <p className="section-eyebrow">English</p>
               <h2 className="mt-2 text-xl font-bold tracking-[-0.025em]">
                 英語
