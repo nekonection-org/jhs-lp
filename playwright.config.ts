@@ -18,6 +18,7 @@ const adminE2eEnvironment: Record<string, string> =
     : {};
 const nextCliPath = fileURLToPath(import.meta.resolve("next/dist/bin/next"));
 const webServerCommand = `"${process.execPath}" "${nextCliPath}" dev --hostname 127.0.0.1 --port 3100`;
+const manageWebServer = process.env.PLAYWRIGHT_SKIP_WEB_SERVER !== "true";
 
 export default defineConfig({
   expect: {
@@ -43,19 +44,21 @@ export default defineConfig({
     screenshot: "only-on-failure",
     trace: "on-first-retry",
   },
-  webServer: {
-    command: webServerCommand,
-    env: {
-      ...adminE2eEnvironment,
-      NEXT_PUBLIC_DISCORD_INVITE_URL: e2eEnvironment.discordUrl,
-      NEXT_PUBLIC_MODERATOR_APPLICATION_URL:
-        e2eEnvironment.moderatorApplicationUrl,
-      NEXT_PUBLIC_RUST_SERVER_ADDRESS: e2eEnvironment.rustServerAddress,
-      NEXT_PUBLIC_SITE_URL: e2eEnvironment.siteUrl,
-      NEXT_PUBLIC_TEBEX_URL: e2eEnvironment.tebexUrl,
-    },
-    reuseExistingServer: process.env.PLAYWRIGHT_REUSE_SERVER === "true",
-    timeout: 120_000,
-    url: e2eEnvironment.siteUrl,
-  },
+  webServer: manageWebServer
+    ? {
+        command: webServerCommand,
+        env: {
+          ...adminE2eEnvironment,
+          NEXT_PUBLIC_DISCORD_INVITE_URL: e2eEnvironment.discordUrl,
+          NEXT_PUBLIC_MODERATOR_APPLICATION_URL:
+            e2eEnvironment.moderatorApplicationUrl,
+          NEXT_PUBLIC_RUST_SERVER_ADDRESS: e2eEnvironment.rustServerAddress,
+          NEXT_PUBLIC_SITE_URL: e2eEnvironment.siteUrl,
+          NEXT_PUBLIC_TEBEX_URL: e2eEnvironment.tebexUrl,
+        },
+        reuseExistingServer: process.env.PLAYWRIGHT_REUSE_SERVER === "true",
+        timeout: 120_000,
+        url: e2eEnvironment.siteUrl,
+      }
+    : undefined,
 });
