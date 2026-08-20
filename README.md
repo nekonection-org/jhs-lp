@@ -103,7 +103,7 @@ DB接続情報、Cloudflare Access設定、管理者メールアドレスはサ�
 NEXT_PUBLIC_DISCORD_INVITE_URL=https://discord.gg/実際の招待コード
 ```
 
-Docker Composeではプロジェクト直下の`.env`、GHCR向けGitHub ActionsではRepository Variablesの`NEXT_PUBLIC_DISCORD_INVITE_URL`を使用します。
+Docker Composeではプロジェクト直下の`.env`を使用します。GHCR向けGitHub ActionsではRepository Variablesの`NEXT_PUBLIC_DISCORD_INVITE_URL`を優先し、未設定時は現在の公式Discord招待URLを使用します。
 
 ### Rust接続先の設定
 
@@ -226,7 +226,7 @@ docker compose up -d
 docker compose ps -a
 ```
 
-`migrate`が終了コード0で完了してから`web`が起動します。本番イメージのビルドでは`NEXT_PUBLIC_SITE_URL`と`NEXT_PUBLIC_DISCORD_INVITE_URL`を必須とし、HTTPSの公開URLであることを検証します。空欄、localhost、予約済みテスト用ドメインではビルドに失敗します。
+`migrate`が終了コード0で完了してから`web`が起動します。本番イメージのビルドでは`NEXT_PUBLIC_SITE_URL`と`NEXT_PUBLIC_DISCORD_INVITE_URL`を必須とし、HTTPSの公開URLであることを検証します。空欄、localhost、予約済みテスト用ドメインではビルドに失敗します。Containerワークフローは現在の本番公開値を既定値として持ち、同名のRepository Variablesが設定されている場合はその値を優先します。
 
 ログは次のコマンドで確認できます。
 
