@@ -17,25 +17,26 @@ export type {
 export const announcementsCacheTag = "announcements";
 
 const getCachedPublishedAnnouncements = unstable_cache(
-  async () =>
-    (await listPublishedAnnouncements())
-      .map(toPublicAnnouncement)
-      .filter(
-        (announcement): announcement is PublicAnnouncement =>
-          announcement !== null,
-      ),
+  async (): Promise<PublicAnnouncementsResult> => {
+    try {
+      const items = (await listPublishedAnnouncements())
+        .map(toPublicAnnouncement)
+        .filter(
+          (announcement): announcement is PublicAnnouncement =>
+            announcement !== null,
+        );
+      return { status: "ready", items };
+    } catch (error) {
+      console.error("Public announcements are unavailable.", {
+        errorName: error instanceof Error ? error.name : "UnknownError",
+      });
+      return { status: "unavailable", items: [] };
+    }
+  },
   ["public-announcements-v1"],
   { revalidate: 60, tags: [announcementsCacheTag] },
 );
 
 export async function getPublicAnnouncements(): Promise<PublicAnnouncementsResult> {
-  try {
-    const items = await getCachedPublishedAnnouncements();
-    return { status: "ready", items };
-  } catch (error) {
-    console.error("Public announcements are unavailable.", {
-      errorName: error instanceof Error ? error.name : "UnknownError",
-    });
-    return { status: "unavailable", items: [] };
-  }
+  return getCachedPublishedAnnouncements();
 }
