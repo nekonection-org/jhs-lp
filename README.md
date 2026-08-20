@@ -45,6 +45,8 @@ pnpm dev
 
 ブラウザで`http://localhost:3000`を開きます。PowerShellの実行ポリシーによって`pnpm.ps1`が実行できない場合は、`pnpm.cmd`を使用してください。
 
+Tailscale経由の開発確認では`http://10.96.0.36:3000`を使用できます。開発用JS、CSS、Fast Refreshへのアクセスは`next.config.ts`の`allowedDevOrigins`でこのIPだけを許可しています。IPを変更した場合は許可リストも更新し、開発サーバーを再起動してください。ワイルドカードや信頼していないホストは追加しません。
+
 ## 環境変数
 
 `.env.example`を`.env.local`へコピーし、実際に管理している公開URLと接続先を設定します。
