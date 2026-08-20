@@ -1,5 +1,6 @@
 import {
   CircleHelp,
+  ClipboardCheck,
   FileClock,
   Gem,
   Home,
@@ -63,6 +64,14 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
             >
               <Gem aria-hidden="true" className="size-4" />
               <span className="hidden sm:inline">VIP</span>
+            </Link>
+            <Link
+              aria-label="モデレーター募集管理"
+              className="inline-flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+              href="/admin/moderator"
+            >
+              <ClipboardCheck aria-hidden="true" className="size-4" />
+              <span className="hidden xl:inline">募集</span>
             </Link>
             <Link
               aria-label="操作ログ"

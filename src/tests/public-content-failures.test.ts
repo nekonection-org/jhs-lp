@@ -1,11 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { findVipContent, listPublishedAnnouncements, listPublishedFaqs } =
-  vi.hoisted(() => ({
-    findVipContent: vi.fn(),
-    listPublishedAnnouncements: vi.fn(),
-    listPublishedFaqs: vi.fn(),
-  }));
+const {
+  findModeratorContent,
+  findVipContent,
+  listPublishedAnnouncements,
+  listPublishedFaqs,
+} = vi.hoisted(() => ({
+  findModeratorContent: vi.fn(),
+  findVipContent: vi.fn(),
+  listPublishedAnnouncements: vi.fn(),
+  listPublishedFaqs: vi.fn(),
+}));
 
 vi.mock("next/cache", () => ({
   unstable_cache: (callback: () => unknown) => callback,
@@ -17,10 +22,12 @@ vi.mock("@/lib/announcements/repository", () => ({
 
 vi.mock("@/lib/faqs/repository", () => ({ listPublishedFaqs }));
 vi.mock("@/lib/vip/repository", () => ({ findVipContent }));
+vi.mock("@/lib/moderator/repository", () => ({ findModeratorContent }));
 
 import { getPublicAnnouncements } from "@/lib/announcements/public";
 import { getPublicFaqs } from "@/lib/faqs/public";
 import { getPublicVipContent } from "@/lib/vip/public";
+import { getPublicModeratorContent } from "@/lib/moderator/public";
 
 describe("public database failure handling", () => {
   beforeEach(() => {
@@ -67,6 +74,21 @@ describe("public database failure handling", () => {
     });
     expect(console.error).toHaveBeenCalledWith(
       "Public VIP content is unavailable.",
+      { errorName: "Error" },
+    );
+  });
+
+  it("returns an unavailable moderator result without removing the static fallback", async () => {
+    findModeratorContent.mockRejectedValueOnce(
+      new Error("Missing required database configuration: DATABASE_HOST"),
+    );
+
+    await expect(getPublicModeratorContent()).resolves.toEqual({
+      status: "unavailable",
+      item: null,
+    });
+    expect(console.error).toHaveBeenCalledWith(
+      "Public moderator content is unavailable.",
       { errorName: "Error" },
     );
   });

@@ -11,14 +11,18 @@ import { en, ja } from "@/content";
 import type { ModeratorContent } from "@/content/types";
 import { getMatchingItem } from "@/lib/content";
 import { getExternalUrl } from "@/lib/constants";
+import { getPublicModeratorContent } from "@/lib/moderator/public";
 
 function getApplicationAction(content: ModeratorContent) {
   return content.applicationAction;
 }
 
-export function ModeratorSection() {
-  const japaneseApplicationAction = getApplicationAction(ja.moderator);
-  const englishApplicationAction = getApplicationAction(en.moderator);
+export async function ModeratorSection() {
+  const result = await getPublicModeratorContent();
+  const japaneseContent = result.item?.translations.ja ?? ja.moderator;
+  const englishContent = result.item?.translations.en ?? en.moderator;
+  const japaneseApplicationAction = getApplicationAction(japaneseContent);
+  const englishApplicationAction = getApplicationAction(englishContent);
   const applicationHref =
     japaneseApplicationAction &&
     englishApplicationAction &&
@@ -34,18 +38,21 @@ export function ModeratorSection() {
           <SectionHeading
             description={
               <LocalizedText
-                ja={ja.moderator.description}
-                en={en.moderator.description}
+                ja={japaneseContent.description}
+                en={englishContent.description}
               />
             }
             eyebrow={
               <LocalizedText
-                ja={ja.moderator.eyebrow}
-                en={en.moderator.eyebrow}
+                ja={japaneseContent.eyebrow}
+                en={englishContent.eyebrow}
               />
             }
             title={
-              <LocalizedText ja={ja.moderator.title} en={en.moderator.title} />
+              <LocalizedText
+                ja={japaneseContent.title}
+                en={englishContent.title}
+              />
             }
           />
         </Reveal>
@@ -59,29 +66,29 @@ export function ModeratorSection() {
               <div>
                 <h3 className="text-lg font-bold">
                   <LocalizedText
-                    ja={ja.moderator.statusTitle}
-                    en={en.moderator.statusTitle}
+                    ja={japaneseContent.statusTitle}
+                    en={englishContent.statusTitle}
                   />
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
                   <LocalizedText
-                    ja={ja.moderator.statusDescription}
-                    en={en.moderator.statusDescription}
+                    ja={japaneseContent.statusDescription}
+                    en={englishContent.statusDescription}
                   />
                 </p>
               </div>
             </div>
             <StatusBadge
-              en={en.common.statusLabels[en.moderator.status]}
-              ja={ja.common.statusLabels[ja.moderator.status]}
-              status={ja.moderator.status}
+              en={en.common.statusLabels[englishContent.status]}
+              ja={ja.common.statusLabels[japaneseContent.status]}
+              status={japaneseContent.status}
             />
           </div>
         </Reveal>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          {ja.moderator.items.map((item, index) => {
-            const englishItem = getMatchingItem(en.moderator.items, item.id);
+          {japaneseContent.items.map((item, index) => {
+            const englishItem = getMatchingItem(englishContent.items, item.id);
 
             return (
               <Reveal delay={index * 0.05} key={item.id}>
@@ -112,14 +119,14 @@ export function ModeratorSection() {
             <div>
               <h3 className="text-xl font-bold tracking-[-0.025em]">
                 <LocalizedText
-                  ja={ja.moderator.applicationTitle}
-                  en={en.moderator.applicationTitle}
+                  ja={japaneseContent.applicationTitle}
+                  en={englishContent.applicationTitle}
                 />
               </h3>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-secondary)]">
                 <LocalizedText
-                  ja={ja.moderator.applicationDescription}
-                  en={en.moderator.applicationDescription}
+                  ja={japaneseContent.applicationDescription}
+                  en={englishContent.applicationDescription}
                 />
               </p>
             </div>
