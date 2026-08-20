@@ -20,6 +20,9 @@
 !.env.example
 /secrets/
 
+# local operational guides
+/docs/cloudflare-access-admin-setup.local.md
+
 # debug
 npm-debug.log*
 pnpm-debug.log*
