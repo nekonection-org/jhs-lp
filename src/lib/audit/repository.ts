@@ -22,6 +22,7 @@ function mapAuditLogRecord(auditLog: AuditLog): AuditLogRecord {
     actorEmail: auditLog.actorEmail,
     announcementId: auditLog.announcementId,
     faqItemId: auditLog.faqItemId,
+    managedSectionId: auditLog.managedSectionId,
     beforeData: auditLog.beforeData,
     afterData: auditLog.afterData,
     createdAt: auditLog.createdAt,

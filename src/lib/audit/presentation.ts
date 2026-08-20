@@ -34,15 +34,23 @@ export function formatAuditSnapshot(value: unknown | null) {
 export function getAuditTarget({
   announcementId,
   faqItemId,
+  managedSectionId = null,
 }: {
   announcementId: string | null;
   faqItemId: string | null;
+  managedSectionId?: string | null;
 }) {
   if (announcementId) {
     return { label: "お知らせ", id: announcementId };
   }
   if (faqItemId) {
     return { label: "FAQ", id: faqItemId };
+  }
+  if (managedSectionId === "vip") {
+    return { label: "VIP", id: managedSectionId };
+  }
+  if (managedSectionId === "moderator") {
+    return { label: "モデレーター募集", id: managedSectionId };
   }
   return { label: "対象なし", id: null };
 }

@@ -6,6 +6,7 @@ export interface AuditLogRecord {
   actorEmail: string;
   announcementId: string | null;
   faqItemId: string | null;
+  managedSectionId: string | null;
   beforeData: unknown | null;
   afterData: unknown | null;
   createdAt: Date;

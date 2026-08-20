@@ -11,12 +11,16 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
 import { externalUrls } from "@/lib/constants";
+import { getPublicVipContent } from "@/lib/vip/public";
 
-export function VipSection() {
-  const japanesePurchaseAction = ja.vip.purchaseAction;
-  const englishPurchaseAction = en.vip.purchaseAction;
-  const japaneseBenefits: readonly VipBenefit[] = ja.vip.benefits;
-  const englishBenefits: readonly VipBenefit[] = en.vip.benefits;
+export async function VipSection() {
+  const result = await getPublicVipContent();
+  const japaneseContent = result.item?.translations.ja ?? ja.vip;
+  const englishContent = result.item?.translations.en ?? en.vip;
+  const japanesePurchaseAction = japaneseContent.purchaseAction;
+  const englishPurchaseAction = englishContent.purchaseAction;
+  const japaneseBenefits: readonly VipBenefit[] = japaneseContent.benefits;
+  const englishBenefits: readonly VipBenefit[] = englishContent.benefits;
 
   return (
     <section className="section-shell" id="vip">
@@ -24,10 +28,23 @@ export function VipSection() {
         <Reveal>
           <SectionHeading
             description={
-              <LocalizedText ja={ja.vip.description} en={en.vip.description} />
+              <LocalizedText
+                ja={japaneseContent.description}
+                en={englishContent.description}
+              />
             }
-            eyebrow={<LocalizedText ja={ja.vip.eyebrow} en={en.vip.eyebrow} />}
-            title={<LocalizedText ja={ja.vip.title} en={en.vip.title} />}
+            eyebrow={
+              <LocalizedText
+                ja={japaneseContent.eyebrow}
+                en={englishContent.eyebrow}
+              />
+            }
+            title={
+              <LocalizedText
+                ja={japaneseContent.title}
+                en={englishContent.title}
+              />
+            }
           />
         </Reveal>
 
@@ -43,28 +60,28 @@ export function VipSection() {
                   />
                 </span>
                 <StatusBadge
-                  en={en.common.statusLabels[en.vip.status]}
-                  ja={ja.common.statusLabels[ja.vip.status]}
-                  status={ja.vip.status}
+                  en={en.common.statusLabels[englishContent.status]}
+                  ja={ja.common.statusLabels[japaneseContent.status]}
+                  status={japaneseContent.status}
                 />
               </div>
               <h3 className="mt-6 text-2xl font-bold tracking-[-0.035em]">
                 <LocalizedText
-                  ja={ja.vip.statusTitle}
-                  en={en.vip.statusTitle}
+                  ja={japaneseContent.statusTitle}
+                  en={englishContent.statusTitle}
                 />
               </h3>
               <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
                 <LocalizedText
-                  ja={ja.vip.statusDescription}
-                  en={en.vip.statusDescription}
+                  ja={japaneseContent.statusDescription}
+                  en={englishContent.statusDescription}
                 />
               </p>
 
               <dl className="mt-7 grid gap-px overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--border)] sm:grid-cols-2">
-                {ja.vip.details.map((detail) => {
+                {japaneseContent.details.map((detail) => {
                   const englishDetail = getMatchingItem(
-                    en.vip.details,
+                    englishContent.details,
                     detail.id,
                   );
 
@@ -108,8 +125,8 @@ export function VipSection() {
                     />
                     <p>
                       <LocalizedText
-                        ja={ja.vip.purchaseUnavailableMessage}
-                        en={en.vip.purchaseUnavailableMessage}
+                        ja={japaneseContent.purchaseUnavailableMessage}
+                        en={englishContent.purchaseUnavailableMessage}
                       />
                     </p>
                   </div>
@@ -127,8 +144,8 @@ export function VipSection() {
                 />
                 <h3 className="text-xl font-bold tracking-[-0.025em]">
                   <LocalizedText
-                    ja={ja.vip.benefitsTitle}
-                    en={en.vip.benefitsTitle}
+                    ja={japaneseContent.benefitsTitle}
+                    en={englishContent.benefitsTitle}
                   />
                 </h3>
               </div>
@@ -179,21 +196,24 @@ export function VipSection() {
                   </span>
                   <h4 className="mt-5 text-lg font-bold">
                     <LocalizedText
-                      ja={ja.vip.emptyBenefitsTitle}
-                      en={en.vip.emptyBenefitsTitle}
+                      ja={japaneseContent.emptyBenefitsTitle}
+                      en={englishContent.emptyBenefitsTitle}
                     />
                   </h4>
                   <p className="mt-2 max-w-lg text-sm leading-6 text-[var(--text-secondary)]">
                     <LocalizedText
-                      ja={ja.vip.emptyBenefitsDescription}
-                      en={en.vip.emptyBenefitsDescription}
+                      ja={japaneseContent.emptyBenefitsDescription}
+                      en={englishContent.emptyBenefitsDescription}
                     />
                   </p>
                 </div>
               )}
 
               <p className="mt-6 border-t border-[var(--border)] pt-5 text-xs leading-5 text-[var(--text-muted)]">
-                <LocalizedText ja={ja.vip.notice} en={en.vip.notice} />
+                <LocalizedText
+                  ja={japaneseContent.notice}
+                  en={englishContent.notice}
+                />
               </p>
             </div>
           </Reveal>

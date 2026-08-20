@@ -29,6 +29,13 @@ describe("audit presentation", () => {
     expect(
       getAuditTarget({ announcementId: null, faqItemId: "faq-1" }),
     ).toEqual({ label: "FAQ", id: "faq-1" });
+    expect(
+      getAuditTarget({
+        announcementId: null,
+        faqItemId: null,
+        managedSectionId: "vip",
+      }),
+    ).toEqual({ label: "VIP", id: "vip" });
   });
 
   it("renders snapshots as escaped text", () => {

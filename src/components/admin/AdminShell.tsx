@@ -1,6 +1,7 @@
 import {
   CircleHelp,
   FileClock,
+  Gem,
   Home,
   Newspaper,
   ScrollText,
@@ -28,7 +29,7 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
             <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface)]">
               <Image alt="" fill sizes="36px" src="/icon.png" />
             </span>
-            <span>
+            <span className="hidden lg:block">
               <span className="block text-sm font-bold tracking-[-0.025em]">
                 JHS 管理画面
               </span>
@@ -54,6 +55,14 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
             >
               <CircleHelp aria-hidden="true" className="size-4" />
               <span className="hidden sm:inline">FAQ</span>
+            </Link>
+            <Link
+              aria-label="VIP管理"
+              className="inline-flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+              href="/admin/vip"
+            >
+              <Gem aria-hidden="true" className="size-4" />
+              <span className="hidden sm:inline">VIP</span>
             </Link>
             <Link
               aria-label="操作ログ"
