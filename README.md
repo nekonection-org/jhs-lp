@@ -226,7 +226,7 @@ docker compose up -d
 docker compose ps -a
 ```
 
-`migrate`が終了コード0で完了してから`web`が起動します。本番イメージのビルドでは`NEXT_PUBLIC_SITE_URL`と`NEXT_PUBLIC_DISCORD_INVITE_URL`を必須とし、HTTPSの公開URLであることを検証します。空欄、localhost、予約済みテスト用ドメインではビルドに失敗します。Containerワークフローは現在の本番公開値を既定値として持ち、同名のRepository Variablesが設定されている場合はその値を優先します。
+`migrate`が終了コード0で完了してから`web`が起動します。Docker Composeで本番イメージをビルドする場合は`NEXT_PUBLIC_SITE_URL`と`NEXT_PUBLIC_DISCORD_INVITE_URL`を設定し、HTTPSの公開URLであることを検証します。GHCR向けContainerワークフローでは、Repository Variablesが未設定の場合に既定値を使用します。
 
 ログは次のコマンドで確認できます。
 
