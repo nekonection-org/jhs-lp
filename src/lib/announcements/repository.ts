@@ -88,16 +88,40 @@ export async function findAdminAnnouncement(id: string) {
   return announcement ? mapAnnouncementRecord(announcement) : null;
 }
 
-export async function listPublishedAnnouncements(now = new Date()) {
-  const announcements = await getPrismaClient().announcement.findMany({
-    where: {
-      status: DatabaseStatus.PUBLISHED,
-      publishedAt: { lte: now },
-    },
+interface ListPublishedAnnouncementsOptions {
+  now?: Date;
+  page?: number;
+  pageSize?: number;
+}
+
+export async function listPublishedAnnouncements({
+  now = new Date(),
+  page = 1,
+  pageSize = 5,
+}: ListPublishedAnnouncementsOptions = {}) {
+  const database = getPrismaClient();
+  const where = {
+    status: DatabaseStatus.PUBLISHED,
+    publishedAt: { lte: now },
+  } satisfies Prisma.AnnouncementWhereInput;
+  const normalizedPageSize = Math.max(1, Math.trunc(pageSize));
+  const requestedPage = Math.max(1, Math.trunc(page));
+  const totalItems = await database.announcement.count({ where });
+  const totalPages = Math.max(1, Math.ceil(totalItems / normalizedPageSize));
+  const currentPage = Math.min(requestedPage, totalPages);
+  const announcements = await database.announcement.findMany({
+    where,
     include: announcementWithTranslations,
     orderBy: [{ publishedAt: "desc" }, { id: "desc" }],
-    take: 5,
+    skip: (currentPage - 1) * normalizedPageSize,
+    take: normalizedPageSize,
   });
 
-  return announcements.map(mapAnnouncementRecord);
+  return {
+    items: announcements.map(mapAnnouncementRecord),
+    page: currentPage,
+    pageSize: normalizedPageSize,
+    totalItems,
+    totalPages,
+  };
 }

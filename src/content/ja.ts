@@ -335,6 +335,13 @@ export const ja = {
     unavailableTitle: "お知らせを取得できません",
     unavailableDescription:
       "一時的にお知らせを読み込めません。時間を置いてからもう一度お試しください。",
+    archiveTitle: "過去のお知らせ",
+    archiveDescription: "公開済みのお知らせを新しい順に5件ずつ表示しています。",
+    viewArchive: "過去のお知らせを見る",
+    backToLatest: "最新のお知らせに戻る",
+    paginationLabel: "お知らせのページ切り替え",
+    previousPage: "前のページ",
+    nextPage: "次のページ",
     translationPendingTitle: "英語版を準備中です",
     translationPendingDescription:
       "英語版が公開されるまで、しばらくお待ちください。",

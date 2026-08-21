@@ -103,7 +103,7 @@ DB接続情報、Cloudflare Access設定、管理者メールアドレスはサ�
 NEXT_PUBLIC_DISCORD_INVITE_URL=https://discord.gg/実際の招待コード
 ```
 
-Docker Composeではプロジェクト直下の`.env`、GHCR向けGitHub ActionsではRepository Variablesの`NEXT_PUBLIC_DISCORD_INVITE_URL`を使用します。
+Docker Composeではプロジェクト直下の`.env`を使用します。GHCR向けGitHub ActionsではRepository Variablesの`NEXT_PUBLIC_DISCORD_INVITE_URL`を優先し、未設定時は現在の公式Discord招待URLを使用します。
 
 ### Rust接続先の設定
 
@@ -136,7 +136,7 @@ NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 - `予約公開`: 公開状態のまま未来の公開日時を指定します。日時は日本時間（JST）で入力し、DBにはUTCで保存します。
 - `アーカイブ`: 公開対象から外します。お知らせと操作ログは削除しません。
 
-公開サイトは公開日時が新しい順に最大5件を表示します。予約時刻の到来は最大約60秒のキャッシュ遅延が生じる場合があります。管理画面からの保存時は公開キャッシュを即時無効化します。
+公開サイトは公開日時が新しい順に1ページ5件を表示します。6件以上ある場合は「過去のお知らせを見る」から同じLP内で5件ずつページ送りできます。予約時刻の到来は最大約60秒のキャッシュ遅延が生じる場合があります。管理画面からの保存時は公開キャッシュを即時無効化します。
 
 ### FAQの更新
 
@@ -226,7 +226,7 @@ docker compose up -d
 docker compose ps -a
 ```
 
-`migrate`が終了コード0で完了してから`web`が起動します。本番イメージのビルドでは`NEXT_PUBLIC_SITE_URL`と`NEXT_PUBLIC_DISCORD_INVITE_URL`を必須とし、HTTPSの公開URLであることを検証します。空欄、localhost、予約済みテスト用ドメインではビルドに失敗します。
+`migrate`が終了コード0で完了してから`web`が起動します。Docker Composeで本番イメージをビルドする場合は`NEXT_PUBLIC_SITE_URL`と`NEXT_PUBLIC_DISCORD_INVITE_URL`を設定し、HTTPSの公開URLであることを検証します。GHCR向けContainerワークフローでは、Repository Variablesが未設定の場合に既定値を使用します。
 
 ログは次のコマンドで確認できます。
 

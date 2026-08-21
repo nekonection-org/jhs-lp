@@ -6,8 +6,12 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { en, ja } from "@/content";
 import { getPublicAnnouncements } from "@/lib/announcements/public";
 
-export async function NewsSection() {
-  const result = await getPublicAnnouncements();
+interface NewsSectionProps {
+  page?: number;
+}
+
+export async function NewsSection({ page = 1 }: NewsSectionProps) {
+  const result = await getPublicAnnouncements(page);
 
   return (
     <section

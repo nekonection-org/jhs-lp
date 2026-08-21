@@ -63,6 +63,31 @@ describe("public database failure handling", () => {
     );
   });
 
+  it("requests public announcements in fixed pages of five", async () => {
+    listPublishedAnnouncements.mockResolvedValueOnce({
+      items: [],
+      page: 2,
+      pageSize: 5,
+      totalItems: 8,
+      totalPages: 2,
+    });
+
+    await expect(getPublicAnnouncements(2)).resolves.toEqual({
+      status: "ready",
+      items: [],
+      pagination: {
+        page: 2,
+        pageSize: 5,
+        totalItems: 8,
+        totalPages: 2,
+      },
+    });
+    expect(listPublishedAnnouncements).toHaveBeenCalledWith({
+      page: 2,
+      pageSize: 5,
+    });
+  });
+
   it("returns an unavailable VIP result without removing the static fallback", async () => {
     findVipContent.mockRejectedValueOnce(
       new Error("Missing required database configuration: DATABASE_HOST"),

@@ -337,6 +337,14 @@ export const en = {
     unavailableTitle: "Announcements are temporarily unavailable",
     unavailableDescription:
       "We could not load announcements. Please try again in a few minutes.",
+    archiveTitle: "Past announcements",
+    archiveDescription:
+      "Published announcements are shown five at a time, newest first.",
+    viewArchive: "View past announcements",
+    backToLatest: "Back to latest announcements",
+    paginationLabel: "Announcement pages",
+    previousPage: "Previous page",
+    nextPage: "Next page",
     translationPendingTitle: "English translation in progress",
     translationPendingDescription:
       "The English version of this announcement is not available yet.",
