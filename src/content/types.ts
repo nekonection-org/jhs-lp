@@ -285,6 +285,13 @@ export interface NewsContent extends SectionIntroduction<"news"> {
   readonly emptyDescription: string;
   readonly unavailableTitle: string;
   readonly unavailableDescription: string;
+  readonly archiveTitle: string;
+  readonly archiveDescription: string;
+  readonly viewArchive: string;
+  readonly backToLatest: string;
+  readonly paginationLabel: string;
+  readonly previousPage: string;
+  readonly nextPage: string;
   readonly translationPendingTitle: string;
   readonly translationPendingDescription: string;
 }

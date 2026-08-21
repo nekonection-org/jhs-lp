@@ -10,10 +10,18 @@ import { TermsSection } from "@/components/sections/TermsSection";
 import { VipSection } from "@/components/sections/VipSection";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { en, ja } from "@/content";
+import { parsePublicAnnouncementsPage } from "@/lib/announcements/public-types";
 
 export const dynamic = "force-dynamic";
 
-export default function Home() {
+interface HomeProps {
+  searchParams: Promise<{ newsPage?: string | string[] }>;
+}
+
+export default async function Home({ searchParams }: HomeProps) {
+  const query = await searchParams;
+  const newsPage = parsePublicAnnouncementsPage(query.newsPage);
+
   return (
     <>
       <a className="skip-link" href="#main-content">
@@ -34,7 +42,7 @@ export default function Home() {
         <VipSection />
         <FaqSection />
         <ModeratorSection />
-        <NewsSection />
+        <NewsSection page={newsPage} />
         <TermsSection />
       </main>
       <Footer />
