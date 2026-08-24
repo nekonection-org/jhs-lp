@@ -1,5 +1,4 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import type { RulesActionState } from "@/app/admin/rules/action-state";
@@ -7,18 +6,28 @@ import { RulesForm } from "@/components/admin/RulesForm";
 import { en, ja } from "@/content";
 
 describe("RulesForm", () => {
-  it("renders current bilingual rules and supports adding a rule entry", async () => {
-    const user = userEvent.setup();
+  it("renders current bilingual rules and supports adding a rule entry", () => {
     const action = vi.fn(async (state: RulesActionState) => state);
-    render(
-      <RulesForm
-        action={action}
-        values={{
-          version: 3,
-          translations: { ja: ja.rules, en: en.rules },
-        }}
-      />,
-    );
+    const values = {
+      version: 3,
+      translations: {
+        ja: {
+          ...ja.rules,
+          rulebook: {
+            ...ja.rules.rulebook,
+            blocks: ja.rules.rulebook.blocks.slice(1, 2),
+          },
+        },
+        en: {
+          ...en.rules,
+          rulebook: {
+            ...en.rules.rulebook,
+            blocks: en.rules.rulebook.blocks.slice(1, 2),
+          },
+        },
+      },
+    };
+    render(<RulesForm action={action} values={values} />);
 
     expect(screen.getByLabelText("注意見出し")).toHaveValue(
       ja.rules.noticeTitle,
@@ -32,12 +41,12 @@ describe("RulesForm", () => {
       ),
     ).toBeInTheDocument();
     expect(document.querySelector('input[name="blockCount"]')).toHaveValue(
-      String(ja.rules.rulebook.blocks.length),
+      String(values.translations.ja.rulebook.blocks.length),
     );
 
-    await user.click(screen.getByRole("button", { name: "ルール項目を追加" }));
+    fireEvent.click(screen.getByRole("button", { name: "ルール項目を追加" }));
     expect(document.querySelector('input[name="blockCount"]')).toHaveValue(
-      String(ja.rules.rulebook.blocks.length + 1),
+      String(values.translations.ja.rulebook.blocks.length + 1),
     );
     expect(
       screen.getByRole("button", { name: "サーバールールを保存" }),
