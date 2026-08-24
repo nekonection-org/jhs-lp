@@ -107,4 +107,45 @@ test.describe("managed section administration", () => {
       await expect(page).toHaveURL("/admin/moderator?saved=1");
     }
   });
+
+  test("updates rules content, public display, and audit log", async ({
+    page,
+  }) => {
+    const marker = `Rules E2E ${Date.now()}`;
+
+    await page.goto("/admin/rules");
+    await expect(
+      page.getByRole("heading", { name: "サーバールール管理" }),
+    ).toBeVisible();
+    const japaneseNoticeTitle = page.getByLabel("注意見出し");
+    const englishNoticeTitle = page.getByLabel("Notice title");
+    const originalJapaneseTitle = await japaneseNoticeTitle.inputValue();
+    const originalEnglishTitle = await englishNoticeTitle.inputValue();
+
+    try {
+      await japaneseNoticeTitle.fill(marker);
+      await englishNoticeTitle.fill(`${marker} English`);
+      await page.getByRole("button", { name: "サーバールールを保存" }).click();
+      await expect(page).toHaveURL("/admin/rules?saved=1");
+      await expect(
+        page.getByText("サーバールールを更新しました。"),
+      ).toBeVisible();
+
+      await page.goto("/#rules");
+      await expect(
+        page.locator("#rules").getByText(marker, { exact: true }),
+      ).toBeVisible();
+
+      await page.goto("/admin/audit");
+      await expect(
+        page.getByText("サーバールール: rules").first(),
+      ).toBeVisible();
+    } finally {
+      await page.goto("/admin/rules");
+      await page.getByLabel("注意見出し").fill(originalJapaneseTitle);
+      await page.getByLabel("Notice title").fill(originalEnglishTitle);
+      await page.getByRole("button", { name: "サーバールールを保存" }).click();
+      await expect(page).toHaveURL("/admin/rules?saved=1");
+    }
+  });
 });

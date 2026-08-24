@@ -7,8 +7,13 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
+import { getPublicRulesContent } from "@/lib/rules/public";
 
-export function RulesSection() {
+export async function RulesSection() {
+  const result = await getPublicRulesContent();
+  const japaneseContent = result.item?.translations.ja ?? ja.rules;
+  const englishContent = result.item?.translations.en ?? en.rules;
+
   return (
     <section
       className="section-shell border-y border-[var(--border)] bg-[linear-gradient(135deg,var(--surface-secondary),color-mix(in_srgb,var(--surface)_58%,var(--surface-secondary)))]"
@@ -19,14 +24,22 @@ export function RulesSection() {
           <SectionHeading
             description={
               <LocalizedText
-                ja={ja.rules.description}
-                en={en.rules.description}
+                ja={japaneseContent.description}
+                en={englishContent.description}
               />
             }
             eyebrow={
-              <LocalizedText ja={ja.rules.eyebrow} en={en.rules.eyebrow} />
+              <LocalizedText
+                ja={japaneseContent.eyebrow}
+                en={englishContent.eyebrow}
+              />
             }
-            title={<LocalizedText ja={ja.rules.title} en={en.rules.title} />}
+            title={
+              <LocalizedText
+                ja={japaneseContent.title}
+                en={englishContent.title}
+              />
+            }
           />
         </Reveal>
 
@@ -38,20 +51,23 @@ export function RulesSection() {
             <div>
               <h3 className="font-bold text-[var(--text-primary)]">
                 <LocalizedText
-                  ja={ja.rules.noticeTitle}
-                  en={en.rules.noticeTitle}
+                  ja={japaneseContent.noticeTitle}
+                  en={englishContent.noticeTitle}
                 />
               </h3>
               <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                <LocalizedText ja={ja.rules.notice} en={en.rules.notice} />
+                <LocalizedText
+                  ja={japaneseContent.notice}
+                  en={englishContent.notice}
+                />
               </p>
             </div>
           </aside>
         </Reveal>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {ja.rules.items.map((item, index) => {
-            const englishItem = getMatchingItem(en.rules.items, item.id);
+          {japaneseContent.items.map((item, index) => {
+            const englishItem = getMatchingItem(englishContent.items, item.id);
 
             return (
               <Reveal delay={index * 0.035} key={item.id}>
@@ -88,14 +104,14 @@ export function RulesSection() {
               <span className="mr-auto">
                 <span className="group-open:hidden">
                   <LocalizedText
-                    ja={ja.rules.rulebook.openLabel}
-                    en={en.rules.rulebook.openLabel}
+                    ja={japaneseContent.rulebook.openLabel}
+                    en={englishContent.rulebook.openLabel}
                   />
                 </span>
                 <span className="hidden group-open:inline">
                   <LocalizedText
-                    ja={ja.rules.rulebook.closeLabel}
-                    en={en.rules.rulebook.closeLabel}
+                    ja={japaneseContent.rulebook.closeLabel}
+                    en={englishContent.rulebook.closeLabel}
                   />
                 </span>
               </span>
@@ -110,16 +126,16 @@ export function RulesSection() {
                 <p className="section-eyebrow">Server Rulebook</p>
                 <h3 className="mt-2 text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
                   <LocalizedText
-                    ja={ja.rules.rulebook.title}
-                    en={en.rules.rulebook.title}
+                    ja={japaneseContent.rulebook.title}
+                    en={englishContent.rulebook.title}
                   />
                 </h3>
               </div>
 
               <div className="mt-7 divide-y divide-[var(--border)] border-y border-[var(--border)]">
-                {ja.rules.rulebook.blocks.map((block) => {
+                {japaneseContent.rulebook.blocks.map((block) => {
                   const englishBlock = getMatchingItem(
-                    en.rules.rulebook.blocks,
+                    englishContent.rulebook.blocks,
                     block.id,
                   );
 
@@ -194,14 +210,14 @@ export function RulesSection() {
 
               <aside className="mt-8 rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] p-4 text-sm leading-6 text-[var(--text-secondary)]">
                 <LocalizedText
-                  ja={ja.rules.rulebook.supplementaryNote}
-                  en={en.rules.rulebook.supplementaryNote}
+                  ja={japaneseContent.rulebook.supplementaryNote}
+                  en={englishContent.rulebook.supplementaryNote}
                 />
               </aside>
               <p className="mt-5 text-xs text-[var(--text-muted)]">
                 <LocalizedText
-                  ja={`${ja.rules.rulebook.lastUpdatedLabel}: ${ja.rules.rulebook.lastUpdated}`}
-                  en={`${en.rules.rulebook.lastUpdatedLabel}: ${en.rules.rulebook.lastUpdated}`}
+                  ja={`${japaneseContent.rulebook.lastUpdatedLabel}: ${japaneseContent.rulebook.lastUpdated}`}
+                  en={`${englishContent.rulebook.lastUpdatedLabel}: ${englishContent.rulebook.lastUpdated}`}
                 />
               </p>
             </div>

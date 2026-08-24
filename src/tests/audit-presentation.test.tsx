@@ -36,6 +36,13 @@ describe("audit presentation", () => {
         managedSectionId: "vip",
       }),
     ).toEqual({ label: "VIP", id: "vip" });
+    expect(
+      getAuditTarget({
+        announcementId: null,
+        faqItemId: null,
+        managedSectionId: "rules",
+      }),
+    ).toEqual({ label: "サーバールール", id: "rules" });
   });
 
   it("renders snapshots as escaped text", () => {

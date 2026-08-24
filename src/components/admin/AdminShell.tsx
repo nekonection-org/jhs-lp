@@ -6,6 +6,7 @@ import {
   Home,
   Newspaper,
   ScrollText,
+  ShieldCheck,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -56,6 +57,14 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
             >
               <CircleHelp aria-hidden="true" className="size-4" />
               <span className="hidden sm:inline">FAQ</span>
+            </Link>
+            <Link
+              aria-label="サーバールール管理"
+              className="inline-flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+              href="/admin/rules"
+            >
+              <ShieldCheck aria-hidden="true" className="size-4" />
+              <span className="hidden xl:inline">ルール</span>
             </Link>
             <Link
               aria-label="VIP管理"

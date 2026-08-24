@@ -52,5 +52,8 @@ export function getAuditTarget({
   if (managedSectionId === "moderator") {
     return { label: "モデレーター募集", id: managedSectionId };
   }
+  if (managedSectionId === "rules") {
+    return { label: "サーバールール", id: managedSectionId };
+  }
   return { label: "対象なし", id: null };
 }

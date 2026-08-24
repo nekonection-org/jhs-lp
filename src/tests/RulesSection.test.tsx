@@ -1,14 +1,24 @@
 import { render, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+const { getPublicRulesContent } = vi.hoisted(() => ({
+  getPublicRulesContent: vi.fn(),
+}));
+
+vi.mock("@/lib/rules/public", () => ({ getPublicRulesContent }));
 
 import { RulesSection } from "@/components/sections/RulesSection";
-import { ja } from "@/content";
+import { en, ja } from "@/content";
 
 describe("RulesSection", () => {
   it("exposes the complete server rules in a native details element", async () => {
     const user = userEvent.setup();
-    const { container } = render(<RulesSection />);
+    getPublicRulesContent.mockResolvedValueOnce({
+      status: "ready",
+      item: { version: 1, translations: { ja: ja.rules, en: en.rules } },
+    });
+    const { container } = render(await RulesSection());
     const rulebook = container.querySelector<HTMLDetailsElement>(
       "#rules details.rulebook",
     );
