@@ -1,4 +1,4 @@
-export const managedSectionIds = ["vip", "moderator"] as const;
+export const managedSectionIds = ["vip", "moderator", "rules"] as const;
 
 export type ManagedSectionId = (typeof managedSectionIds)[number];
 export type ManagedSectionLocale = "ja" | "en";

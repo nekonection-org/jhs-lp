@@ -2,11 +2,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const {
   findModeratorContent,
+  findRulesContent,
   findVipContent,
   listPublishedAnnouncements,
   listPublishedFaqs,
 } = vi.hoisted(() => ({
   findModeratorContent: vi.fn(),
+  findRulesContent: vi.fn(),
   findVipContent: vi.fn(),
   listPublishedAnnouncements: vi.fn(),
   listPublishedFaqs: vi.fn(),
@@ -23,11 +25,13 @@ vi.mock("@/lib/announcements/repository", () => ({
 vi.mock("@/lib/faqs/repository", () => ({ listPublishedFaqs }));
 vi.mock("@/lib/vip/repository", () => ({ findVipContent }));
 vi.mock("@/lib/moderator/repository", () => ({ findModeratorContent }));
+vi.mock("@/lib/rules/repository", () => ({ findRulesContent }));
 
 import { getPublicAnnouncements } from "@/lib/announcements/public";
 import { getPublicFaqs } from "@/lib/faqs/public";
 import { getPublicVipContent } from "@/lib/vip/public";
 import { getPublicModeratorContent } from "@/lib/moderator/public";
+import { getPublicRulesContent } from "@/lib/rules/public";
 
 describe("public database failure handling", () => {
   beforeEach(() => {
@@ -114,6 +118,21 @@ describe("public database failure handling", () => {
     });
     expect(console.error).toHaveBeenCalledWith(
       "Public moderator content is unavailable.",
+      { errorName: "Error" },
+    );
+  });
+
+  it("returns an unavailable rules result without removing the static fallback", async () => {
+    findRulesContent.mockRejectedValueOnce(
+      new Error("Missing required database configuration: DATABASE_HOST"),
+    );
+
+    await expect(getPublicRulesContent()).resolves.toEqual({
+      status: "unavailable",
+      item: null,
+    });
+    expect(console.error).toHaveBeenCalledWith(
+      "Public rules content is unavailable.",
       { errorName: "Error" },
     );
   });

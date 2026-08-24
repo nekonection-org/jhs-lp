@@ -30,7 +30,7 @@
     "typecheck": "tsc --noEmit",
     "pretest": "prisma generate",
     "test": "vitest run",
-    "test:integration": "vitest run src/tests/announcement-service.integration.test.ts && vitest run src/tests/faq-service.integration.test.ts && vitest run src/tests/vip-service.integration.test.ts && vitest run src/tests/moderator-service.integration.test.ts",
+    "test:integration": "vitest run src/tests/announcement-service.integration.test.ts && vitest run src/tests/faq-service.integration.test.ts && vitest run src/tests/vip-service.integration.test.ts && vitest run src/tests/moderator-service.integration.test.ts && vitest run src/tests/rules-service.integration.test.ts",
     "test:watch": "vitest",
     "pretest:e2e": "prisma generate",
     "test:e2e": "playwright test",
