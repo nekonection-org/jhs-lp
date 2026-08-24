@@ -86,6 +86,21 @@ describe("localized content", () => {
     }
   });
 
+  it("keeps the complete server rulebook structurally aligned", () => {
+    expect(en.rules.rulebook.blocks.map(({ id }) => id)).toEqual(
+      ja.rules.rulebook.blocks.map(({ id }) => id),
+    );
+
+    for (const block of ja.rules.rulebook.blocks) {
+      const englishBlock = getMatchingItem(en.rules.rulebook.blocks, block.id);
+      expect(englishBlock.paragraphs).toHaveLength(block.paragraphs.length);
+      expect(englishBlock.items?.map(({ id }) => id) ?? []).toEqual(
+        block.items?.map(({ id }) => id) ?? [],
+      );
+      expect(Boolean(englishBlock.penalty)).toBe(Boolean(block.penalty));
+    }
+  });
+
   it("publishes the confirmed server schedule and enforcement rules", () => {
     expect(
       ja.server.highlights.every(({ status }) => status === "confirmed"),
@@ -117,11 +132,48 @@ describe("localized content", () => {
     expect(ja.server.welcomeDescription).toContain("公平で快適な環境");
     expect(ja.rules.items[0].description).toContain("平日18:00〜24:00");
     expect(ja.rules.items[0].description).toContain("土・日12:00〜24:00");
-    expect(ja.rules.items[0].description).toContain("自動的に処罰");
+    expect(ja.rules.items[0].description).toContain("次回ワイプまで自動BAN");
     expect(ja.rules.items[1].description).toContain("最大4人");
     expect(ja.rules.items[2].description).toContain("永久BAN");
     expect(ja.rules.items[2].description).toContain("#claim-ticket");
+    expect(ja.rules.items[2].description).toContain("DMでは対応しません");
     expect(ja.rules.items[4].description).toContain("F7レポート");
+
+    const raidRules = getMatchingItem(ja.rules.rulebook.blocks, "raid-rules");
+    expect(raidRules.items?.map(({ id }) => id)).toEqual([
+      "weekdays",
+      "weekends",
+      "prohibited-scope",
+      "exemptions",
+      "attack-enforcement",
+      "destruction-enforcement",
+      "accident",
+    ]);
+    expect(
+      raidRules.items?.find(({ id }) => id === "attack-enforcement")
+        ?.description,
+    ).toContain("1回目は警告、2回目はサーバーキック");
+    expect(
+      raidRules.items?.find(({ id }) => id === "destruction-enforcement")
+        ?.description,
+    ).toContain("違反回数にかかわらず");
+    expect(getMatchingItem(ja.rules.rulebook.blocks, "cheating").penalty).toBe(
+      "永久BAN",
+    );
+    expect(
+      getMatchingItem(ja.rules.rulebook.blocks, "cheating").items?.find(
+        ({ id }) => id === "appeal",
+      )?.description,
+    ).toContain("Discord の #claim-ticket");
+    expect(
+      raidRules.items?.find(({ id }) => id === "exemptions")?.description,
+    ).toContain("パスコードレイド");
+    expect(
+      ja.rules.rulebook.blocks.some(({ id }) => id === "server-specifications"),
+    ).toBe(false);
+    expect(ja.rules.rulebook.supplementaryNote).toContain(
+      "最新のサーバールール",
+    );
 
     expect(getMatchingItem(en.server.settings, "map-bp-wipe").value).toBe(
       "Every Friday at 18:00 JST",
@@ -132,10 +184,11 @@ describe("localized content", () => {
     expect(en.server.welcomeDescription).toContain("beginners to veterans");
     expect(en.server.welcomeDescription).toContain("fair and comfortable");
     expect(en.rules.items[0].description).toContain("weekdays");
-    expect(en.rules.items[0].description).toContain("penalized automatically");
+    expect(en.rules.items[0].description).toContain("automatic ban");
     expect(en.rules.items[1].description).toContain("four players");
     expect(en.rules.items[2].description).toContain("permanent ban");
     expect(en.rules.items[4].description).toContain("F7 report");
+    expect(en.rules.rulebook.supplementaryNote).toContain("authoritative");
   });
 
   it("keeps database-backed news labels and fallback messages complete", () => {

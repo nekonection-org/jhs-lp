@@ -101,7 +101,7 @@ export const en = {
       "Learn about the guiding principles of Japan Hideaway Server and what to know before joining.",
     settingsTitle: "Settings",
     settingsDescription:
-      "Server settings and operating times are listed separately below. Further details are also available on Discord.",
+      "Server settings and operating times are listed separately below. Review the complete Server Rules on this page for applicable conditions and exceptions.",
     welcomeTitle: "Welcome to Japan Hideaway Server!",
     welcomeDescription:
       "We are a Rust community server where players from beginners to veterans, including working adults and students, respect each other's playstyles and work toward a fair and comfortable environment. To make limited playtime enjoyable, our game balance stays close to official servers, with raid hours and operating rules designed around everyday schedules.",
@@ -159,7 +159,7 @@ export const en = {
     eyebrow: "Rules",
     title: "Important Rules",
     description:
-      "This page provides a concise overview of the most important rules for a safe experience. Please check the Discord server for full details.",
+      "This page provides a concise overview of the most important rules for a safe experience. The complete Server Rules are also available on this website.",
     noticeTitle: "Read before joining",
     notice:
       "Raiding outside the permitted hours, teaming, unfair play, and abusive conduct are handled according to the specific rule, with penalties including warnings, kicks, temporary bans, and permanent bans. If you are unsure about an action or make an accidental mistake, contact staff promptly through a Discord ticket.",
@@ -168,7 +168,7 @@ export const en = {
         id: "raid-window",
         title: "Raiding Hours",
         description:
-          "Raiding is allowed from 18:00 to 24:00 on weekdays and 12:00 to 24:00 on Saturday and Sunday. Attacks on buildings outside these hours are penalized automatically. Outdoor deployables, code raids, twig or wood-upgrade structures, your own base, and nearby TC pillars are exempt.",
+          "Raiding is allowed from 18:00 to 24:00 on weekdays and 12:00 to 24:00 on Saturday and Sunday. Attacking another player's building outside these hours is handled through escalating penalties; actually destroying it results in an automatic ban until the next wipe. See the complete Rules for exemptions.",
         icon: "clock",
         status: "confirmed",
         important: true,
@@ -186,7 +186,7 @@ export const en = {
         id: "fair-play",
         title: "Unfair Play and Exploits",
         description:
-          "Cheats, glitches, unauthorized tools, and other conduct prohibited on official servers are subject to a permanent ban. Automated or temporary kicks and bans may also be applied, and appeals are handled in the Discord #claim-ticket channel.",
+          "Cheats, glitches, unauthorized tools, and other conduct prohibited on official servers are subject to a permanent ban. Appeals are handled through Discord #claim-ticket; Admins and Moderators do not respond to direct messages.",
         icon: "shield",
         status: "confirmed",
       },
@@ -215,6 +215,176 @@ export const en = {
         status: "confirmed",
       },
     ],
+    rulebook: {
+      title: "Japan Hideaway Server Rules",
+      openLabel: "View the Complete Server Rules",
+      closeLabel: "Close the Complete Server Rules",
+      blocks: [
+        {
+          id: "raid-rules",
+          title: "Permitted Raid Hours and Off-Hours Raiding",
+          paragraphs: [
+            '"Off-hours raiding" means attacking or destroying another player\'s building outside the permitted raid hours. All times are in Japan Standard Time (JST).',
+          ],
+          items: [
+            {
+              id: "weekdays",
+              label: "Permitted raid hours on weekdays",
+              description: "18:00–24:00",
+            },
+            {
+              id: "weekends",
+              label: "Permitted raid hours on Saturday and Sunday",
+              description: "12:00–24:00",
+            },
+            {
+              id: "prohibited-scope",
+              label: "What counts as off-hours raiding",
+              description:
+                "Attacking or destroying another player's building, including walls, doors, and boat bases",
+            },
+            {
+              id: "exemptions",
+              label: "What does not count as off-hours raiding",
+              description:
+                "Destroying outdoor deployables such as turrets, code raids, twig or wood-upgrade structures, your own base, and nearby TC pillars",
+            },
+            {
+              id: "attack-enforcement",
+              label: "Violation without destroying a building",
+              description:
+                "First violation: warning; second violation: server kick; another violation after a kick: the offender and the entire team are banned until the next wipe",
+            },
+            {
+              id: "destruction-enforcement",
+              label: "If a building is destroyed",
+              description:
+                "Regardless of prior violations, the player is automatically banned until the next wipe. Staff will destroy the offender's base after reviewing the logs",
+            },
+            {
+              id: "accident",
+              label: "Accidental destruction",
+              description: "Report it to staff immediately",
+            },
+          ],
+        },
+        {
+          id: "cheating",
+          title: "1. Cheats, Glitches, and Unauthorized Tools",
+          penalty: "Permanent ban",
+          paragraphs: [
+            "All conduct prohibited on official servers is also prohibited here. Depending on automated detection and the investigation, a player may be automatically or temporarily kicked or banned from the Server.",
+          ],
+          items: [
+            {
+              id: "party-member",
+              label: "Players in the same party",
+              description:
+                "A 30-day ban for the first incident and a permanent ban for the second and later incidents",
+            },
+            {
+              id: "appeal",
+              label: "Appeals",
+              description:
+                "Admins and Moderators do not respond to direct messages. Use Discord #claim-ticket for assistance.",
+            },
+          ],
+        },
+        {
+          id: "conduct",
+          title:
+            "2. Abuse, Discriminatory Language, Excessive Taunting, and Defamation",
+          penalty: "Warning to permanent ban",
+          paragraphs: [
+            "Political or discriminatory statements, persistent personal attacks, and other conduct beyond generally acceptable social standards are prohibited.",
+          ],
+          items: [
+            {
+              id: "locations",
+              description:
+                "This applies to in-game chat, voice chat, vending machines, buildings, signs, bases, and channels in the Discord server.",
+            },
+            {
+              id: "removal",
+              description:
+                "Problematic buildings, signs, vending machines, bases, and similar content will be removed.",
+            },
+            {
+              id: "serious",
+              description:
+                "Serious conduct may result in a temporary or permanent ban without prior warning.",
+            },
+          ],
+        },
+        {
+          id: "teaming",
+          title: "3. Team-Size Violations (Teaming)",
+          penalty: "Warning to permanent ban",
+          paragraphs: [
+            "Teams are limited to four players. Sharing supplies, fighting together, or sharing a base with players outside your team is prohibited.",
+          ],
+          items: [
+            {
+              id: "retirement",
+              label: "Transferring supplies when retiring",
+              description:
+                "The transfer itself is allowed, but afterward you must clear sleeping bag, TC, and other authorization, log out promptly, and refrain from playing again during that wipe.",
+            },
+          ],
+        },
+        {
+          id: "feedback",
+          title: "Feedback and Criticism",
+          paragraphs: [
+            "Feedback or criticism regarding the Server or its operators is not itself prohibited.",
+            "However, feedback or criticism does not justify abuse, discrimination, defamation, persistent personal attacks, or other conduct beyond generally acceptable social standards.",
+          ],
+        },
+        {
+          id: "operations",
+          title: "Operating Policy and Reports",
+          paragraphs: [
+            "Playstyles are generally not restricted, but prohibited conduct under these Rules is not recognized as a playstyle. Ignoring warnings or engaging in serious misconduct may result in a ban.",
+          ],
+          items: [
+            {
+              id: "fairness",
+              description:
+                "The operators will treat all players as fairly as reasonably possible.",
+            },
+            {
+              id: "cheat-report",
+              description:
+                "If you suspect cheats, glitches, or unauthorized tools, use Rust's F7 report feature and, when appropriate, provide recordings or other evidence through a Discord ticket.",
+            },
+            {
+              id: "other-report",
+              description:
+                "Report other rule violations through the Discord ticket system.",
+            },
+            {
+              id: "changes",
+              description:
+                "These Rules may be changed without prior notice to maintain a healthy Server environment.",
+            },
+            {
+              id: "volunteer",
+              description:
+                "The Server is managed by volunteers who contribute their own time and money. We will improve the Server environment and anti-cheat response where reasonably possible, but cannot guarantee a perfect environment or an immediate response at all times.",
+            },
+            {
+              id: "choice",
+              description:
+                "If the Server's policies or environment do not suit you, please consider using another server.",
+            },
+          ],
+        },
+      ],
+      supplementaryNote:
+        "The content on this website is the current authoritative version of the Server Rules. Please also review the Terms of Service and latest announcements.",
+      lastUpdatedLabel: "Last updated",
+      lastUpdated: "August 25, 2026",
+    },
   },
   vip: {
     id: "vip",
@@ -369,7 +539,7 @@ export const en = {
         title: "Article 1 — Scope",
         paragraphs: [
           "These Terms apply to all matters relating to the use of the Server, its official website, and its related Discord community.",
-          "Server rules, announcements, and operational guidance separately published on Discord or the official website form part of these Terms.",
+          "Server Rules, announcements, and operational guidance published on the official website form part of these Terms. Discord may be used for update notices and support, but the latest Server Rules on the official website are authoritative.",
         ],
       },
       {
@@ -442,7 +612,7 @@ export const en = {
         id: "changes",
         title: "Article 9 — Changes to the Terms",
         paragraphs: [
-          "The operators may amend or add to these Terms when necessary. Changes and their effective date will be announced on the official website or in the related Discord community.",
+          "The operators may amend or add to these Terms when necessary. Changes and their effective date will be published on the official website and may also be announced in the related Discord community.",
           "Unless separate consent is required by law, continued use of the Server after revised Terms take effect constitutes acceptance of the revised Terms.",
         ],
       },
@@ -455,9 +625,9 @@ export const en = {
       },
     ],
     supplementaryNote:
-      "Please review the latest Server rules and announcements published on Discord and this website together with these Terms.",
+      "Please review the latest Server Rules and announcements on this website together with these Terms. Discord is used as a supplementary channel for inquiries and update notices.",
     lastUpdatedLabel: "Last updated",
-    lastUpdated: "August 3, 2026",
+    lastUpdated: "August 25, 2026",
   },
   footer: {
     ariaLabel: "Footer",

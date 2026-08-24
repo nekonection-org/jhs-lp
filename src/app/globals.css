@@ -158,6 +158,10 @@ html[data-locale="en"] [data-locale-content="en"] {
   display: none;
 }
 
+.rulebook summary::-webkit-details-marker {
+  display: none;
+}
+
 .faq-item[open] [data-faq-icon] {
   rotate: 45deg;
 }

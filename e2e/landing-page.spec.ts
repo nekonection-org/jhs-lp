@@ -123,6 +123,28 @@ test("FAQ はDB状態を明示し、取得時はネイティブ details で開�
   await expect(firstFaq).not.toHaveAttribute("open", "");
 });
 
+test("サーバールール全文をWebサイト上で開閉して確認できる", async ({
+  page,
+}) => {
+  const rulebook = page.locator("#rules details.rulebook");
+  const summary = rulebook.locator("summary");
+
+  await expect(rulebook).not.toHaveAttribute("open", "");
+  await summary.click();
+  await expect(rulebook).toHaveAttribute("open", "");
+  await expect(
+    rulebook.getByRole("heading", {
+      name: "Japan Hideaway Server サーバールール",
+    }),
+  ).toBeVisible();
+  await expect(rulebook.getByText("永久BAN", { exact: true })).toBeVisible();
+  await expect(rulebook.getByText(/パスコードレイド/)).toBeVisible();
+  await expect(rulebook.getByText(/最新のサーバールール/)).toBeVisible();
+
+  await summary.click();
+  await expect(rulebook).not.toHaveAttribute("open", "");
+});
+
 test("利用規約はモーダルで表示され、Escキーで閉じられる", async ({ page }) => {
   const trigger = page.getByRole("button", { name: "利用規約を表示" });
   await trigger.click();

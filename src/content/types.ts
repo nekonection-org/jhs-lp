@@ -216,10 +216,35 @@ export type RuleItems = IdentifiedItems<
   }
 >;
 
+export interface RulebookListItemContent {
+  readonly id: string;
+  readonly label?: string;
+  readonly description: string;
+}
+
+export interface RulebookBlockContent {
+  readonly id: string;
+  readonly title: string;
+  readonly penalty?: string;
+  readonly paragraphs: readonly string[];
+  readonly items?: readonly RulebookListItemContent[];
+}
+
+export interface RulebookContent {
+  readonly title: string;
+  readonly openLabel: string;
+  readonly closeLabel: string;
+  readonly blocks: readonly RulebookBlockContent[];
+  readonly supplementaryNote: string;
+  readonly lastUpdatedLabel: string;
+  readonly lastUpdated: string;
+}
+
 export interface RulesContent extends SectionIntroduction<"rules"> {
   readonly noticeTitle: string;
   readonly notice: string;
   readonly items: RuleItems;
+  readonly rulebook: RulebookContent;
 }
 
 export type VipDetailItems = IdentifiedItems<
