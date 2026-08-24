@@ -224,7 +224,7 @@ export const en = {
           id: "raid-rules",
           title: "Permitted Raid Hours and Off-Hours Raiding",
           paragraphs: [
-            '“Off-hours raiding” means attacking or destroying another player\'s building outside the permitted raid hours. All times are in Japan Standard Time (JST).',
+            "“Off-hours raiding” means attacking or destroying another player's building outside the permitted raid hours. All times are in Japan Standard Time (JST).",
           ],
           items: [
             {
