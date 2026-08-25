@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Japan Hideaway Server",
     short_name: "JHS",
     description:
-      "Japan Hideaway Serverのサーバー情報、ルール、VIP、FAQ、お知らせを案内する公式LPです。",
+      "The official website of Japan Hideaway Server, a Rust community server with designated raiding hours.",
     start_url: "/",
     display: "standalone",
     background_color: "#08090b",

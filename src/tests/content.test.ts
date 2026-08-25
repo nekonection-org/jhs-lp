@@ -33,6 +33,17 @@ describe("localized content", () => {
     expect(en.locale).toBe("en");
   });
 
+  it("keeps shared metadata consistent across language changes", () => {
+    const title = "Japan Hideaway Server | Rust Server";
+    const description =
+      "The official website of Japan Hideaway Server, a Rust community server with designated raiding hours.";
+
+    expect(ja.metadata.title).toBe(title);
+    expect(en.metadata.title).toBe(title);
+    expect(ja.metadata.description).toBe(description);
+    expect(en.metadata.description).toBe(description);
+  });
+
   it("keeps navigation and section identifiers aligned in both languages", () => {
     const expectedNavigationIds = sectionIds.filter((id) => id !== "top");
 

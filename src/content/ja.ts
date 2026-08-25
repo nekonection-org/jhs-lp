@@ -3,10 +3,10 @@ import type { SiteContent } from "./types";
 export const ja = {
   locale: "ja",
   metadata: {
-    title: "Japan Hideaway Server | Rustコミュニティサーバー",
+    title: "Japan Hideaway Server | Rust Server",
     description:
-      "社会人・学生向けのRustコミュニティサーバー、Japan Hideaway Serverの公式案内サイトです。サーバー情報、ルール、VIP、FAQ、運営募集、お知らせをご案内します。",
-    openGraphImageAlt: "Japan Hideaway Server 公式案内サイト",
+      "The official website of Japan Hideaway Server, a Rust community server with designated raiding hours.",
+    openGraphImageAlt: "Japan Hideaway Server official website preview",
   },
   common: {
     siteName: "Japan Hideaway Server",
