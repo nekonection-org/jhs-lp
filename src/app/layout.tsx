@@ -8,6 +8,7 @@ import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import { ThemeColorSync } from "@/components/providers/ThemeColorSync";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ja } from "@/content";
+import { brandColors } from "@/lib/brand";
 import { siteUrl } from "@/lib/constants";
 
 const geist = localFont({
@@ -32,25 +33,11 @@ export const metadata: Metadata = {
     title: ja.metadata.title,
     description: ja.metadata.description,
     url: "/",
-    images: [
-      {
-        url: "/icon.png",
-        width: 1254,
-        height: 1254,
-        alt: ja.metadata.openGraphImageAlt,
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: ja.metadata.title,
     description: ja.metadata.description,
-    images: [
-      {
-        url: "/icon.png",
-        alt: ja.metadata.openGraphImageAlt,
-      },
-    ],
   },
   icons: {
     icon: [{ url: "/icon.png", type: "image/png" }],
@@ -61,7 +48,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "dark light",
-  themeColor: "#08090b",
+  themeColor: brandColors.accent,
   width: "device-width",
   initialScale: 1,
 };

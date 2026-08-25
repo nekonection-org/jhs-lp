@@ -3,9 +3,11 @@
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 
+import { brandColors } from "@/lib/brand";
+
 const themeColors = {
-  dark: "#08090b",
-  light: "#f4f5f6",
+  dark: brandColors.accent,
+  light: brandColors.accentStrong,
 } as const;
 
 export function ThemeColorSync() {
