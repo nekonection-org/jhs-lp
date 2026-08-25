@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ja } from "@/content";
 import { brandColors } from "@/lib/brand";
 import { siteUrl } from "@/lib/constants";
+import { socialPreviewImage } from "@/lib/social-metadata";
 
 const geist = localFont({
   src: "./fonts/Geist-Variable.woff2",
@@ -33,11 +34,24 @@ export const metadata: Metadata = {
     title: ja.metadata.title,
     description: ja.metadata.description,
     url: "/",
+    images: [
+      {
+        ...socialPreviewImage,
+        alt: ja.metadata.openGraphImageAlt,
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: ja.metadata.title,
     description: ja.metadata.description,
+    images: [
+      {
+        url: socialPreviewImage.url,
+        alt: ja.metadata.openGraphImageAlt,
+      },
+    ],
   },
   icons: {
     icon: [{ url: "/icon.png", type: "image/png" }],

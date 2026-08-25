@@ -190,6 +190,7 @@ VIP案内はCloudflare Accessで保護された`/admin/vip`から管理します
 
 - `public/icon.png`: ヘッダー、Heroカード、Footerで使用する公式アイコン
 - `public/main-image.png`: Heroのメイン画像
+- `public/banner.png`: Discordなどのリンク共有で使用するOG/Twitter画像
 
 ファイル名を維持して差し替えると、コンポーネント側の変更は不要です。
 
