@@ -1,0 +1,70 @@
+# Development-only stack. Credentials are local defaults, not production secrets.
+name: jhs-lp-devcontainer
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    init: true
+    command: sleep infinity
+    working_dir: /workspaces/jhs-lp
+    shm_size: 1gb
+    volumes:
+      - ..:/workspaces/jhs-lp:cached
+      - type: volume
+        source: node_modules
+        target: /workspaces/jhs-lp/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: next_cache
+        target: /workspaces/jhs-lp/.next
+        volume:
+          nocopy: true
+      - pnpm_store:/home/node/.local/share/pnpm/store
+      - playwright_cache:/home/node/.cache/ms-playwright
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_PORT: "3306"
+      DATABASE_USER: jhs_app
+      DATABASE_PASSWORD: jhs_dev_password
+      DATABASE_PASSWORD_FILE: ""
+      DATABASE_NAME: jhs_dev
+      DATABASE_URL: ""
+      PRISMA_REQUIRE_DATABASE_CONFIG: "true"
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.4.10
+    environment:
+      MYSQL_DATABASE: jhs_dev
+      MYSQL_USER: jhs_app
+      MYSQL_PASSWORD: jhs_dev_password
+      MYSQL_ROOT_PASSWORD: jhs_dev_root_password
+      TZ: UTC
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-test-database.sql:/docker-entrypoint-initdb.d/01-test-database.sql:ro
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          MYSQL_PWD="$${MYSQL_PASSWORD}"
+          mysql --protocol=TCP --host=127.0.0.1
+          --user="$${MYSQL_USER}" --database="$${MYSQL_DATABASE}"
+          --execute="SELECT 1" --silent
+      interval: 5s
+      timeout: 5s
+      start_period: 30s
+      retries: 20
+
+volumes:
+  node_modules:
+  next_cache:
+  pnpm_store:
+  playwright_cache:
+  mysql_data:

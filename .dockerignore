@@ -4,6 +4,7 @@
 .codex
 .vscode
 .idea
+.devcontainer
 
 node_modules
 **/node_modules

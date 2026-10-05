@@ -36,6 +36,39 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 
 ## ローカル開発
 
+### Dev Containerで開発する
+
+Docker Desktop（WindowsではWSL 2とLinux containers）、VS Code、[Dev Containers拡張](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)を用意します。ホスト側のNode.js・pnpmは不要です。
+
+1. Docker Desktopを起動します。
+2. このリポジトリをVS Codeで開き、コマンドパレットから`Dev Containers: Reopen in Container`を実行します。
+3. 初回セットアップの完了後、コンテナ内のターミナルで次を実行します。
+
+```bash
+pnpm dev --hostname 0.0.0.0
+```
+
+`http://localhost:3000`で確認できます。[Dev Containerの公式手順](https://code.visualstudio.com/docs/devcontainers/create-dev-container)に沿って、`.devcontainer/devcontainer.json`から専用Composeを起動します。
+
+コンテナにはNode.js `24.18.0`、`package.json`と同じpnpm、Git、ESLint・Prettier・Prisma・PlaywrightのVS Code拡張を用意します。初回作成時には依存関係の固定インストール、Prisma Clientの生成、開発・テストDBへのマイグレーション、Chromiumと[PlaywrightのOS依存パッケージ](https://playwright.dev/docs/browsers#install-system-dependencies)のインストールを自動実行します。セットアップに失敗した場合はログを確認して、コンテナ内で`bash .devcontainer/post-create.sh`を再実行できます。
+
+MySQL `8.4.10`はコンテナ内の`mysql:3306`で利用し、開発用`jhs_dev`とテスト用`jhs_test`を分けています。DB接続情報は専用Composeが設定するため、`.env.local`のホスト用DB設定を書き換える必要はありません。ここで使うパスワードは開発専用の固定値です。MySQLのポートはホストへ公開しません。本番Compose・Cloudflare Tunnel・本番のsecretは使用しません。
+
+Discordなどの公開URLや管理画面の開発バイパスを設定したい場合は、既存の`.env.local`を使用します。ファイルがない場合にだけ`cp .env.example .env.local`で作成し、必要な項目を編集してください。管理画面のバイパス設定は後述の「ローカル管理画面開発」を参照してください。
+
+品質チェックは通常の`pnpm typecheck`、`pnpm lint`、`pnpm format:check`、`pnpm test`、`pnpm build`を使用します。DB統合テストと管理画面のE2Eは、コンテナ内でテストDBを指定します。
+
+```bash
+DATABASE_NAME=jhs_test RUN_DATABASE_INTEGRATION=true pnpm test:integration
+DATABASE_NAME=jhs_test E2E_ADMIN_ENABLED=true pnpm test:e2e --workers=1
+```
+
+アプリの3000番、E2Eサーバーの3100番、Playwrightレポートの9323番をVS Code経由で転送します。`node_modules`、`.next`、pnpmストア、ブラウザー、MySQLデータは専用の名前付きvolumeに保存し、ホストのWindows用依存関係と分けます。
+
+Node.js・pnpmのバージョンやDockerfileを変更した場合は`Dev Containers: Rebuild Container`を実行してください。RebuildやVS Code終了時のコンテナ停止ではDBデータは保持されます。新しいマイグレーションを追加・取得した場合は`pnpm db:migrate:deploy`と`DATABASE_NAME=jhs_test pnpm db:migrate:deploy`で両DBへ適用します。
+
+### ホストのNode.jsで開発する
+
 ```powershell
 corepack enable
 pnpm install --frozen-lockfile

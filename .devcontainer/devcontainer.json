@@ -1,0 +1,35 @@
+{
+  "name": "Japan Hideaway Server development",
+  "dockerComposeFile": "compose.yml",
+  "service": "app",
+  "runServices": ["app", "mysql"],
+  "workspaceFolder": "/workspaces/jhs-lp",
+  "remoteUser": "node",
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": ["bash", ".devcontainer/post-create.sh"],
+  "waitFor": "postCreateCommand",
+  "forwardPorts": [3000, 3100, 9323],
+  "portsAttributes": {
+    "3000": { "label": "Next.js", "onAutoForward": "notify" },
+    "3100": { "label": "Playwright test server", "onAutoForward": "silent" },
+    "9323": { "label": "Playwright report", "onAutoForward": "silent" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "Prisma.prisma",
+        "ms-playwright.playwright"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
+        "files.eol": "\n",
+        "typescript.tsdk": "node_modules/typescript/lib",
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}
