@@ -5,6 +5,7 @@ import {
   type ReactNode,
   useContext,
   useEffect,
+  useState,
   useSyncExternalStore,
 } from "react";
 
@@ -12,7 +13,6 @@ import { getContent } from "@/content";
 import { locales, type Locale } from "@/content/types";
 
 const storageKey = "jhs-locale";
-const localeChangeEvent = "jhs:locale-change";
 
 interface LanguageContextValue {
   locale: Locale;
@@ -30,28 +30,61 @@ function applyDocumentLocale(locale: Locale) {
   document.documentElement.dataset.locale = locale;
 }
 
-function getLocaleSnapshot(): Locale {
-  const storedLocale = window.localStorage.getItem(storageKey);
-  return isLocale(storedLocale) ? storedLocale : "ja";
-}
-
 function getServerLocaleSnapshot(): Locale {
   return "ja";
 }
 
-function subscribeToLocale(onStoreChange: () => void) {
-  function handleStorage(event: StorageEvent) {
-    if (event.key === storageKey) {
-      onStoreChange();
+function createLocaleStore() {
+  let currentLocale: Locale | null = null;
+  const listeners = new Set<() => void>();
+
+  function notifyListeners() {
+    for (const listener of listeners) {
+      listener();
     }
   }
 
-  window.addEventListener("storage", handleStorage);
-  window.addEventListener(localeChangeEvent, onStoreChange);
+  return {
+    getSnapshot(): Locale {
+      if (currentLocale === null) {
+        try {
+          const storedLocale = window.localStorage.getItem(storageKey);
+          currentLocale = isLocale(storedLocale) ? storedLocale : "ja";
+        } catch {
+          currentLocale = "ja";
+        }
+      }
 
-  return () => {
-    window.removeEventListener("storage", handleStorage);
-    window.removeEventListener(localeChangeEvent, onStoreChange);
+      return currentLocale;
+    },
+    subscribe(onStoreChange: () => void) {
+      function handleStorage(event: StorageEvent) {
+        if (event.key === storageKey || event.key === null) {
+          currentLocale = isLocale(event.newValue) ? event.newValue : "ja";
+          notifyListeners();
+        }
+      }
+
+      listeners.add(onStoreChange);
+      window.addEventListener("storage", handleStorage);
+
+      return () => {
+        listeners.delete(onStoreChange);
+        window.removeEventListener("storage", handleStorage);
+      };
+    },
+    setLocale(nextLocale: Locale) {
+      currentLocale = nextLocale;
+      applyDocumentLocale(nextLocale);
+
+      try {
+        window.localStorage.setItem(storageKey, nextLocale);
+      } catch {
+        // The in-memory selection still works when persistence is unavailable.
+      }
+
+      notifyListeners();
+    },
   };
 }
 
@@ -60,9 +93,10 @@ interface LanguageProviderProps {
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
+  const [store] = useState(createLocaleStore);
   const locale = useSyncExternalStore(
-    subscribeToLocale,
-    getLocaleSnapshot,
+    store.subscribe,
+    store.getSnapshot,
     getServerLocaleSnapshot,
   );
 
@@ -90,14 +124,8 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     };
   }, [locale]);
 
-  function setLocale(nextLocale: Locale) {
-    applyDocumentLocale(nextLocale);
-    window.localStorage.setItem(storageKey, nextLocale);
-    window.dispatchEvent(new Event(localeChangeEvent));
-  }
-
   return (
-    <LanguageContext.Provider value={{ locale, setLocale }}>
+    <LanguageContext.Provider value={{ locale, setLocale: store.setLocale }}>
       {children}
     </LanguageContext.Provider>
   );
