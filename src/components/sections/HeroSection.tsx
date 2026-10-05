@@ -79,7 +79,7 @@ export function HeroSection() {
         animate={{ opacity: 1, scale: 1 }}
         aria-hidden="true"
         className="absolute inset-0 -z-30"
-        initial={reduceMotion ? false : { opacity: 0.55, scale: 1.035 }}
+        initial={{ opacity: 0.55, scale: 1.035 }}
         transition={{ duration: reduceMotion ? 0 : 0.7, ease: "easeOut" }}
       >
         <Image
@@ -104,11 +104,15 @@ export function HeroSection() {
         className="absolute inset-0 -z-10 opacity-25 [background-image:linear-gradient(color-mix(in_srgb,var(--border)_45%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--border)_45%,transparent)_1px,transparent_1px)] [background-size:4.5rem_4.5rem] [mask-image:linear-gradient(to_bottom,black,transparent_82%)]"
       />
       <motion.div
-        animate={reduceMotion ? undefined : { opacity: 0.42, scale: 1 }}
+        animate={{ opacity: 0.42, scale: 1 }}
         aria-hidden="true"
         className="absolute top-[18%] right-[8%] -z-10 size-72 rounded-full bg-[color-mix(in_srgb,var(--accent)_16%,transparent)] blur-3xl sm:size-96"
-        initial={reduceMotion ? false : { opacity: 0, scale: 0.88 }}
-        transition={{ delay: 0.2, duration: 0.7, ease: "easeOut" }}
+        initial={{ opacity: 0, scale: 0.88 }}
+        transition={{
+          delay: reduceMotion ? 0 : 0.2,
+          duration: reduceMotion ? 0 : 0.7,
+          ease: "easeOut",
+        }}
       />
 
       <Container className="relative grid items-center gap-12 lg:grid-cols-[minmax(0,1.16fr)_minmax(19rem,0.84fr)] lg:gap-16">
@@ -159,8 +163,11 @@ export function HeroSection() {
               animate={{ scaleX: 1 }}
               aria-hidden="true"
               className="absolute inset-x-0 top-0 h-1 origin-left bg-[var(--accent)]"
-              initial={reduceMotion ? false : { scaleX: 0 }}
-              transition={{ delay: 0.25, duration: reduceMotion ? 0 : 0.55 }}
+              initial={{ scaleX: 0 }}
+              transition={{
+                delay: reduceMotion ? 0 : 0.25,
+                duration: reduceMotion ? 0 : 0.55,
+              }}
             />
             <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] pb-5">
               <div className="flex items-center gap-3">
