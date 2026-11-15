@@ -98,7 +98,9 @@ export function NewsList({ result }: NewsListProps) {
 
       <div
         className={
-          isArchivePage ? "mt-4 grid gap-4" : "mt-10 grid gap-4 lg:mt-12"
+          isArchivePage
+            ? "mt-4 border-b border-[var(--border)]"
+            : "mt-10 border-b border-[var(--border)] lg:mt-12"
         }
       >
         {result.items.map((item, index) => {
@@ -111,7 +113,7 @@ export function NewsList({ result }: NewsListProps) {
 
           return (
             <Reveal delay={index * 0.04} key={item.id}>
-              <article className="surface-card interactive-card grid gap-4 p-5 sm:grid-cols-[9rem_minmax(0,1fr)_auto] sm:items-center sm:p-6">
+              <article className="grid gap-4 border-t border-[var(--border)] py-6 sm:grid-cols-[9rem_minmax(0,1fr)_auto] sm:items-start sm:py-7">
                 <div className="flex flex-wrap items-center gap-2 sm:block">
                   <time
                     className="text-sm font-semibold text-[var(--text-secondary)]"
@@ -279,8 +281,8 @@ function NewsPlaceholder({
 
   return (
     <Reveal className="mt-10 lg:mt-12">
-      <div className="surface-card flex min-h-64 flex-col items-center justify-center px-6 py-12 text-center sm:px-10">
-        <span className="grid size-12 place-items-center rounded-xl border border-[var(--border)] bg-[var(--surface-secondary)] text-[var(--text-muted)]">
+      <div className="flex flex-col items-start border-t border-[var(--border)] py-8">
+        <span className="text-[var(--text-muted)]">
           <Icon aria-hidden="true" className="size-6" />
         </span>
         <h3 className="mt-5 text-xl font-bold tracking-[-0.025em]">

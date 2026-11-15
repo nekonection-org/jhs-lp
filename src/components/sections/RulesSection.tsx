@@ -16,7 +16,7 @@ export async function RulesSection() {
 
   return (
     <section
-      className="section-shell border-y border-[var(--border)] bg-[linear-gradient(135deg,var(--surface-secondary),color-mix(in_srgb,var(--surface)_58%,var(--surface-secondary)))]"
+      className="section-shell border-y border-[var(--border)] bg-[var(--surface)]"
       id="rules"
     >
       <Container>
@@ -44,8 +44,8 @@ export async function RulesSection() {
         </Reveal>
 
         <Reveal className="mt-8">
-          <aside className="surface-card flex items-start gap-4 p-5 sm:p-6">
-            <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-[color-mix(in_srgb,var(--danger)_10%,transparent)] text-[var(--danger)]">
+          <aside className="flex items-start gap-4 border-l-2 border-[var(--danger)] py-1 pl-5">
+            <span className="pt-1 text-[var(--danger)]">
               <TriangleAlert aria-hidden="true" className="size-5" />
             </span>
             <div>
@@ -65,14 +65,13 @@ export async function RulesSection() {
           </aside>
         </Reveal>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 border-b border-[var(--border)]">
           {japaneseContent.items.map((item, index) => {
             const englishItem = getMatchingItem(englishContent.items, item.id);
 
             return (
               <Reveal delay={index * 0.035} key={item.id}>
                 <FeatureCard
-                  className="bg-[var(--surface)]"
                   description={
                     <LocalizedText
                       ja={item.description}

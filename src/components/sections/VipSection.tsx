@@ -1,4 +1,4 @@
-import { BadgeCheck, Gem, LockKeyhole } from "lucide-react";
+import { BadgeCheck, LockKeyhole } from "lucide-react";
 
 import type { VipBenefit } from "@/content";
 import { LocalizedExternalAction } from "@/components/ui/ActionLink";
@@ -48,24 +48,17 @@ export async function VipSection() {
           />
         </Reveal>
 
-        <div className="mt-10 grid gap-6 lg:mt-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+        <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
           <Reveal>
-            <div className="surface-card flex h-full flex-col p-6 sm:p-8">
+            <div className="flex flex-col border-t-2 border-[var(--accent)] pt-5">
               <div className="flex flex-wrap items-start justify-between gap-4">
-                <span className="grid size-12 place-items-center rounded-xl border border-[var(--border)] bg-[var(--surface-secondary)] text-[var(--accent-strong)]">
-                  <Gem
-                    aria-hidden="true"
-                    className="size-6"
-                    strokeWidth={1.7}
-                  />
-                </span>
                 <StatusBadge
                   en={en.common.statusLabels[englishContent.status]}
                   ja={ja.common.statusLabels[japaneseContent.status]}
                   status={japaneseContent.status}
                 />
               </div>
-              <h3 className="mt-6 text-2xl font-bold tracking-[-0.035em]">
+              <h3 className="mt-4 text-2xl font-bold tracking-[-0.035em]">
                 <LocalizedText
                   ja={japaneseContent.statusTitle}
                   en={englishContent.statusTitle}
@@ -78,7 +71,7 @@ export async function VipSection() {
                 />
               </p>
 
-              <dl className="mt-7 grid gap-px overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--border)] sm:grid-cols-2">
+              <dl className="mt-6 divide-y divide-[var(--border)] border-y border-[var(--border)]">
                 {japaneseContent.details.map((detail) => {
                   const englishDetail = getMatchingItem(
                     englishContent.details,
@@ -87,7 +80,7 @@ export async function VipSection() {
 
                   return (
                     <div
-                      className="bg-[var(--surface-secondary)] p-4"
+                      className="grid gap-2 py-4 sm:grid-cols-2"
                       key={detail.id}
                     >
                       <dt className="text-xs font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">
@@ -96,7 +89,7 @@ export async function VipSection() {
                           en={englishDetail.label}
                         />
                       </dt>
-                      <dd className="mt-2 font-bold text-[var(--text-primary)]">
+                      <dd className="font-semibold text-[var(--text-primary)]">
                         <LocalizedText
                           ja={detail.value}
                           en={englishDetail.value}
@@ -118,7 +111,7 @@ export async function VipSection() {
                     href={externalUrls.tebex}
                   />
                 ) : (
-                  <div className="flex items-start gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] p-4 text-sm leading-6 text-[var(--text-secondary)]">
+                  <div className="flex items-start gap-3 text-sm leading-6 text-[var(--text-secondary)]">
                     <LockKeyhole
                       aria-hidden="true"
                       className="mt-0.5 size-4 shrink-0"
@@ -136,7 +129,7 @@ export async function VipSection() {
           </Reveal>
 
           <Reveal delay={0.06}>
-            <div className="surface-card flex h-full flex-col p-6 sm:p-8">
+            <div className="flex flex-col border-t border-[var(--border)] pt-5">
               <div className="flex items-center gap-3">
                 <BadgeCheck
                   aria-hidden="true"
@@ -151,7 +144,7 @@ export async function VipSection() {
               </div>
 
               {japaneseBenefits.length > 0 ? (
-                <div className="mt-6 grid gap-3">
+                <div className="mt-6 divide-y divide-[var(--border)]">
                   {japaneseBenefits.map((benefit) => {
                     const englishBenefit = getMatchingItem(
                       englishBenefits,
@@ -159,10 +152,7 @@ export async function VipSection() {
                     );
 
                     return (
-                      <div
-                        className="rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] p-4"
-                        key={benefit.id}
-                      >
+                      <div className="py-5" key={benefit.id}>
                         <div className="flex items-start gap-3">
                           {benefit.icon ? (
                             <ContentIcon
@@ -190,8 +180,8 @@ export async function VipSection() {
                   })}
                 </div>
               ) : (
-                <div className="mt-6 flex flex-1 flex-col items-start justify-center rounded-xl border border-dashed border-[var(--border-strong)] bg-[var(--surface-secondary)] p-6 sm:p-8">
-                  <span className="grid size-11 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)]">
+                <div className="mt-6 flex flex-col items-start py-4">
+                  <span className="text-[var(--text-muted)]">
                     <LockKeyhole aria-hidden="true" className="size-5" />
                   </span>
                   <h4 className="mt-5 text-lg font-bold">

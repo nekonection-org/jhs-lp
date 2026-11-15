@@ -64,9 +64,9 @@ export function TermsSection() {
     >
       <Container>
         <Reveal>
-          <div className="surface-card flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex max-w-3xl items-start gap-4">
-              <span className="grid size-11 shrink-0 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] text-[var(--accent-strong)]">
+              <span className="pt-1 text-[var(--accent-strong)]">
                 <FileText aria-hidden="true" className="size-5" />
               </span>
               <div>

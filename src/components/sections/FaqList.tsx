@@ -36,18 +36,18 @@ export function FaqList({ result }: FaqListProps) {
   }
 
   return (
-    <div className="grid gap-3">
+    <div className="border-b border-[var(--border)]">
       {result.items.map((item, index) => (
         <Reveal delay={Math.min(index * 0.025, 0.15)} key={item.id}>
-          <details className="faq-item surface-card group overflow-hidden">
-            <summary className="flex min-h-16 cursor-pointer items-center gap-4 px-5 py-4 font-bold tracking-[-0.015em] text-[var(--text-primary)] outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--focus)] sm:px-6">
+          <details className="faq-item group overflow-hidden border-t border-[var(--border)]">
+            <summary className="flex min-h-16 cursor-pointer items-center gap-4 px-1 py-5 font-bold tracking-[-0.015em] text-[var(--text-primary)] outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--focus)] sm:px-2">
               <span className="flex-1">
                 <LocalizedText
                   en={item.translations.en.question}
                   ja={item.translations.ja.question}
                 />
               </span>
-              <span className="grid size-8 shrink-0 place-items-center rounded-md border border-[var(--border)] bg-[var(--surface-secondary)] text-[var(--accent-strong)]">
+              <span className="grid size-8 shrink-0 place-items-center text-[var(--accent-strong)]">
                 <Plus
                   aria-hidden="true"
                   className="size-4 transition-transform duration-150"
@@ -55,7 +55,7 @@ export function FaqList({ result }: FaqListProps) {
                 />
               </span>
             </summary>
-            <div className="border-t border-[var(--border)] px-5 py-5 sm:px-6">
+            <div className="px-1 pb-6 sm:px-2">
               <p className="text-sm leading-7 text-[var(--text-secondary)]">
                 <LocalizedText
                   en={item.translations.en.answer}
@@ -95,8 +95,8 @@ function FaqPlaceholder({
 
   return (
     <Reveal>
-      <div className="surface-card flex min-h-64 flex-col items-center justify-center px-6 py-12 text-center sm:px-10">
-        <span className="grid size-12 place-items-center rounded-xl border border-[var(--border)] bg-[var(--surface-secondary)] text-[var(--text-muted)]">
+      <div className="flex flex-col items-start border-t border-[var(--border)] py-8">
+        <span className="text-[var(--text-muted)]">
           <Icon aria-hidden="true" className="size-6" />
         </span>
         <h3 className="mt-5 text-xl font-bold tracking-[-0.025em]">

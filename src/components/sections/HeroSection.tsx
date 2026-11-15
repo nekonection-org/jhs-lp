@@ -1,16 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
-import {
-  ArrowRight,
-  Check,
-  Clock3,
-  Copy,
-  Gamepad2,
-  ShieldCheck,
-  Terminal,
-} from "lucide-react";
+import { Check, Copy, Gamepad2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
@@ -23,23 +14,14 @@ import { Button, buttonStyles } from "@/components/ui/Button";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
-import { getMatchingItem } from "@/lib/content";
 import { externalUrls, rustConnection } from "@/lib/constants";
 
 type CopyState = "idle" | "copied" | "error";
 
 export function HeroSection() {
-  const reduceMotion = useReducedMotion();
   const { locale } = useLanguage();
   const [copyState, setCopyState] = useState<CopyState>("idle");
   const copyResetTimer = useRef<number | null>(null);
-  const audienceFeature = ja.server.highlights[0];
-  const audienceFeatureEn = getMatchingItem(
-    en.server.highlights,
-    audienceFeature.id,
-  );
-  const raidFeature = ja.server.highlights[1];
-  const raidFeatureEn = getMatchingItem(en.server.highlights, raidFeature.id);
 
   useEffect(
     () => () => {
@@ -72,272 +54,149 @@ export function HeroSection() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[min(48rem,calc(100svh-4.75rem))] items-center overflow-hidden border-b border-[var(--border)] py-16 sm:py-20 lg:py-24"
+      className="border-b border-[var(--border)] pt-8 sm:pt-16 lg:pt-20"
       id="top"
     >
-      <motion.div
-        animate={{ opacity: 1, scale: 1 }}
-        aria-hidden="true"
-        className="absolute inset-0 -z-30"
-        initial={{ opacity: 0.55, scale: 1.035 }}
-        transition={{ duration: reduceMotion ? 0 : 0.7, ease: "easeOut" }}
-      >
-        <Image
-          alt=""
-          className="object-cover object-[62%_center] saturate-[0.72] sm:object-[68%_center] lg:object-[78%_center]"
-          fill
-          priority
-          sizes="100vw"
-          src="/main-image.png"
-        />
-      </motion.div>
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,var(--background)_0%,color-mix(in_srgb,var(--background)_94%,transparent)_42%,color-mix(in_srgb,var(--background)_58%,transparent)_72%,color-mix(in_srgb,var(--background)_28%,transparent)_100%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--background)_18%,transparent),transparent_42%,var(--background)_100%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-25 [background-image:linear-gradient(color-mix(in_srgb,var(--border)_45%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--border)_45%,transparent)_1px,transparent_1px)] [background-size:4.5rem_4.5rem] [mask-image:linear-gradient(to_bottom,black,transparent_82%)]"
-      />
-      <motion.div
-        animate={{ opacity: 0.42, scale: 1 }}
-        aria-hidden="true"
-        className="absolute top-[18%] right-[8%] -z-10 size-72 rounded-full bg-[color-mix(in_srgb,var(--accent)_16%,transparent)] blur-3xl sm:size-96"
-        initial={{ opacity: 0, scale: 0.88 }}
-        transition={{
-          delay: reduceMotion ? 0 : 0.2,
-          duration: reduceMotion ? 0 : 0.7,
-          ease: "easeOut",
-        }}
-      />
-
-      <Container className="relative grid items-center gap-12 lg:grid-cols-[minmax(0,1.16fr)_minmax(19rem,0.84fr)] lg:gap-16">
+      <Container>
         <Reveal>
           <p className="section-eyebrow">
             <LocalizedText ja={ja.hero.eyebrow} en={en.hero.eyebrow} />
           </p>
-          <h1
-            className="mt-5 max-w-4xl text-balance text-[clamp(2.7rem,8vw,5.75rem)] leading-[0.96] font-bold tracking-[-0.06em] text-[var(--text-primary)] [text-shadow:0_2px_30px_color-mix(in_srgb,var(--background)_75%,transparent)]"
-            id="hero-title"
-          >
-            {ja.hero.title}
-          </h1>
-          <p className="mt-6 max-w-2xl text-balance text-xl leading-8 font-semibold tracking-[-0.025em] text-[var(--text-primary)] sm:text-2xl">
-            <LocalizedText ja={ja.hero.subtitle} en={en.hero.subtitle} />
-          </p>
-          <p className="mt-4 max-w-2xl text-pretty text-base leading-7 text-[var(--text-secondary)] sm:text-lg sm:leading-8">
-            <LocalizedText ja={ja.hero.description} en={en.hero.description} />
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <LocalizedExternalAction
-              action={{ ja: ja.hero.primaryAction, en: en.hero.primaryAction }}
-              className="w-full sm:w-auto"
-              common={{ ja: ja.common, en: en.common }}
-              href={externalUrls.discord}
-            />
-            <LocalizedSectionAction
-              action={{
-                ja: ja.hero.secondaryAction,
-                en: en.hero.secondaryAction,
-              }}
-              className="w-full sm:w-auto"
-            />
+          <div className="mt-6 grid items-end gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:gap-14">
+            <h1
+              className="max-w-3xl text-[clamp(2.6rem,6.4vw,5.6rem)] leading-[1.03] font-semibold tracking-[-0.055em]"
+              id="hero-title"
+            >
+              {ja.hero.title}
+            </h1>
+            <div className="max-w-lg pb-1">
+              <p className="text-lg leading-8 font-semibold sm:text-xl">
+                <LocalizedText ja={ja.hero.subtitle} en={en.hero.subtitle} />
+              </p>
+              <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
+                <LocalizedText
+                  ja={ja.hero.description}
+                  en={en.hero.description}
+                />
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <LocalizedExternalAction
+                  action={{
+                    ja: ja.hero.primaryAction,
+                    en: en.hero.primaryAction,
+                  }}
+                  common={{ ja: ja.common, en: en.common }}
+                  href={externalUrls.discord}
+                />
+                <LocalizedSectionAction
+                  action={{
+                    ja: ja.hero.secondaryAction,
+                    en: en.hero.secondaryAction,
+                  }}
+                />
+              </div>
+            </div>
           </div>
-          {!externalUrls.discord ? (
-            <p className="mt-3 max-w-xl text-xs leading-5 text-[var(--text-muted)]">
+        </Reveal>
+        <div
+          aria-hidden="true"
+          className="relative mt-6 h-32 sm:mt-10 overflow-hidden bg-[var(--surface)] sm:h-52 lg:mt-12 lg:h-64"
+        >
+          <Image
+            alt=""
+            className="object-cover object-[65%_55%] saturate-[0.65] sm:object-[center_55%]"
+            fill
+            priority
+            sizes="(min-width: 1280px) 1200px, 100vw"
+            src="/main-image.png"
+          />
+          <div className="absolute inset-0 bg-[var(--hero-overlay)]" />
+        </div>
+        <div className="grid gap-6 py-7 lg:grid-cols-3 lg:gap-12 lg:py-8">
+          <div>
+            <h2 className="text-base font-semibold">
               <LocalizedText
-                ja="Discord招待URLの設定後に参加ボタンが有効になります。"
-                en="The join button will be enabled after the Discord invite URL is configured."
+                ja={ja.hero.connection.title}
+                en={en.hero.connection.title}
+              />
+            </h2>
+            <p className="mt-2 max-w-md text-sm leading-6 text-[var(--text-secondary)]">
+              <LocalizedText
+                ja={ja.hero.connection.description}
+                en={en.hero.connection.description}
               />
             </p>
-          ) : null}
-        </Reveal>
-
-        <Reveal className="relative" delay={0.12}>
-          <div className="relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--accent)_34%,var(--border))] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] p-5 shadow-[0_24px_80px_color-mix(in_srgb,var(--background)_55%,transparent)] backdrop-blur-md sm:p-6">
-            <motion.span
-              animate={{ scaleX: 1 }}
-              aria-hidden="true"
-              className="absolute inset-x-0 top-0 h-1 origin-left bg-[var(--accent)]"
-              initial={{ scaleX: 0 }}
-              transition={{
-                delay: reduceMotion ? 0 : 0.25,
-                duration: reduceMotion ? 0 : 0.55,
-              }}
-            />
-            <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] pb-5">
-              <div className="flex items-center gap-3">
-                <span className="relative size-12 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface-secondary)]">
-                  <Image
-                    alt=""
-                    className="object-cover"
-                    fill
-                    sizes="48px"
-                    src="/icon.png"
-                  />
-                </span>
-                <div>
-                  <p className="text-xs font-bold tracking-[0.14em] text-[var(--text-muted)] uppercase">
-                    <LocalizedText
-                      ja={ja.server.eyebrow}
-                      en={en.server.eyebrow}
-                    />
-                  </p>
-                  <p className="mt-1 text-lg font-bold tracking-[-0.025em]">
-                    JHS / Japan
-                  </p>
-                </div>
-              </div>
-              <span className="grid size-10 place-items-center rounded-lg bg-[color-mix(in_srgb,var(--accent)_12%,var(--surface-secondary))] text-[var(--accent-strong)]">
-                <ShieldCheck aria-hidden="true" className="size-5" />
-              </span>
-            </div>
-
-            <div className="grid gap-3 pt-5">
-              <div className="group rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] p-4 transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--accent)_42%,var(--border))]">
-                <div className="flex items-start gap-3">
-                  <ArrowRight
-                    aria-hidden="true"
-                    className="mt-0.5 size-4 shrink-0 text-[var(--accent-strong)] transition-transform duration-200 group-hover:translate-x-0.5"
-                  />
-                  <div>
-                    <p className="font-bold">
-                      <LocalizedText
-                        ja={audienceFeature.title}
-                        en={audienceFeatureEn.title}
-                      />
-                    </p>
-                    <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">
-                      <LocalizedText
-                        ja={audienceFeature.description}
-                        en={audienceFeatureEn.description}
-                      />
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="group rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] p-4 transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--accent)_42%,var(--border))]">
-                <div className="flex items-start gap-3">
-                  <Clock3
-                    aria-hidden="true"
-                    className="mt-0.5 size-4 shrink-0 text-[var(--accent-strong)] transition-transform duration-200 group-hover:rotate-6"
-                  />
-                  <div>
-                    <p className="font-bold">
-                      <LocalizedText
-                        ja={raidFeature.title}
-                        en={raidFeatureEn.title}
-                      />
-                    </p>
-                    <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">
-                      <LocalizedText
-                        ja={raidFeature.description}
-                        en={raidFeatureEn.description}
-                      />
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 rounded-lg border border-[color-mix(in_srgb,var(--accent)_28%,var(--border))] bg-[color-mix(in_srgb,var(--background)_72%,transparent)] p-4">
-              <div className="flex items-start gap-3">
-                <Terminal
-                  aria-hidden="true"
-                  className="mt-0.5 size-4 shrink-0 text-[var(--accent-strong)]"
-                />
-                <div>
-                  <p className="font-bold">
-                    <LocalizedText
-                      ja={ja.hero.connection.title}
-                      en={en.hero.connection.title}
-                    />
-                  </p>
-                  <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">
-                    <LocalizedText
-                      ja={ja.hero.connection.description}
-                      en={en.hero.connection.description}
-                    />
-                  </p>
-                </div>
-              </div>
-
-              {rustConnection ? (
-                <div className="mt-4">
-                  <p className="text-xs font-bold tracking-[0.08em] text-[var(--text-muted)] uppercase">
-                    <LocalizedText
-                      ja={ja.hero.connection.commandLabel}
-                      en={en.hero.connection.commandLabel}
-                    />
-                  </p>
-                  <code className="mt-2 block overflow-x-auto rounded-md border border-[var(--border)] bg-[var(--surface-secondary)] px-3 py-2.5 text-sm text-[var(--text-primary)]">
-                    {rustConnection.command}
-                  </code>
-                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                    <Button
-                      aria-live="polite"
-                      className="w-full"
-                      onClick={copyConnectionCommand}
-                      size="compact"
-                      variant="secondary"
-                    >
-                      {copyState === "copied" ? (
-                        <Check aria-hidden="true" className="size-4" />
-                      ) : (
-                        <Copy aria-hidden="true" className="size-4" />
-                      )}
-                      <LocalizedText
-                        ja={
-                          copyState === "copied"
-                            ? ja.hero.connection.copiedLabel
-                            : copyState === "error"
-                              ? ja.hero.connection.copyErrorLabel
-                              : ja.hero.connection.copyLabel
-                        }
-                        en={
-                          copyState === "copied"
-                            ? en.hero.connection.copiedLabel
-                            : copyState === "error"
-                              ? en.hero.connection.copyErrorLabel
-                              : en.hero.connection.copyLabel
-                        }
-                      />
-                    </Button>
-                    <a
-                      aria-label={
-                        locale === "ja"
-                          ? ja.hero.connection.steamAriaLabel
-                          : en.hero.connection.steamAriaLabel
-                      }
-                      className={buttonStyles({
-                        className: "w-full",
-                        size: "compact",
-                      })}
-                      href={rustConnection.steamUrl}
-                    >
-                      <Gamepad2 aria-hidden="true" className="size-4" />
-                      <LocalizedText
-                        ja={ja.hero.connection.steamLabel}
-                        en={en.hero.connection.steamLabel}
-                      />
-                    </a>
-                  </div>
-                </div>
-              ) : (
-                <p className="mt-3 text-xs leading-5 text-[var(--text-muted)]">
-                  <LocalizedText
-                    ja={ja.hero.connection.unavailable}
-                    en={en.hero.connection.unavailable}
-                  />
-                </p>
-              )}
-            </div>
           </div>
-        </Reveal>
+          {rustConnection ? (
+            <div className="min-w-0 lg:col-span-2">
+              <p className="text-xs font-bold tracking-[0.08em] text-[var(--text-muted)] uppercase">
+                <LocalizedText
+                  ja={ja.hero.connection.commandLabel}
+                  en={en.hero.connection.commandLabel}
+                />
+              </p>
+              <code className="mt-2 block overflow-x-auto rounded-md border border-[var(--border)] bg-[var(--surface-secondary)] px-3 py-2.5 text-sm text-[var(--text-primary)]">
+                {rustConnection.command}
+              </code>
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                <Button
+                  aria-live="polite"
+                  className="w-full sm:w-auto"
+                  onClick={copyConnectionCommand}
+                  size="compact"
+                  variant="secondary"
+                >
+                  {copyState === "copied" ? (
+                    <Check aria-hidden="true" className="size-4" />
+                  ) : (
+                    <Copy aria-hidden="true" className="size-4" />
+                  )}
+                  <LocalizedText
+                    ja={
+                      copyState === "copied"
+                        ? ja.hero.connection.copiedLabel
+                        : copyState === "error"
+                          ? ja.hero.connection.copyErrorLabel
+                          : ja.hero.connection.copyLabel
+                    }
+                    en={
+                      copyState === "copied"
+                        ? en.hero.connection.copiedLabel
+                        : copyState === "error"
+                          ? en.hero.connection.copyErrorLabel
+                          : en.hero.connection.copyLabel
+                    }
+                  />
+                </Button>
+                <a
+                  aria-label={
+                    locale === "ja"
+                      ? ja.hero.connection.steamAriaLabel
+                      : en.hero.connection.steamAriaLabel
+                  }
+                  className={buttonStyles({
+                    className: "w-full sm:w-auto",
+                    size: "compact",
+                  })}
+                  href={rustConnection.steamUrl}
+                >
+                  <Gamepad2 aria-hidden="true" className="size-4" />
+                  <LocalizedText
+                    ja={ja.hero.connection.steamLabel}
+                    en={en.hero.connection.steamLabel}
+                  />
+                </a>
+              </div>
+            </div>
+          ) : (
+            <p className="mt-3 text-xs leading-5 text-[var(--text-muted)]">
+              <LocalizedText
+                ja={ja.hero.connection.unavailable}
+                en={en.hero.connection.unavailable}
+              />
+            </p>
+          )}
+        </div>
       </Container>
     </section>
   );

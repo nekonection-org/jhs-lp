@@ -5,6 +5,8 @@ import type {
 } from "react";
 import { forwardRef } from "react";
 
+import { cva } from "class-variance-authority";
+
 import { cn } from "@/lib/cn";
 
 type ButtonVariant = "primary" | "secondary" | "quiet";
@@ -17,22 +19,34 @@ interface SharedButtonProps {
   children: ReactNode;
 }
 
+// Adapted from shadcn/ui's button variant pattern; keep native link semantics.
+const buttonVariants = cva(
+  "inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-md border text-sm font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        primary:
+          "border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-contrast)] hover:border-[var(--accent-hover)] hover:bg-[var(--accent-hover)]",
+        secondary:
+          "border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent-strong)]",
+        quiet:
+          "border-transparent bg-transparent text-[var(--text-secondary)] hover:bg-[var(--surface-secondary)] hover:text-[var(--text-primary)]",
+      },
+      size: {
+        default: "px-5 py-2.5",
+        compact: "px-3.5 py-2",
+      },
+    },
+    defaultVariants: { variant: "primary", size: "default" },
+  },
+);
+
 export function buttonStyles({
-  variant = "primary",
-  size = "default",
+  variant,
+  size,
   className,
 }: Omit<SharedButtonProps, "children"> = {}) {
-  return cn(
-    "inline-flex min-h-11 items-center justify-center gap-2 rounded-[0.6rem] border font-semibold tracking-[-0.01em] transition-[color,background-color,border-color,transform] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] motion-safe:hover:-translate-y-0.5 motion-reduce:transform-none",
-    size === "default" ? "px-5 py-2.5 text-sm" : "min-h-10 px-3.5 py-2 text-sm",
-    variant === "primary" &&
-      "border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-contrast)] hover:border-[var(--accent-hover)] hover:bg-[var(--accent-hover)]",
-    variant === "secondary" &&
-      "border-[var(--border-strong)] bg-[var(--surface)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent-strong)]",
-    variant === "quiet" &&
-      "border-transparent bg-transparent text-[var(--text-secondary)] hover:bg-[var(--surface-secondary)] hover:text-[var(--text-primary)]",
-    className,
-  );
+  return cn(buttonVariants({ variant, size }), className);
 }
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & SharedButtonProps;

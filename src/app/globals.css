@@ -44,7 +44,7 @@
   --warning: #815d16;
   --focus: #426b35;
   --header: rgba(244, 245, 246, 0.9);
-  --hero-overlay: rgba(236, 239, 241, 0.7);
+  --hero-overlay: rgba(8, 9, 11, 0.2);
 }
 
 * {
@@ -127,27 +127,26 @@ html[data-locale="en"] [data-locale-content="en"] {
 
 .section-shell {
   position: relative;
-  padding-block: clamp(4.5rem, 9vw, 7.5rem);
+  padding-block: clamp(4rem, 7vw, 6rem);
 }
 
 .section-eyebrow {
   color: var(--accent-strong);
   font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   line-height: 1.5;
   text-transform: uppercase;
 }
 
 .surface-card {
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: 0.375rem;
   background: var(--surface);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--text-primary) 4%, transparent);
 }
 
-.rule-card[data-important="true"] {
-  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+.rule-card[data-important="true"] h3 {
+  color: var(--accent-strong);
 }
 
 .faq-item summary {
@@ -167,21 +166,7 @@ html[data-locale="en"] [data-locale-content="en"] {
 }
 
 .faq-item[open] {
-  border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
-}
-
-@media (hover: hover) {
-  .interactive-card {
-    transition:
-      translate 180ms ease,
-      border-color 180ms ease,
-      background-color 180ms ease;
-  }
-
-  .interactive-card:hover {
-    translate: 0 -0.2rem;
-    border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
-  }
+  background: var(--surface-secondary);
 }
 
 @media (max-width: 639px) {

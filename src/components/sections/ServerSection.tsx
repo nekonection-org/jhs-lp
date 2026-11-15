@@ -1,4 +1,4 @@
-import { Info, Settings2, Sparkles } from "lucide-react";
+import { Info } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
@@ -26,29 +26,37 @@ export function ServerSection() {
           />
         </Reveal>
 
-        <Reveal className="mt-10 lg:mt-12">
-          <div className="surface-card overflow-hidden p-5 sm:p-6 lg:p-8">
-            <div className="flex items-start gap-3.5">
-              <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-[color-mix(in_srgb,var(--accent)_35%,var(--border))] bg-[color-mix(in_srgb,var(--accent)_10%,var(--surface-secondary))] text-[var(--accent-strong)]">
-                <Settings2 aria-hidden="true" className="size-4.5" />
-              </span>
-              <div>
-                <h3 className="text-lg font-bold tracking-[-0.025em] text-[var(--text-primary)]">
-                  <LocalizedText
-                    ja={ja.server.settingsTitle}
-                    en={en.server.settingsTitle}
-                  />
-                </h3>
-                <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-secondary)]">
-                  <LocalizedText
-                    ja={ja.server.settingsDescription}
-                    en={en.server.settingsDescription}
-                  />
-                </p>
-              </div>
-            </div>
-
-            <dl className="mt-6 grid gap-2.5 md:grid-cols-2">
+        <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+          <Reveal>
+            <article className="border-t-2 border-[var(--accent)] pt-5">
+              <h3 className="text-lg font-semibold">
+                <LocalizedText
+                  ja={ja.server.welcomeTitle}
+                  en={en.server.welcomeTitle}
+                />
+              </h3>
+              <p className="mt-4 text-sm leading-8 text-[var(--text-secondary)]">
+                <LocalizedText
+                  ja={ja.server.welcomeDescription}
+                  en={en.server.welcomeDescription}
+                />
+              </p>
+            </article>
+          </Reveal>
+          <Reveal>
+            <h3 className="text-lg font-semibold">
+              <LocalizedText
+                ja={ja.server.settingsTitle}
+                en={en.server.settingsTitle}
+              />
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+              <LocalizedText
+                ja={ja.server.settingsDescription}
+                en={en.server.settingsDescription}
+              />
+            </p>
+            <dl className="mt-5 divide-y divide-[var(--border)] border-y border-[var(--border)]">
               {ja.server.settings.map((setting) => {
                 const englishSetting = getMatchingItem(
                   en.server.settings,
@@ -57,10 +65,10 @@ export function ServerSection() {
 
                 return (
                   <div
-                    className="grid gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] px-4 py-3.5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-4"
+                    className="grid gap-2 py-4 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] sm:items-baseline sm:gap-4"
                     key={setting.id}
                   >
-                    <dt className="text-xs font-semibold tracking-[0.02em] text-[var(--text-muted)]">
+                    <dt className="text-sm text-[var(--text-secondary)]">
                       <LocalizedText
                         ja={setting.label}
                         en={englishSetting.label}
@@ -76,33 +84,11 @@ export function ServerSection() {
                 );
               })}
             </dl>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
 
         <Reveal className="mt-6">
-          <article className="surface-card flex items-start gap-4 border-[color-mix(in_srgb,var(--accent)_28%,var(--border))] p-5 sm:p-6">
-            <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-[color-mix(in_srgb,var(--accent)_12%,var(--surface-secondary))] text-[var(--accent-strong)]">
-              <Sparkles aria-hidden="true" className="size-5" />
-            </span>
-            <div>
-              <h3 className="text-xl font-bold tracking-[-0.03em] text-[var(--text-primary)]">
-                <LocalizedText
-                  ja={ja.server.welcomeTitle}
-                  en={en.server.welcomeTitle}
-                />
-              </h3>
-              <p className="mt-2 max-w-4xl text-sm leading-6 text-[var(--text-secondary)] sm:text-base sm:leading-7">
-                <LocalizedText
-                  ja={ja.server.welcomeDescription}
-                  en={en.server.welcomeDescription}
-                />
-              </p>
-            </div>
-          </article>
-        </Reveal>
-
-        <Reveal className="mt-6">
-          <div className="flex items-start gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-secondary)] p-4 text-sm leading-6 text-[var(--text-secondary)] sm:p-5">
+          <div className="flex items-start gap-3 text-xs leading-6 text-[var(--text-muted)]">
             <Info
               aria-hidden="true"
               className="mt-0.5 size-5 shrink-0 text-[var(--accent-strong)]"

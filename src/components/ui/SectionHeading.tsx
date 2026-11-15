@@ -26,10 +26,10 @@ export function SectionHeading({
       )}
     >
       <p className="section-eyebrow">{eyebrow}</p>
-      <h2 className="mt-3 text-balance text-3xl font-bold tracking-[-0.035em] text-[var(--text-primary)] sm:text-4xl">
+      <h2 className="mt-3 text-balance text-3xl font-semibold tracking-[-0.035em] text-[var(--text-primary)] sm:text-4xl">
         {title}
       </h2>
-      <p className="mt-4 text-pretty text-base leading-7 text-[var(--text-secondary)] sm:text-lg">
+      <p className="mt-4 text-pretty text-base leading-7 text-[var(--text-secondary)] sm:text-base">
         {description}
       </p>
     </header>

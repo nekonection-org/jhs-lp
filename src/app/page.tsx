@@ -31,11 +31,7 @@ export default async function Home({ searchParams }: HomeProps) {
         />
       </a>
       <Header />
-      <main
-        className="relative isolate overflow-hidden bg-[radial-gradient(circle_at_8%_22%,color-mix(in_srgb,var(--accent)_7%,transparent),transparent_28rem),radial-gradient(circle_at_94%_70%,color-mix(in_srgb,var(--accent)_6%,transparent),transparent_32rem)]"
-        id="main-content"
-        tabIndex={-1}
-      >
+      <main className="relative" id="main-content" tabIndex={-1}>
         <HeroSection />
         <ServerSection />
         <RulesSection />

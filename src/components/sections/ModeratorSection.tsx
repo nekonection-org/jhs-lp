@@ -58,9 +58,9 @@ export async function ModeratorSection() {
         </Reveal>
 
         <Reveal className="mt-8">
-          <div className="surface-card flex flex-col gap-5 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-6">
+          <div className="flex flex-col gap-5 border-l-2 border-[var(--accent)] pl-5 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex max-w-3xl items-start gap-4">
-              <span className="grid size-11 shrink-0 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] text-[var(--accent-strong)]">
+              <span className="pt-1 text-[var(--accent-strong)]">
                 <ClipboardCheck aria-hidden="true" className="size-5" />
               </span>
               <div>
@@ -86,7 +86,7 @@ export async function ModeratorSection() {
           </div>
         </Reveal>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <div className="mt-8 border-b border-[var(--border)]">
           {japaneseContent.items.map((item, index) => {
             const englishItem = getMatchingItem(englishContent.items, item.id);
 
@@ -115,7 +115,7 @@ export async function ModeratorSection() {
         </div>
 
         <Reveal className="mt-6">
-          <div className="surface-card grid gap-5 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="grid gap-5 py-5 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <h3 className="text-xl font-bold tracking-[-0.025em]">
                 <LocalizedText
