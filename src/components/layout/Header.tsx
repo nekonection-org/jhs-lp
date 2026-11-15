@@ -110,12 +110,23 @@ export function Header() {
     };
   }, [menuOpen]);
 
-  function closeMenu() {
+  function closeMenu(sectionId: string) {
     setMenuOpen(false);
+    const heading = document.getElementById(sectionId)?.querySelector("h2");
+    if (heading) {
+      heading.tabIndex = -1;
+      // Let native anchor navigation finish before placing keyboard focus.
+      window.requestAnimationFrame(() =>
+        heading.focus({ preventScroll: true }),
+      );
+    }
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--header)] backdrop-blur-sm">
+    <header
+      data-menu-open={menuOpen}
+      className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--header)] backdrop-blur-sm"
+    >
       <Container className="flex min-h-[4.75rem] items-center gap-3">
         <a
           className="group mr-auto inline-flex min-h-11 items-center gap-3 rounded-lg pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
@@ -230,7 +241,7 @@ export function Header() {
                             "border-[var(--border)] bg-[var(--surface)] text-[var(--accent-strong)]",
                         )}
                         href={`#${item.id}`}
-                        onClick={closeMenu}
+                        onClick={() => closeMenu(item.id)}
                       >
                         {item.label}
                         <span

@@ -90,6 +90,8 @@ export const ja = {
       copyLabel: "コマンドをコピー",
       copiedLabel: "コピーしました",
       copyErrorLabel: "コピーできませんでした",
+      copyErrorHelp:
+        "コピーできない場合は、コマンドを選択して手動でコピーしてください。",
       steamLabel: "Steamで起動",
       steamAriaLabel: "Steamを起動してJapan Hideaway Serverへ接続する",
       unavailable: "接続先の設定後に利用できます。",
@@ -104,6 +106,11 @@ export const ja = {
       weekends: "土・日",
       allowed: "レイド可能",
       blocked: "レイド禁止",
+      checkerTitle: "時間を選んで確認",
+      checkerDescription:
+        "曜日と時刻を選ぶと、その時間帯にレイドできるか確認できます。",
+      dayLabel: "確認する曜日",
+      timeLabel: "確認する時刻（日本時間）",
     },
     id: "server",
     eyebrow: "Server Information",

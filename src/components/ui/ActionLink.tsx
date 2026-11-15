@@ -38,7 +38,11 @@ export function LocalizedExternalAction({
     <>
       <LocalizedText ja={action.ja.label} en={action.en.label} />
       {href ? (
-        <ArrowUpRight aria-hidden="true" className="size-4" />
+        <ArrowUpRight
+          data-action-icon="external"
+          aria-hidden="true"
+          className="size-4"
+        />
       ) : (
         <LockKeyhole aria-hidden="true" className="size-4" />
       )}
@@ -103,7 +107,11 @@ export function LocalizedSectionAction({
       href={`#${action.ja.destination}`}
     >
       <LocalizedText ja={action.ja.label} en={action.en.label} />
-      <ArrowDown aria-hidden="true" className="size-4" />
+      <ArrowDown
+        data-action-icon="section"
+        aria-hidden="true"
+        className="size-4"
+      />
     </a>
   );
 }

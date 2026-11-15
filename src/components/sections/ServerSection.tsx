@@ -2,6 +2,7 @@ import { Info } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { RaidTimeChecker } from "@/components/ui/RaidTimeChecker";
 import { RaidSchedule } from "@/components/ui/RaidSchedule";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -89,6 +90,10 @@ export function ServerSection() {
             </dl>
           </Reveal>
         </div>
+
+        <Reveal>
+          <RaidTimeChecker />
+        </Reveal>
 
         <Reveal className="mt-6">
           <div className="flex items-start gap-3 text-xs leading-6 text-[var(--text-muted)]">

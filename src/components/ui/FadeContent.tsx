@@ -1,7 +1,7 @@
 "use client";
 
 // Adapted from React Bits FadeContent (c83b5e7). See THIRD_PARTY_NOTICES.md.
-// Start fully visible; apply the subtle effect only after an observer fires.
+// SSR remains visible. Enhance the first appearance only after an observer fires.
 import { useEffect, type ReactNode } from "react";
 import { useAnimate, useReducedMotion } from "motion/react";
 
@@ -30,9 +30,10 @@ export function FadeContent({
         if (entry?.isIntersecting) {
           animation = animate(
             element,
-            { opacity: [0.92, 1] },
+            { opacity: [0.65, 1], y: [12, 0] },
             {
-              duration: 0.3,
+              duration: 0.38,
+              ease: [0.22, 1, 0.36, 1],
               delay: Math.min(delay, 0.15),
             },
           );
@@ -47,6 +48,7 @@ export function FadeContent({
       animation?.stop();
       // A preference change must leave content at full opacity immediately.
       element.style.opacity = "1";
+      element.style.removeProperty("transform");
     };
   }, [animate, delay, reduceMotion, scope]);
 

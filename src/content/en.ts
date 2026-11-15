@@ -90,6 +90,8 @@ export const en = {
       copyLabel: "Copy command",
       copiedLabel: "Copied",
       copyErrorLabel: "Could not copy",
+      copyErrorHelp:
+        "If copying fails, select the command and copy it manually.",
       steamLabel: "Launch with Steam",
       steamAriaLabel: "Launch Steam and connect to Japan Hideaway Server",
       unavailable: "Available after the server address is configured.",
@@ -104,6 +106,11 @@ export const en = {
       weekends: "Weekends",
       allowed: "Raiding allowed",
       blocked: "No raiding",
+      checkerTitle: "Check a time",
+      checkerDescription:
+        "Choose a day and time to check whether raiding is allowed.",
+      dayLabel: "Choose a day",
+      timeLabel: "Choose a time (JST)",
     },
     id: "server",
     eyebrow: "Server Information",

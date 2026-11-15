@@ -165,6 +165,7 @@ export interface HeroContent {
     readonly copyLabel: string;
     readonly copiedLabel: string;
     readonly copyErrorLabel: string;
+    readonly copyErrorHelp: string;
     readonly steamLabel: string;
     readonly steamAriaLabel: string;
     readonly unavailable: string;
@@ -204,6 +205,10 @@ export interface ServerContent extends SectionIntroduction<"server"> {
     readonly weekends: string;
     readonly allowed: string;
     readonly blocked: string;
+    readonly checkerTitle: string;
+    readonly checkerDescription: string;
+    readonly dayLabel: string;
+    readonly timeLabel: string;
   };
   readonly settingsTitle: string;
   readonly settingsDescription: string;

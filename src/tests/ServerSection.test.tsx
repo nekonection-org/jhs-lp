@@ -45,7 +45,14 @@ describe("ServerSection", () => {
     expect(
       within(table).getByRole("row", { name: /土・日/ }),
     ).toHaveTextContent("12:00–24:00 JST");
-    expect(screen.getByText("レイド可能", { exact: true })).toBeInTheDocument();
-    expect(screen.getByText("レイド禁止", { exact: true })).toBeInTheDocument();
+    const figure = screen.getByRole("figure", {
+      name: /レイド時間を、ひと目で。/,
+    });
+    expect(
+      within(figure).getByText("レイド可能", { exact: true }),
+    ).toBeInTheDocument();
+    expect(
+      within(figure).getByText("レイド禁止", { exact: true }),
+    ).toBeInTheDocument();
   });
 });

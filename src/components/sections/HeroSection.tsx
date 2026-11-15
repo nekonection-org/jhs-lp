@@ -41,15 +41,17 @@ export function HeroSection() {
   async function copyConnectionCommand() {
     if (!rustConnection) return;
 
+    if (copyResetTimer.current !== null) {
+      window.clearTimeout(copyResetTimer.current);
+      copyResetTimer.current = null;
+    }
+
     try {
       await navigator.clipboard.writeText(rustConnection.command);
       setCopyState("copied");
     } catch {
       setCopyState("error");
-    }
-
-    if (copyResetTimer.current !== null) {
-      window.clearTimeout(copyResetTimer.current);
+      return;
     }
 
     copyResetTimer.current = window.setTimeout(() => {
@@ -100,7 +102,7 @@ export function HeroSection() {
                 en={en.hero.description}
               />
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3" id="hero-actions">
               <LocalizedExternalAction
                 action={{
                   ja: ja.hero.primaryAction,
@@ -185,7 +187,7 @@ export function HeroSection() {
                   en={en.hero.connection.commandLabel}
                 />
               </p>
-              <code className="connection-command">
+              <code className="connection-command" data-copy-state={copyState}>
                 {rustConnection.command}
               </code>
               <div className="mt-3 flex flex-col gap-2 sm:flex-row">
@@ -238,6 +240,17 @@ export function HeroSection() {
                   />
                 </a>
               </div>
+              {copyState === "error" ? (
+                <p
+                  className="mt-3 text-xs leading-6 text-[var(--text-secondary)]"
+                  role="alert"
+                >
+                  <LocalizedText
+                    ja={ja.hero.connection.copyErrorHelp}
+                    en={en.hero.connection.copyErrorHelp}
+                  />
+                </p>
+              ) : null}
             </div>
           ) : (
             <p className="mt-3 text-xs leading-5 text-[var(--text-muted)]">

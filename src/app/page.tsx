@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { MobileJoinBar } from "@/components/layout/MobileJoinBar";
 import { FinalCtaSection } from "@/components/sections/FinalCtaSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -44,6 +45,7 @@ export default async function Home({ searchParams }: HomeProps) {
         <TermsSection />
       </main>
       <Footer />
+      <MobileJoinBar />
     </>
   );
 }
