@@ -149,6 +149,7 @@ export interface SectionActionContent {
 }
 
 export interface HeroContent {
+  readonly headline: readonly [string, string];
   readonly id: "top";
   readonly eyebrow: string;
   readonly title: string;
@@ -365,6 +366,11 @@ export interface SiteContent {
   readonly faq: FaqContent;
   readonly moderator: ModeratorContent;
   readonly news: NewsContent;
+  readonly finalCta: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly description: string;
+  };
   readonly terms: TermsContent;
   readonly footer: FooterContent;
 }

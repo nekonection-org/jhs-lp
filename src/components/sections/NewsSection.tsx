@@ -14,10 +14,7 @@ export async function NewsSection({ page = 1 }: NewsSectionProps) {
   const result = await getPublicAnnouncements(page);
 
   return (
-    <section
-      className="section-shell border-y border-[var(--border)] bg-[var(--surface)]"
-      id="news"
-    >
+    <section className="section-shell" id="news">
       <Container>
         <Reveal>
           <SectionHeading

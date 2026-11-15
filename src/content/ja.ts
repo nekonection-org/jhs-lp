@@ -61,6 +61,7 @@ export const ja = {
     },
   },
   hero: {
+    headline: ["暮らしのペースで、", "Rustを楽しもう。"],
     id: "top",
     eyebrow: "Rust Community Server",
     title: "Japan Hideaway Server",
@@ -513,6 +514,12 @@ export const ja = {
     translationPendingTitle: "英語版を準備中です",
     translationPendingDescription:
       "英語版が公開されるまで、しばらくお待ちください。",
+  },
+  finalCta: {
+    eyebrow: "Your next hideaway",
+    title: "次のRustを、ここから。",
+    description:
+      "最新のお知らせや参加の案内、運営へのお問い合わせはDiscordへ。あなたのペースで、Japan Hideaway Serverに参加しませんか。",
   },
   terms: {
     eyebrow: "Terms of Service",

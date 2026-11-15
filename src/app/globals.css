@@ -21,7 +21,7 @@
   --warning: #e6b566;
   --focus: #b7df9f;
   --header: rgba(8, 9, 11, 0.9);
-  --hero-overlay: rgba(8, 9, 11, 0.58);
+  --hero-overlay: rgba(8, 9, 11, 0.18);
 }
 
 .light {
@@ -44,7 +44,7 @@
   --warning: #815d16;
   --focus: #426b35;
   --header: rgba(244, 245, 246, 0.9);
-  --hero-overlay: rgba(8, 9, 11, 0.2);
+  --hero-overlay: rgba(8, 9, 11, 0.12);
 }
 
 * {
@@ -66,6 +66,7 @@ body {
     var(--font-geist), "Yu Gothic UI", "Yu Gothic", "Hiragino Kaku Gothic ProN",
     "Noto Sans JP", system-ui, sans-serif;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 section {
@@ -127,16 +128,221 @@ html[data-locale="en"] [data-locale-content="en"] {
 
 .section-shell {
   position: relative;
-  padding-block: clamp(4rem, 7vw, 6rem);
+  padding-block: clamp(5rem, 8.5vw, 8rem);
 }
 
 .section-eyebrow {
   color: var(--accent-strong);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
-  line-height: 1.5;
+  letter-spacing: 0.14em;
+  line-height: 1.6;
   text-transform: uppercase;
+}
+
+.section-heading .section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-heading .section-eyebrow::before {
+  content: "";
+  width: 1.25rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+.section-heading.text-center .section-eyebrow {
+  justify-content: center;
+}
+
+.section-title {
+  margin-top: 1rem;
+  font-size: clamp(1.875rem, 3.1vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.section-description {
+  max-width: 34rem;
+  margin-top: 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+.section-heading.text-center .section-description {
+  margin-inline: auto;
+}
+
+.hero-section {
+  padding-top: clamp(2.5rem, 5vw, 5rem);
+}
+
+.hero-layout {
+  display: grid;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.hero-copy {
+  min-width: 0;
+}
+
+.hero-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.hero-brand > span {
+  width: 1.5rem;
+  height: 2px;
+  background: var(--accent);
+}
+
+.hero-headline {
+  margin-top: 1.75rem;
+  font-size: clamp(2rem, 4.5vw, 3.55rem);
+  font-weight: 650;
+  line-height: 1.4;
+  letter-spacing: -0.055em;
+}
+
+html[data-locale="en"] .hero-headline {
+  font-size: clamp(3.25rem, 7vw, 5.75rem);
+  line-height: 1.06;
+}
+
+.hero-figure {
+  min-width: 0;
+}
+
+.hero-image {
+  position: relative;
+  height: 13rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.625rem;
+  background: var(--surface);
+}
+
+.hero-facts {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-block: 1.75rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.connection-strip {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 1.75rem;
+}
+
+.settings-panel {
+  min-width: 0;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.625rem;
+  background: var(--surface);
+}
+
+.vip-plan {
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem;
+  border: 1px solid var(--border-strong);
+  border-top: 2px solid var(--accent);
+  border-radius: 0.625rem;
+  background: var(--surface);
+}
+
+.join-panel {
+  display: grid;
+  align-items: center;
+  gap: 2rem;
+  padding: 2.25rem 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+}
+
+@media (min-width: 640px) {
+  .hero-image {
+    height: 22rem;
+  }
+
+  .hero-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .hero-facts > div + div {
+    border-left: 1px solid var(--border);
+    padding-left: 2rem;
+  }
+
+  .settings-panel,
+  .vip-plan {
+    padding: 2rem;
+  }
+
+  .join-panel {
+    padding: 3.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-layout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 3.5rem;
+  }
+
+  .hero-image {
+    height: 31rem;
+  }
+
+  .hero-facts {
+    margin-top: 2rem;
+  }
+
+  .connection-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3rem;
+  }
+
+  .section-heading-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    align-items: end;
+    column-gap: 4rem;
+  }
+
+  .section-heading-split .section-eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .section-heading-split .section-description {
+    margin-top: 0;
+  }
+
+  .join-panel {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4rem;
+    padding: 4rem;
+  }
 }
 
 .surface-card {
@@ -171,7 +377,25 @@ html[data-locale="en"] [data-locale-content="en"] {
 
 @media (max-width: 639px) {
   .section-shell {
-    padding-block: 4rem;
+    padding-block: 4.5rem;
+  }
+
+  .hero-facts {
+    gap: 0;
+    padding-block: 0.75rem;
+  }
+
+  .hero-facts > div {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.75rem;
+  }
+
+  .hero-facts dd {
+    margin-top: 0;
+    font-size: 0.8125rem;
   }
 }
 

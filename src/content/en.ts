@@ -61,6 +61,7 @@ export const en = {
     },
   },
   hero: {
+    headline: ["Your time.", "Your Rust."],
     id: "top",
     eyebrow: "Rust Community Server",
     title: "Japan Hideaway Server",
@@ -518,6 +519,12 @@ export const en = {
     translationPendingTitle: "English translation in progress",
     translationPendingDescription:
       "The English version of this announcement is not available yet.",
+  },
+  finalCta: {
+    eyebrow: "Your next hideaway",
+    title: "Find your place in Rust.",
+    description:
+      "Join our Discord for server announcements, help getting started, and support from the team. Make Japan Hideaway Server your next place to play.",
   },
   terms: {
     eyebrow: "Terms of Service",

@@ -32,7 +32,10 @@ export async function ModeratorSection() {
       : null;
 
   return (
-    <section className="section-shell" id="moderator">
+    <section
+      className="section-shell border-y border-[var(--border)] bg-[var(--surface)]"
+      id="moderator"
+    >
       <Container>
         <Reveal>
           <SectionHeading
@@ -57,7 +60,7 @@ export async function ModeratorSection() {
           />
         </Reveal>
 
-        <Reveal className="mt-8">
+        <Reveal className="mt-12">
           <div className="flex flex-col gap-5 border-l-2 border-[var(--accent)] pl-5 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex max-w-3xl items-start gap-4">
               <span className="pt-1 text-[var(--accent-strong)]">

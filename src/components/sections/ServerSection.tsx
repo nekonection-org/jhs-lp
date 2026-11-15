@@ -26,16 +26,16 @@ export function ServerSection() {
           />
         </Reveal>
 
-        <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+        <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-20">
           <Reveal>
-            <article className="border-t-2 border-[var(--accent)] pt-5">
-              <h3 className="text-lg font-semibold">
+            <article className="border-l-2 border-[var(--accent)] pl-6 sm:pl-8">
+              <h3 className="text-xl font-semibold leading-8">
                 <LocalizedText
                   ja={ja.server.welcomeTitle}
                   en={en.server.welcomeTitle}
                 />
               </h3>
-              <p className="mt-4 text-sm leading-8 text-[var(--text-secondary)]">
+              <p className="mt-5 text-base leading-8 text-[var(--text-secondary)]">
                 <LocalizedText
                   ja={ja.server.welcomeDescription}
                   en={en.server.welcomeDescription}
@@ -43,7 +43,7 @@ export function ServerSection() {
               </p>
             </article>
           </Reveal>
-          <Reveal>
+          <Reveal className="settings-panel">
             <h3 className="text-lg font-semibold">
               <LocalizedText
                 ja={ja.server.settingsTitle}
@@ -74,7 +74,7 @@ export function ServerSection() {
                         en={englishSetting.label}
                       />
                     </dt>
-                    <dd className="text-sm font-bold tracking-[-0.01em] text-[var(--accent-strong)] sm:text-right">
+                    <dd className="text-sm font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:text-right">
                       <LocalizedText
                         ja={setting.value}
                         en={englishSetting.value}

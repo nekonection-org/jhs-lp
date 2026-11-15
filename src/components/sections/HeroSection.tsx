@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Check, Copy, Gamepad2 } from "lucide-react";
+import { Check, Copy, Gamepad2, ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
@@ -14,12 +14,18 @@ import { Button, buttonStyles } from "@/components/ui/Button";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
+import { getMatchingItem } from "@/lib/content";
 import { externalUrls, rustConnection } from "@/lib/constants";
 
 type CopyState = "idle" | "copied" | "error";
 
 export function HeroSection() {
   const { locale } = useLanguage();
+  const featuredSettings = [
+    "team-limit",
+    "map-bp-wipe",
+    "weekday-raids",
+  ] as const;
   const [copyState, setCopyState] = useState<CopyState>("idle");
   const copyResetTimer = useRef<number | null>(null);
 
@@ -52,67 +58,106 @@ export function HeroSection() {
   }
 
   return (
-    <section
-      aria-labelledby="hero-title"
-      className="border-b border-[var(--border)] pt-8 sm:pt-16 lg:pt-20"
-      id="top"
-    >
+    <section aria-labelledby="hero-title" className="hero-section" id="top">
       <Container>
-        <Reveal>
-          <p className="section-eyebrow">
-            <LocalizedText ja={ja.hero.eyebrow} en={en.hero.eyebrow} />
-          </p>
-          <div className="mt-6 grid items-end gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] lg:gap-14">
-            <h1
-              className="max-w-3xl text-[clamp(2.6rem,6.4vw,5.6rem)] leading-[1.03] font-semibold tracking-[-0.055em]"
-              id="hero-title"
-            >
+        <div className="hero-layout">
+          <Reveal className="hero-copy">
+            <p className="hero-brand">
+              <span aria-hidden="true" />
               {ja.hero.title}
-            </h1>
-            <div className="max-w-lg pb-1">
-              <p className="text-lg leading-8 font-semibold sm:text-xl">
-                <LocalizedText ja={ja.hero.subtitle} en={en.hero.subtitle} />
-              </p>
-              <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
+            </p>
+            <h1 className="hero-headline" id="hero-title">
+              <span className="block">
                 <LocalizedText
-                  ja={ja.hero.description}
-                  en={en.hero.description}
+                  ja={ja.hero.headline[0]}
+                  en={en.hero.headline[0]}
                 />
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <LocalizedExternalAction
-                  action={{
-                    ja: ja.hero.primaryAction,
-                    en: en.hero.primaryAction,
-                  }}
-                  common={{ ja: ja.common, en: en.common }}
-                  href={externalUrls.discord}
+              </span>{" "}
+              <span className="block text-[var(--accent-strong)]">
+                <LocalizedText
+                  ja={ja.hero.headline[1]}
+                  en={en.hero.headline[1]}
                 />
-                <LocalizedSectionAction
-                  action={{
-                    ja: ja.hero.secondaryAction,
-                    en: en.hero.secondaryAction,
-                  }}
-                />
-              </div>
+              </span>
+            </h1>
+            <p className="mt-6 text-lg font-semibold leading-8">
+              <LocalizedText ja={ja.hero.subtitle} en={en.hero.subtitle} />
+            </p>
+            <p className="mt-3 max-w-lg text-base leading-8 text-[var(--text-secondary)]">
+              <LocalizedText
+                ja={ja.hero.description}
+                en={en.hero.description}
+              />
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <LocalizedExternalAction
+                action={{
+                  ja: ja.hero.primaryAction,
+                  en: en.hero.primaryAction,
+                }}
+                common={{ ja: ja.common, en: en.common }}
+                href={externalUrls.discord}
+                className="min-h-12 px-6"
+              />
+              <LocalizedSectionAction
+                action={{
+                  ja: ja.hero.secondaryAction,
+                  en: en.hero.secondaryAction,
+                }}
+                className="min-h-12 px-6"
+              />
             </div>
-          </div>
-        </Reveal>
-        <div
-          aria-hidden="true"
-          className="relative mt-6 h-32 sm:mt-10 overflow-hidden bg-[var(--surface)] sm:h-52 lg:mt-12 lg:h-64"
-        >
-          <Image
-            alt=""
-            className="object-cover object-[65%_55%] saturate-[0.65] sm:object-[center_55%]"
-            fill
-            priority
-            sizes="(min-width: 1280px) 1200px, 100vw"
-            src="/main-image.png"
-          />
-          <div className="absolute inset-0 bg-[var(--hero-overlay)]" />
+            <a
+              href="#server"
+              className="mt-7 inline-flex min-h-11 items-center gap-2 text-xs font-medium text-[var(--text-secondary)] underline-offset-4 hover:text-[var(--accent-strong)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--focus)]"
+            >
+              <LocalizedText
+                ja={ja.server.highlights[0].title}
+                en={en.server.highlights[0].title}
+              />
+              <ArrowUpRight aria-hidden="true" className="size-3.5" />
+            </a>
+          </Reveal>
+          <figure className="hero-figure">
+            <div className="hero-image">
+              <Image
+                alt=""
+                className="object-cover object-[78%_center]"
+                fill
+                priority
+                sizes="(min-width: 1280px) 480px, (min-width: 1024px) 44vw, 100vw"
+                src="/main-image.png"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-[var(--hero-overlay)]"
+              />
+            </div>
+            <figcaption className="flex items-center justify-between gap-3 py-4 text-[0.65rem] font-medium tracking-[0.12em] text-[var(--text-muted)] uppercase">
+              <span>
+                <LocalizedText ja={ja.hero.eyebrow} en={en.hero.eyebrow} />
+              </span>
+              <span>Japan Hideaway / Rust</span>
+            </figcaption>
+          </figure>
         </div>
-        <div className="grid gap-6 py-7 lg:grid-cols-3 lg:gap-12 lg:py-8">
+        <dl className="hero-facts">
+          {featuredSettings.map((id) => {
+            const setting = getMatchingItem(ja.server.settings, id);
+            const english = getMatchingItem(en.server.settings, id);
+            return (
+              <div key={id}>
+                <dt className="text-xs font-medium text-[var(--text-muted)]">
+                  <LocalizedText ja={setting.label} en={english.label} />
+                </dt>
+                <dd className="mt-2 text-sm font-semibold leading-6 sm:text-base">
+                  <LocalizedText ja={setting.value} en={english.value} />
+                </dd>
+              </div>
+            );
+          })}
+        </dl>
+        <div className="connection-strip">
           <div>
             <h2 className="text-base font-semibold">
               <LocalizedText

@@ -115,13 +115,13 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--header)] backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--header)] backdrop-blur-sm">
       <Container className="flex min-h-[4.75rem] items-center gap-3">
         <a
           className="group mr-auto inline-flex min-h-11 items-center gap-3 rounded-lg pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
           href="#top"
         >
-          <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface)] transition-[border-color,transform] duration-200 group-hover:scale-[1.04] group-hover:border-[var(--accent)]">
+          <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface)] transition-colors duration-200 group-hover:border-[var(--accent)]">
             <Image
               alt=""
               className="object-cover"
@@ -148,7 +148,7 @@ export function Header() {
             <a
               aria-current={activeSection === item.id ? "location" : undefined}
               className={cn(
-                "relative rounded-md px-2.5 py-2 text-xs font-semibold whitespace-nowrap text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-secondary)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
+                "relative rounded-md px-2.5 py-2 text-xs font-medium whitespace-nowrap text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-secondary)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
                 activeSection === item.id && "text-[var(--accent-strong)]",
               )}
               href={`#${item.id}`}
@@ -166,7 +166,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-1.5 xl:flex">
+        <div className="ml-2 hidden items-center gap-1.5 border-l border-[var(--border)] pl-4 xl:flex">
           <LanguageToggle content={content.language} />
           <ThemeToggle content={content.theme} />
           <LocalizedExternalAction

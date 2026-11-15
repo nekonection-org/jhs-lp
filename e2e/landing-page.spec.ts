@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { en } from "../src/content";
+import { en, ja } from "../src/content";
 import { e2eEnvironment } from "./environment";
 
 const sectionIds = [
@@ -22,7 +22,7 @@ test("トップページに必須セクションと単一の見出しが表示�
   page,
 }) => {
   await expect(
-    page.getByRole("heading", { level: 1, name: "Japan Hideaway Server" }),
+    page.getByRole("heading", { level: 1, name: ja.hero.headline.join(" ") }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   await expect(page.locator('header img[src*="icon.png"]')).toBeVisible();
@@ -62,7 +62,7 @@ test("初期言語は日本語で、英語の選択が再読み込み後も保�
   await expect(root).toHaveAttribute("lang", "en");
   await expect(page).toHaveTitle(en.metadata.title);
   await expect(
-    page.getByRole("heading", { level: 1, name: "Japan Hideaway Server" }),
+    page.getByRole("heading", { level: 1, name: en.hero.headline.join(" ") }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { level: 2, name: "Server Information" }),
@@ -207,7 +207,7 @@ test("指定された全幅で主要コンテンツを表示し、横スクロ�
     await page.goto(`/?viewport=${width}`);
 
     await expect(
-      page.getByRole("heading", { level: 1, name: "Japan Hideaway Server" }),
+      page.getByRole("heading", { level: 1, name: ja.hero.headline.join(" ") }),
     ).toBeVisible();
     await expect(
       page.locator(`#top a[href="${e2eEnvironment.discordUrl}"]`).first(),
@@ -254,4 +254,22 @@ test.describe("360px のモバイル表示", () => {
     );
     expect(closedMenuOverflow).toBeLessThanOrEqual(1);
   });
+});
+
+test("最終CTAから同じDiscordとルールへ移動でき、英語にも切り替わる", async ({
+  page,
+}) => {
+  const japaneseCta = page.getByRole("region", { name: ja.finalCta.title });
+  await japaneseCta.scrollIntoViewIfNeeded();
+  await expect(
+    japaneseCta.getByRole("link", { name: /Discordに参加/ }),
+  ).toHaveAttribute("href", e2eEnvironment.discordUrl);
+  await expect(
+    japaneseCta.getByRole("link", { name: /ルールを見る/ }),
+  ).toHaveAttribute("href", "#rules");
+  await page.getByRole("button", { name: /English|英語/i }).click();
+  const englishCta = page.getByRole("region", { name: en.finalCta.title });
+  await expect(
+    englishCta.getByRole("link", { name: /Join Discord/ }),
+  ).toHaveAttribute("href", e2eEnvironment.discordUrl);
 });

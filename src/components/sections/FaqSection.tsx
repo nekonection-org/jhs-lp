@@ -14,10 +14,11 @@ export async function FaqSection() {
       className="section-shell border-y border-[var(--border)] bg-[var(--surface)]"
       id="faq"
     >
-      <Container className="grid gap-10 lg:grid-cols-[minmax(16rem,0.72fr)_minmax(0,1.28fr)] lg:gap-16">
+      <Container className="max-w-[60rem]">
         <Reveal>
           <SectionHeading
-            className="lg:sticky lg:top-28"
+            align="center"
+            layout="stack"
             description={
               <LocalizedText ja={ja.faq.description} en={en.faq.description} />
             }
@@ -26,7 +27,9 @@ export async function FaqSection() {
           />
         </Reveal>
 
-        <FaqList result={result} />
+        <div className="mt-10 sm:mt-14">
+          <FaqList result={result} />
+        </div>
       </Container>
     </section>
   );

@@ -48,9 +48,9 @@ export async function VipSection() {
           />
         </Reveal>
 
-        <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+        <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
           <Reveal>
-            <div className="flex flex-col border-t-2 border-[var(--accent)] pt-5">
+            <div className="vip-plan">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <StatusBadge
                   en={en.common.statusLabels[englishContent.status]}
@@ -129,7 +129,7 @@ export async function VipSection() {
           </Reveal>
 
           <Reveal delay={0.06}>
-            <div className="flex flex-col border-t border-[var(--border)] pt-5">
+            <div className="flex flex-col py-2 lg:py-6">
               <div className="flex items-center gap-3">
                 <BadgeCheck
                   aria-hidden="true"

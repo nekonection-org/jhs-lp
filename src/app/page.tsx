@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { FinalCtaSection } from "@/components/sections/FinalCtaSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { ModeratorSection } from "@/components/sections/ModeratorSection";
@@ -39,6 +40,7 @@ export default async function Home({ searchParams }: HomeProps) {
         <FaqSection />
         <ModeratorSection />
         <NewsSection page={newsPage} />
+        <FinalCtaSection />
         <TermsSection />
       </main>
       <Footer />

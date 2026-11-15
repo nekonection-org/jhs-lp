@@ -43,58 +43,63 @@ export async function RulesSection() {
           />
         </Reveal>
 
-        <Reveal className="mt-8">
-          <aside className="flex items-start gap-4 border-l-2 border-[var(--danger)] py-1 pl-5">
-            <span className="pt-1 text-[var(--danger)]">
-              <TriangleAlert aria-hidden="true" className="size-5" />
-            </span>
-            <div>
-              <h3 className="font-bold text-[var(--text-primary)]">
-                <LocalizedText
-                  ja={japaneseContent.noticeTitle}
-                  en={englishContent.noticeTitle}
-                />
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                <LocalizedText
-                  ja={japaneseContent.notice}
-                  en={englishContent.notice}
-                />
-              </p>
-            </div>
-          </aside>
-        </Reveal>
+        <div className="mt-12 grid items-start gap-10 lg:mt-16 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,1.35fr)] lg:gap-16">
+          <Reveal className="lg:sticky lg:top-28">
+            <aside className="flex items-start gap-4 border-l-2 border-[var(--danger)] py-1 pl-5">
+              <span className="pt-1 text-[var(--danger)]">
+                <TriangleAlert aria-hidden="true" className="size-5" />
+              </span>
+              <div>
+                <h3 className="font-bold text-[var(--text-primary)]">
+                  <LocalizedText
+                    ja={japaneseContent.noticeTitle}
+                    en={englishContent.noticeTitle}
+                  />
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                  <LocalizedText
+                    ja={japaneseContent.notice}
+                    en={englishContent.notice}
+                  />
+                </p>
+              </div>
+            </aside>
+          </Reveal>
 
-        <div className="mt-8 border-b border-[var(--border)]">
-          {japaneseContent.items.map((item, index) => {
-            const englishItem = getMatchingItem(englishContent.items, item.id);
+          <div className="border-b border-[var(--border)]">
+            {japaneseContent.items.map((item, index) => {
+              const englishItem = getMatchingItem(
+                englishContent.items,
+                item.id,
+              );
 
-            return (
-              <Reveal delay={index * 0.035} key={item.id}>
-                <FeatureCard
-                  description={
-                    <LocalizedText
-                      ja={item.description}
-                      en={englishItem.description}
-                    />
-                  }
-                  icon={item.icon}
-                  important={"important" in item && item.important}
-                  status={item.status}
-                  statusLabel={{
-                    ja: ja.common.statusLabels[item.status],
-                    en: en.common.statusLabels[englishItem.status],
-                  }}
-                  title={
-                    <LocalizedText ja={item.title} en={englishItem.title} />
-                  }
-                />
-              </Reveal>
-            );
-          })}
+              return (
+                <Reveal delay={index * 0.035} key={item.id}>
+                  <FeatureCard
+                    className="md:grid-cols-1 xl:grid-cols-1"
+                    description={
+                      <LocalizedText
+                        ja={item.description}
+                        en={englishItem.description}
+                      />
+                    }
+                    icon={item.icon}
+                    important={"important" in item && item.important}
+                    status={item.status}
+                    statusLabel={{
+                      ja: ja.common.statusLabels[item.status],
+                      en: en.common.statusLabels[englishItem.status],
+                    }}
+                    title={
+                      <LocalizedText ja={item.title} en={englishItem.title} />
+                    }
+                  />
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
-
-        <Reveal className="mt-8">
+        <Reveal className="mt-10">
           <details className="rulebook surface-card group overflow-hidden bg-[var(--surface)]">
             <summary className="flex min-h-16 cursor-pointer list-none items-center gap-4 px-5 py-4 font-bold text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--focus)] sm:px-6">
               <span className="grid size-10 shrink-0 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] text-[var(--accent-strong)]">
