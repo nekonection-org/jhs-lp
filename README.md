@@ -34,24 +34,24 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 
 ブランドの緑（ダーク `#8fbd78` / ライト `#527d43`）は維持し、色は `src/app/globals.css` のCSS変数で管理します。青紫のグラデーション、背景グリッド、Glow、浮き上がるカード演出は使いません。
 
-- SaaS・プロダクトサイトを意識し、Heroは中央に見出し・説明・CTAを集約しています。日本語は「暮らしのペースで、Rustを楽しもう。」、英語は「Your time. Your Rust.」。色の強調を抑え、文字の太さと余白で優先順位を示します。
-- 横長の既存画像と設定サマリーを1つのフレームにまとめています。画像上には小さなサーバー名とカテゴリだけを置き、説明文・操作ボタンは画像の外で読める構成です。チーム上限・ワイプ・平日のレイド時間は `server.settings` から表示します。
-- セクションは01〜06の番号と見出しで整理しています。紹介文と設定、注意事項とルール一覧、VIPの状態と特典を分け、FAQは中央寄せの見出しと罫線の一覧にしています。
+- Heroは1024px以上で、左に見出し・説明・CTA、右に縦長のビジュアルを配置します。日本語は「暮らしのペースで、Rustを楽しもう。」、英語は「Your time. Your Rust.」。見出しのサイズ・太さに強弱をつけ、本文と画像が同時に見える構成です。モバイルでは文章・操作・画像の順に並べます。
+- 既存画像は控えめなフレームと装飾用のJHS文字で構成し、画像の上下にカテゴリとサーバー名を配置します。説明・ボタンは画像の外に置きます。画像フレームはサーバー情報へ移動するアンカーで、ホバー時の小さなズームとフォーカス表示に対応します。チーム上限・ワイプ・平日のレイド時間は `server.settings` を参照し、Hero全幅の罫線付きサマリーに表示します。画像の `sizes` は左右配置に合わせ、デスクトップで不要に大きな画像を要求しないよう調整しています。
+- セクションは01〜06の番号、大きめの見出し、短い罫線で整理しています。紹介文と設定、注意事項とルール一覧、VIPの状態と特典を分け、FAQは中央寄せの見出しと罫線の一覧にしています。
 - サーバー情報には平日・週末のレイド可能時間を比較する `RaidSchedule` を配置しています。時刻・凡例・表の見出しで内容を伝え、色だけに依存しません。サーバーの稼働状況やオンライン人数を取得・表示する機能ではありません。
 - ボタンの基本角丸は6px、画像・設定・VIPのパネルは8pxです。大きな角丸、Glow、装飾的な影を避け、フォーカスリングと44px以上の操作ボタン高を確保します。
 - 最終CTAはブランドの緑を使った全幅のエリアです。ボタンと本文は背景に対してコントラストを確保し、DiscordとルールへのリンクはHeroと共通にしています。
 - `src/components/ui/Button.tsx` は [shadcn/ui Button](https://ui.shadcn.com/docs/components/button) のバリアント管理パターンを取り入れ、`class-variance-authority` で既存の `primary` / `secondary` / `quiet` APIを管理します。サイト固有の色とネイティブなbutton / aの意味を維持するローカル実装です。shadcn CLIによるテーマ一括置換は行っていません。
-- `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) の軽量版を基に調整しています。既存の `Reveal` から利用し、IntersectionObserverで一度だけ検知してMotionで短い濃度変化を付けます。12pxの移動と380msのフェードを組み合わせ、GSAPやぼかしは導入していません。
+- `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) の軽量版を基に調整しています。既存の `Reveal` から利用し、IntersectionObserverで一度だけ検知し、Motionで16pxの移動と420msのフェードを付けます。`data-reveal-item` のある要素は45msずつずらし、開始の遅延は200msで止めます。共通の時間とイージングは `src/lib/motion.ts` で管理します。GSAPやぼかしは導入していません。
 - SSR・JavaScript無効・IntersectionObserver非対応時も本文を表示します。Reduced Motion時は切り替えを即時にし、アンカー移動もアニメーションしません。採用コードの出典とライセンスは `THIRD_PARTY_NOTICES.md` に記載しています。
 
 ### 操作へのフィードバック
 
 - `RaidTimeChecker`は平日／土・日と0〜23時を選び、選択した時刻のレイド可否を即座に表示します。時刻は日本時間で、現在時刻やサーバー状態の取得は行いません。ネイティブrangeの矢印キー・Home・Endに対応し、結果はアイコン・文言・`aria-live`で伝えます。言語を切り替えても選択値を保持します。
 - モバイルの`MobileJoinBar`はHeroの参加ボタンがヘッダーより上へ移動してから表示し、最終CTA以降とメニュー表示中は隠れます。IntersectionObserverで位置の変化を検知し、セーフエリアと画面下部のスクロール余白を確保しています。
-- ボタンは150〜180msの色・矢印の変化と短い押下反応を使います。曜日の選択表示とモバイルの参加バーも短い時間で切り替えます。
+- ボタンは150〜180msの色・矢印の変化と短い押下反応を使います。言語選択の背景は位置を移して切り替え、テーマのアイコンは短い回転とフェードで応答します。モバイルメニューの項目は25msずつずらして表示します。曜日の選択表示とモバイルの参加バーも短い時間で切り替えます。
 - FAQはネイティブ`details`の操作を維持し、対応ブラウザーではCSSで高さと濃度を220ms以内に切り替えます。[`interpolate-size`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/interpolate-size)は対応状況が異なるため、`@supports`で拡張し、未対応時は通常の開閉に戻します。
 - コピー成功時はチェックアイコン・完了文言・コマンド枠で応答します。クリップボードへのアクセスが拒否された場合は、再試行するまで手動コピーの案内を残します。
-- モバイルメニューからの移動後は見出しへフォーカスを移し、Escで閉じた場合はメニューボタンへ戻します。Reduced Motion時は移動・拡縮を抑え、操作結果を即時に伝えます。
+- モバイルメニューからの移動後は見出しへフォーカスを移し、Escで閉じた場合はメニューボタンへ戻します。Reduced Motion時は移動・拡縮を抑え、操作結果を即時に伝えます。表示アニメーション中に設定を変更した場合も、進行中の処理を止めて濃度・位置を戻します。一度表示した要素はスクロールや設定変更で再生し直しません。
 - JavaScriptが使えなくても時間帯の表と本文は表示されます。時刻確認の操作はハイドレーション後に有効になり、追従バーは拡張機能として追加されます。
 
 UIの更新時は `pnpm typecheck`、`pnpm lint`、`pnpm format:check`、`pnpm test`、`pnpm build` に加えて `pnpm test:e2e` を実行します。360 / 375 / 390 / 768 / 1024 / 1280 / 1440 / 1920pxで横スクロールと操作性を確認してください。DBを利用する統合テストと管理画面E2Eには、後述のDB設定が必要です。
@@ -420,4 +420,8 @@ public/           # 公式アイコンとHero画像
 
 ## フォントライセンス
 
-英数字にはSIL Open Font License 1.1で提供されるGeistを`next/font/local`で自己配信します。ライセンス本文は`src/app/fonts/OFL.txt`に含まれています。日本語は端末のシステムフォントを使用します。
+英数字はGeist、日本語はNoto Sans JPの可変フォントを使います。Geistは`next/font/local`、Noto Sans JPは`next/font/google`で自己配信します。日本語はUnicode範囲ごとのファイルを必要に応じて読み込み、一括プリロードはしません。いずれも`font-display: swap`を使用します。
+
+Noto Sans JPはビルド時にGoogle Fontsへ接続します。閲覧時は同じサイトの静的ファイルから配信され、ブラウザーからGoogleへのリクエストは発生しません（[Next.jsのフォント最適化](https://nextjs.org/docs/app/getting-started/fonts)）。初回のビルド環境ではGoogle Fontsへのネットワークアクセスが必要です。
+
+両フォントのライセンスはSIL Open Font License 1.1です。本文は`src/app/fonts/OFL.txt`と`src/app/fonts/NotoSansJP-OFL.txt`に含まれています。

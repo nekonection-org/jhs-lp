@@ -59,3 +59,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Noto Sans JP
+
+Source: https://github.com/google/fonts/tree/main/ofl/notosansjp
+
+Used through `next/font/google` and served as local build assets. The variable font supplies Japanese glyphs alongside Geist.
+
+SIL Open Font License 1.1. The complete copyright notice and license are included in `src/app/fonts/NotoSansJP-OFL.txt`.
