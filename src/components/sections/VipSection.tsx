@@ -27,6 +27,7 @@ export async function VipSection() {
       <Container>
         <Reveal>
           <SectionHeading
+            index="03"
             description={
               <LocalizedText
                 ja={japaneseContent.description}
@@ -48,7 +49,7 @@ export async function VipSection() {
           />
         </Reveal>
 
-        <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+        <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-20">
           <Reveal>
             <div className="vip-plan">
               <div className="flex flex-wrap items-start justify-between gap-4">

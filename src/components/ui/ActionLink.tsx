@@ -1,4 +1,4 @@
-import { ArrowDown, ExternalLink, LockKeyhole } from "lucide-react";
+import { ArrowDown, ArrowUpRight, LockKeyhole } from "lucide-react";
 
 import type {
   CommonContent,
@@ -38,7 +38,7 @@ export function LocalizedExternalAction({
     <>
       <LocalizedText ja={action.ja.label} en={action.en.label} />
       {href ? (
-        <ExternalLink aria-hidden="true" className="size-4" />
+        <ArrowUpRight aria-hidden="true" className="size-4" />
       ) : (
         <LockKeyhole aria-hidden="true" className="size-4" />
       )}

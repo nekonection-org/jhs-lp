@@ -13,7 +13,7 @@ export function Footer() {
     <footer className="border-t border-[var(--border)] bg-[var(--surface)]">
       <Container className="py-10 sm:py-12">
         <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:gap-16">
-          <div className="max-w-xl">
+          <div className="max-w-lg">
             <a
               className="inline-flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
               href="#top"
@@ -27,7 +27,7 @@ export function Footer() {
                   src="/icon.png"
                 />
               </span>
-              <span className="font-bold tracking-[-0.025em]">
+              <span className="text-lg font-semibold tracking-[-0.035em] sm:text-2xl">
                 Japan Hideaway Server
               </span>
             </a>

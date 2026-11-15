@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { ServerSection } from "@/components/sections/ServerSection";
@@ -32,5 +32,20 @@ describe("ServerSection", () => {
       screen.getByText("Japan Hideaway Serverへようこそ！").closest("h3"),
     ).not.toBeNull();
     expect(screen.getByText(/初心者から上級者まで/)).toBeInTheDocument();
+  });
+
+  it("exposes weekday and weekend raid windows as a labeled table", () => {
+    render(<ServerSection />);
+    const table = screen.getByRole("table", {
+      name: /レイド時間を、ひと目で。/,
+    });
+    expect(within(table).getByRole("row", { name: /平日/ })).toHaveTextContent(
+      "18:00–24:00 JST",
+    );
+    expect(
+      within(table).getByRole("row", { name: /土・日/ }),
+    ).toHaveTextContent("12:00–24:00 JST");
+    expect(screen.getByText("レイド可能", { exact: true })).toBeInTheDocument();
+    expect(screen.getByText("レイド禁止", { exact: true })).toBeInTheDocument();
   });
 });

@@ -4,6 +4,7 @@ import { cn } from "@/lib/cn";
 
 interface SectionHeadingProps {
   eyebrow: ReactNode;
+  index?: string;
   title: ReactNode;
   description: ReactNode;
   align?: "left" | "center";
@@ -13,6 +14,7 @@ interface SectionHeadingProps {
 
 export function SectionHeading({
   eyebrow,
+  index,
   title,
   description,
   align = "left",
@@ -28,7 +30,14 @@ export function SectionHeading({
         className,
       )}
     >
-      <p className="section-eyebrow">{eyebrow}</p>
+      <p className="section-eyebrow">
+        {index ? (
+          <span aria-hidden="true" className="section-index">
+            {index}
+          </span>
+        ) : null}
+        {eyebrow}
+      </p>
       <h2 className="section-title">{title}</h2>
       <p className="section-description">{description}</p>
     </header>

@@ -1,3 +1,4 @@
+import { formatRaidHour, raidWindows } from "./server";
 import type { SiteContent } from "./types";
 
 export const en = {
@@ -95,6 +96,15 @@ export const en = {
     },
   },
   server: {
+    schedule: {
+      title: "Know your raiding hours.",
+      description:
+        "Different hours for weekdays and weekends. All times are in Japan Standard Time (JST).",
+      weekdays: "Weekdays",
+      weekends: "Weekends",
+      allowed: "Raiding allowed",
+      blocked: "No raiding",
+    },
     id: "server",
     eyebrow: "Server Information",
     title: "Server Information",
@@ -144,12 +154,12 @@ export const en = {
       {
         id: "weekday-raids",
         label: "Raid hours (weekdays)",
-        value: "18:00–24:00 JST",
+        value: `${formatRaidHour(raidWindows.weekdays.start)}–${formatRaidHour(raidWindows.weekdays.end)} JST`,
       },
       {
         id: "weekend-raids",
         label: "Raid hours (weekends)",
-        value: "12:00–24:00 JST",
+        value: `${formatRaidHour(raidWindows.weekends.start)}–${formatRaidHour(raidWindows.weekends.end)} JST`,
       },
     ],
     pendingNotice:

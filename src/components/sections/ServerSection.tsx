@@ -2,6 +2,7 @@ import { Info } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { RaidSchedule } from "@/components/ui/RaidSchedule";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { en, ja } from "@/content";
@@ -13,6 +14,7 @@ export function ServerSection() {
       <Container>
         <Reveal>
           <SectionHeading
+            index="01"
             description={
               <LocalizedText
                 ja={ja.server.description}
@@ -28,7 +30,7 @@ export function ServerSection() {
 
         <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-20">
           <Reveal>
-            <article className="border-l-2 border-[var(--accent)] pl-6 sm:pl-8">
+            <article className="server-welcome">
               <h3 className="text-xl font-semibold leading-8">
                 <LocalizedText
                   ja={ja.server.welcomeTitle}
@@ -42,6 +44,7 @@ export function ServerSection() {
                 />
               </p>
             </article>
+            <RaidSchedule />
           </Reveal>
           <Reveal className="settings-panel">
             <h3 className="text-lg font-semibold">

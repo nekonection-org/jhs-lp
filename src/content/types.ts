@@ -197,6 +197,14 @@ export type ServerSettingItems = IdentifiedItems<
 >;
 
 export interface ServerContent extends SectionIntroduction<"server"> {
+  readonly schedule: {
+    readonly title: string;
+    readonly description: string;
+    readonly weekdays: string;
+    readonly weekends: string;
+    readonly allowed: string;
+    readonly blocked: string;
+  };
   readonly settingsTitle: string;
   readonly settingsDescription: string;
   readonly welcomeTitle: string;

@@ -39,6 +39,7 @@ export async function ModeratorSection() {
       <Container>
         <Reveal>
           <SectionHeading
+            index="05"
             description={
               <LocalizedText
                 ja={japaneseContent.description}

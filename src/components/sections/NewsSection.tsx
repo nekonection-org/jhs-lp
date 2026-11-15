@@ -18,6 +18,7 @@ export async function NewsSection({ page = 1 }: NewsSectionProps) {
       <Container>
         <Reveal>
           <SectionHeading
+            index="06"
             description={
               <LocalizedText
                 ja={ja.news.description}

@@ -10,7 +10,7 @@ import { externalUrls } from "@/lib/constants";
 
 export function FinalCtaSection() {
   return (
-    <section aria-labelledby="join-title" className="pb-16 sm:pb-24">
+    <section aria-labelledby="join-title" className="join-section">
       <Container>
         <Reveal>
           <div className="join-panel">
@@ -24,7 +24,7 @@ export function FinalCtaSection() {
               <h2 className="section-title mt-5" id="join-title">
                 <LocalizedText ja={ja.finalCta.title} en={en.finalCta.title} />
               </h2>
-              <p className="mt-5 max-w-xl text-sm leading-8 text-[var(--text-secondary)] sm:text-base">
+              <p className="join-description">
                 <LocalizedText
                   ja={ja.finalCta.description}
                   en={en.finalCta.description}
@@ -39,7 +39,7 @@ export function FinalCtaSection() {
                 }}
                 common={{ ja: ja.common, en: en.common }}
                 href={externalUrls.discord}
-                className="min-h-12 px-7"
+                className="join-primary min-h-12 px-7"
               />
               <LocalizedSectionAction
                 action={{
@@ -47,7 +47,7 @@ export function FinalCtaSection() {
                   en: en.hero.secondaryAction,
                 }}
                 variant="quiet"
-                className="min-h-12 px-7"
+                className="join-secondary min-h-12 px-7"
               />
             </div>
           </div>

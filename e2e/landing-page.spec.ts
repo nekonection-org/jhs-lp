@@ -273,3 +273,40 @@ test("最終CTAから同じDiscordとルールへ移動でき、英語にも切�
     englishCta.getByRole("link", { name: /Join Discord/ }),
   ).toHaveAttribute("href", e2eEnvironment.discordUrl);
 });
+
+test("レイド時間の図がモバイルとデスクトップで正しい時間比率と目盛りを保つ", async ({
+  page,
+}) => {
+  for (const width of [360, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const schedule = page.getByRole("figure", {
+      name: ja.server.schedule.title,
+    });
+    await schedule.scrollIntoViewIfNeeded();
+    const axis = await schedule.locator(".raid-axis").boundingBox();
+    expect(axis).not.toBeNull();
+    const measurements = await schedule
+      .locator(".raid-track")
+      .evaluateAll((tracks) =>
+        tracks.map((track) => {
+          const allowed = track.querySelector(".raid-track-allowed");
+          const bounds = track.getBoundingClientRect();
+          return {
+            left: bounds.left,
+            ratio:
+              (allowed?.getBoundingClientRect().width ?? 0) / track.clientWidth,
+          };
+        }),
+      );
+    expect(measurements).toHaveLength(2);
+    const [weekday, weekend] = measurements;
+    if (!axis || !weekday || !weekend) {
+      throw new Error("Both raid windows and the time axis must be rendered");
+    }
+    for (const measurement of measurements)
+      expect(Math.abs(measurement.left - axis.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(weekday.ratio - 0.25)).toBeLessThan(0.02);
+    expect(Math.abs(weekend.ratio - 0.5)).toBeLessThan(0.02);
+  }
+});

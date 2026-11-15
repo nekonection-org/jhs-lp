@@ -60,12 +60,21 @@ export function HeroSection() {
   return (
     <section aria-labelledby="hero-title" className="hero-section" id="top">
       <Container>
+        <div className="hero-masthead">
+          <p className="hero-brand">
+            <span aria-hidden="true" />
+            {ja.hero.title}
+          </p>
+          <a href="#server" className="hero-audience">
+            <LocalizedText
+              ja={ja.server.highlights[0].title}
+              en={en.server.highlights[0].title}
+            />
+            <ArrowUpRight aria-hidden="true" className="size-3.5" />
+          </a>
+        </div>
         <div className="hero-layout">
           <Reveal className="hero-copy">
-            <p className="hero-brand">
-              <span aria-hidden="true" />
-              {ja.hero.title}
-            </p>
             <h1 className="hero-headline" id="hero-title">
               <span className="block">
                 <LocalizedText
@@ -73,23 +82,25 @@ export function HeroSection() {
                   en={en.hero.headline[0]}
                 />
               </span>{" "}
-              <span className="block text-[var(--accent-strong)]">
+              <span className="block">
                 <LocalizedText
                   ja={ja.hero.headline[1]}
                   en={en.hero.headline[1]}
                 />
               </span>
             </h1>
-            <p className="mt-6 text-lg font-semibold leading-8">
+          </Reveal>
+          <Reveal className="hero-introduction">
+            <p className="text-base font-semibold leading-8 sm:text-lg">
               <LocalizedText ja={ja.hero.subtitle} en={en.hero.subtitle} />
             </p>
-            <p className="mt-3 max-w-lg text-base leading-8 text-[var(--text-secondary)]">
+            <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
               <LocalizedText
                 ja={ja.hero.description}
                 en={en.hero.description}
               />
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               <LocalizedExternalAction
                 action={{
                   ja: ja.hero.primaryAction,
@@ -107,25 +118,17 @@ export function HeroSection() {
                 className="min-h-12 px-6"
               />
             </div>
-            <a
-              href="#server"
-              className="mt-7 inline-flex min-h-11 items-center gap-2 text-xs font-medium text-[var(--text-secondary)] underline-offset-4 hover:text-[var(--accent-strong)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--focus)]"
-            >
-              <LocalizedText
-                ja={ja.server.highlights[0].title}
-                en={en.server.highlights[0].title}
-              />
-              <ArrowUpRight aria-hidden="true" className="size-3.5" />
-            </a>
           </Reveal>
+        </div>
+        <div className="hero-preview">
           <figure className="hero-figure">
             <div className="hero-image">
               <Image
                 alt=""
-                className="object-cover object-[78%_center]"
+                className="object-cover object-[72%_52%] sm:object-[center_36%]"
                 fill
                 priority
-                sizes="(min-width: 1280px) 480px, (min-width: 1024px) 44vw, 100vw"
+                sizes="(min-width: 1280px) 1200px, 100vw"
                 src="/main-image.png"
               />
               <div
@@ -133,30 +136,32 @@ export function HeroSection() {
                 className="absolute inset-0 bg-[var(--hero-overlay)]"
               />
             </div>
-            <figcaption className="flex items-center justify-between gap-3 py-4 text-[0.65rem] font-medium tracking-[0.12em] text-[var(--text-muted)] uppercase">
-              <span>
+            <figcaption className="hero-image-caption">
+              <span className="text-[0.625rem] font-semibold tracking-[0.03em] whitespace-nowrap sm:text-xs">
+                {ja.hero.title}
+              </span>
+              <span className="text-right text-[0.625rem] font-medium tracking-[0.08em] whitespace-nowrap uppercase">
                 <LocalizedText ja={ja.hero.eyebrow} en={en.hero.eyebrow} />
               </span>
-              <span>Japan Hideaway / Rust</span>
             </figcaption>
           </figure>
+          <dl className="hero-facts">
+            {featuredSettings.map((id) => {
+              const setting = getMatchingItem(ja.server.settings, id);
+              const english = getMatchingItem(en.server.settings, id);
+              return (
+                <div key={id}>
+                  <dt className="text-xs font-medium text-[var(--text-muted)]">
+                    <LocalizedText ja={setting.label} en={english.label} />
+                  </dt>
+                  <dd className="mt-2 text-sm font-semibold leading-6 sm:text-base">
+                    <LocalizedText ja={setting.value} en={english.value} />
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
         </div>
-        <dl className="hero-facts">
-          {featuredSettings.map((id) => {
-            const setting = getMatchingItem(ja.server.settings, id);
-            const english = getMatchingItem(en.server.settings, id);
-            return (
-              <div key={id}>
-                <dt className="text-xs font-medium text-[var(--text-muted)]">
-                  <LocalizedText ja={setting.label} en={english.label} />
-                </dt>
-                <dd className="mt-2 text-sm font-semibold leading-6 sm:text-base">
-                  <LocalizedText ja={setting.value} en={english.value} />
-                </dd>
-              </div>
-            );
-          })}
-        </dl>
         <div className="connection-strip">
           <div>
             <h2 className="text-base font-semibold">
@@ -180,7 +185,7 @@ export function HeroSection() {
                   en={en.hero.connection.commandLabel}
                 />
               </p>
-              <code className="mt-2 block overflow-x-auto rounded-md border border-[var(--border)] bg-[var(--surface-secondary)] px-3 py-2.5 text-sm text-[var(--text-primary)]">
+              <code className="connection-command">
                 {rustConnection.command}
               </code>
               <div className="mt-3 flex flex-col gap-2 sm:flex-row">
@@ -221,6 +226,7 @@ export function HeroSection() {
                   }
                   className={buttonStyles({
                     className: "w-full sm:w-auto",
+                    variant: "secondary",
                     size: "compact",
                   })}
                   href={rustConnection.steamUrl}

@@ -22,6 +22,7 @@ export async function RulesSection() {
       <Container>
         <Reveal>
           <SectionHeading
+            index="02"
             description={
               <LocalizedText
                 ja={japaneseContent.description}

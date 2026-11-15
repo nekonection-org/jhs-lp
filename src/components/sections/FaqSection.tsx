@@ -17,6 +17,7 @@ export async function FaqSection() {
       <Container className="max-w-[60rem]">
         <Reveal>
           <SectionHeading
+            index="04"
             align="center"
             layout="stack"
             description={
