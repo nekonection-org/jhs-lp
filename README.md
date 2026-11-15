@@ -28,6 +28,19 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - Vitest / React Testing Library / Playwright
 - Docker / Docker Compose / GitHub Actions
 
+## デザインと共通UI
+
+ブランドの緑（ダーク `#8fbd78` / ライト `#527d43`）は維持し、色は `src/app/globals.css` のCSS変数で管理します。青紫のグラデーション、背景グリッド、Glow、浮き上がるカード演出は使いません。
+
+- Heroはサーバー名と案内文、横長の既存画像、接続操作の3段構成です。画像に文字を重ねず、F1コマンドとSteam起動は下部の接続欄にまとめています。
+- サーバー情報は紹介文と設定一覧、ルール・募集要項は見出しと本文の行、FAQ・お知らせは罫線で区切った一覧にしています。VIPは状態・料金と特典を分け、情報ごとに読みやすい配置を使います。
+- ボタン・パネルの基本角丸は6pxです。ボタンを浮かせる演出や装飾的な影を避け、フォーカスリングと44px以上のボタン高を確保します。
+- `src/components/ui/Button.tsx` は [shadcn/ui Button](https://ui.shadcn.com/docs/components/button) のバリアント管理パターンを取り入れ、`class-variance-authority` で既存の `primary` / `secondary` / `quiet` APIを管理します。サイト固有の色とネイティブなbutton / aの意味を維持するローカル実装です。shadcn CLIによるテーマ一括置換は行っていません。
+- `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) の軽量版を基に調整しています。既存の `Reveal` から利用し、IntersectionObserverで一度だけ検知してMotionで短い濃度変化を付けます。GSAPやぼかしは導入していません。
+- SSR・JavaScript無効・IntersectionObserver非対応時も本文を表示します。Reduced Motion時は切り替えを即時にし、アンカー移動もアニメーションしません。採用コードの出典とライセンスは `THIRD_PARTY_NOTICES.md` に記載しています。
+
+UIの更新時は `pnpm typecheck`、`pnpm lint`、`pnpm format:check`、`pnpm test`、`pnpm build` に加えて `pnpm test:e2e` を実行します。360 / 375 / 390 / 768 / 1024 / 1280 / 1440pxで横スクロールと操作性を確認してください。DBを利用する統合テストと管理画面E2Eには、後述のDB設定が必要です。
+
 ## 必要な環境
 
 - Node.js 24（CI・Dockerでは`24.18.0`）
@@ -146,7 +159,7 @@ URLやF1コマンド全体ではなく、ホスト名と必要に応じてポー
 NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 ```
 
-設定するとHero右側のカードへ次の操作が表示されます。
+設定するとHero下部の接続欄へ次の操作が表示されます。
 
 - F1コンソール用の`client.connect play.jhs.nekonection.com`をコピー
 - `steam://run/252490//+connect ...`形式のリンクからSteamとRustを起動
@@ -210,9 +223,9 @@ VIP案内はCloudflare Accessで保護された`/admin/vip`から管理します
 
 ### サーバールールの更新
 
-サーバールールはCloudflare Accessで保護された`/admin/rules`から管理します。重要事項の要約カードと、「サーバールール全文を見る」内のルール、例外、違反時の対応を日本語と英語で編集できます。Discordの長文投稿ではなく、Webサイトに掲載する内容を最新版として扱います。
+サーバールールはCloudflare Accessで保護された`/admin/rules`から管理します。重要事項の要約一覧と、「サーバールール全文を見る」内のルール、例外、違反時の対応を日本語と英語で編集できます。Discordの長文投稿ではなく、Webサイトに掲載する内容を最新版として扱います。
 
-- 要約カードは既存の6件を編集でき、重要表示と確認状態も変更できます。
+- 要約一覧は既存の6件を編集でき、重要表示と確認状態も変更できます。
 - ルール章は最大12件まで追加・削除・並べ替えが可能です。章内の説明文と箇条書きも日英セットで編集できます。
 - 日英の章ID、説明文数、箇条書きIDと項目構造が一致しない内容は保存できません。
 - 保存は版番号で競合を検知し、変更前後の内容と操作者を操作ログへ記録します。
@@ -221,7 +234,7 @@ VIP案内はCloudflare Accessで保護された`/admin/vip`から管理します
 
 ### 画像の差し替え
 
-- `public/icon.png`: ヘッダー、Heroカード、Footerで使用する公式アイコン
+- `public/icon.png`: ヘッダー、Footerで使用する公式アイコン
 - `public/main-image.png`: Heroのメイン画像
 - `public/banner.png`: Discordなどのリンク共有で使用するOG/Twitter画像
 

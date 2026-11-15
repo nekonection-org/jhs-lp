@@ -1,35 +1,46 @@
-# Server Information Design QA
+# LPデザイン改善の検証記録
 
-## Scope
+確認日: 2026-11-16（JST）
 
-- Source of truth: user-provided inline reference image (1009 x 374; no local filesystem path was exposed)
-- Implemented route: `/#server`
-- Desktop evidence: `test-results/server-section-desktop.png` at 1009 x 1100, dark theme, Japanese
-- Mobile evidence: `test-results/server-section-mobile.png` at 390 x 844, dark theme, Japanese
+## 対象と方針
 
-## Comparison
+公開LP `/` の既存デザインを、ブランドカラーを維持したまま整理しました。従来のサーバー情報パネルの参照画像よりも、今回の「過剰な装飾と均等なカード配置を減らす」という指示を優先しています。
 
-- Layout: passed. The implementation follows the reference with one bordered settings panel, a compact heading and description, and individually bordered setting rows. It uses two columns on desktop and one column on mobile.
-- Content: passed. Six independent rows show team limit, map size, map/BP wipe, daily restart, weekday raid hours, and weekend raid hours. The removed Outpost item is absent.
-- Server philosophy: passed. A separate welcome card below the settings describes a fair and comfortable environment where working adults, students, beginners, and advanced players respect each player's playstyle.
-- Typography and color: passed with intentional adaptation. The existing JHS font stack and green design tokens replace the reference image's blue/orange styling to preserve the site's established design system.
-- Responsiveness: passed. The 390 px viewport has no horizontal overflow, and the longest team-limit value wraps without clipping.
-- Accessibility: passed. Settings use a semantic description list, headings preserve the document hierarchy, and decorative icons are hidden from assistive technology.
-- Runtime: passed. Both checked viewports reported zero console errors and zero page errors.
+- ブランドの緑はダーク `#8fbd78`、ライト `#527d43` のままです。28パターンすべてでCSS変数の値を確認しました。
+- Heroの光彩、背景グリッド、多重グラデーション、浮いた案内カードを除去しました。サーバー名・説明・横長画像・接続操作を分けています。
+- サーバー紹介は左側の文章、設定は右側の `dl` です。6項目と既存の数値・時刻を保持しています。
+- ルール・募集要項は見出しと本文の行、FAQ・お知らせは罫線の一覧です。VIPは状態・料金と特典を非対称に配置しました。
+- ボタンと残したパネルの基本角丸は6pxです。カードの浮き上がり、回転、装飾的な影を取り除きました。
+- shadcn/uiのCVAパターンと、React Bits FadeContentの調整版を使用しています。出典・ライセンスは `THIRD_PARTY_NOTICES.md` を参照してください。
 
-## Mismatch severity
+## 実画面の確認
 
-- P0: none
-- P1: none
-- P2: none
-- P3: the reference uses a small orange status dot, while the implementation uses the existing green icon tile. This is an intentional design-system adaptation and does not affect hierarchy or usability.
+`pnpm build` で作成した本番ビルドをChromiumで確認しました。日英 × ダーク・ライト × 360 / 375 / 390 / 768 / 1024 / 1280 / 1440pxの28パターンで、横スクロール、ブラウザーの実行時エラー、コンソールエラーがないことを確認しています。
 
-## Iteration history
+390px・1440pxの各言語・テーマで、画面全体とHeroのスクリーンショットを保存しています。ローカル検証用のため、以下の生成物はGit管理外です。
 
-1. Initial implementation matched the reference structure and passed desktop/mobile rendering checks.
-2. User-directed content refinement removed the Outpost row and replaced the welcome copy with the final server philosophy.
-3. The final browser check confirmed six settings, no horizontal overflow, and no console or page errors at both target viewports.
+- `test-results/design-refresh/{dark,light}-{ja,en}-{390,1440}.png`
+- `test-results/design-refresh/{dark,light}-{ja,en}-{390,1440}-hero.png`
+- `test-results/design-refresh/viewport-checks.json`
 
-## Final result
+ライト・英語のモバイルHero、ダーク・日本語のデスクトップHero、ライト・英語の全体表示を画像でも確認しました。文字と画像の重なり、接続欄の切れ、セクション間の不要なカードの入れ子はありません。
 
-passed
+## 検証結果
+
+| 検証                         | 結果                                                |
+| ---------------------------- | --------------------------------------------------- |
+| `pnpm typecheck`             | 成功                                                |
+| `pnpm lint`                  | 成功                                                |
+| `pnpm format:check`          | 成功                                                |
+| `pnpm test`                  | 121件成功、DB統合テスト8件は既定設定でスキップ      |
+| `pnpm build`                 | 成功                                                |
+| 本番ビルドに対するPlaywright | 19件成功、管理画面7件は専用設定を有効にせずスキップ |
+| 両テーマ・日英・全指定画面幅 | 28パターン成功                                      |
+
+Playwrightでは、テーマと言語の永続化、アンカー移動、モバイルメニューのキーボード操作とEsc、FAQ・ルール全文・利用規約の開閉、外部リンク、接続コマンド・Steamリンクを確認しました。JavaScript無効・配信失敗、IntersectionObserver未対応、ストレージ制限、Reduced Motionのケースも通過しています。
+
+表示演出は初期HTMLにopacityやtransformを設定せず、本文を完全に表示します。IntersectionObserverが動作したときだけ短い濃度変化を付けるため、JavaScriptなしでも読めます。Reduced Motion時はこの演出を実行しません。
+
+## 確認の範囲
+
+Lighthouseスコア、スクリーンリーダーの実機操作、管理画面のDB更新・統合テストは今回の検証に含めていません。画像配信待ちで一度タイムアウトした検証は、サーバーを再起動して本番ビルド全体を再実行し、成功を確認しました。
