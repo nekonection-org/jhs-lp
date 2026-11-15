@@ -1,12 +1,13 @@
 # Japan Hideaway Server LP
 
-Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用ランディングページです。複数ページへ遷移せず、サーバー情報、ルール、VIP、FAQ、モデレーター募集、お知らせ、利用規約を1ページ内で案内します。
+Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用ランディングページです。複数ページへ遷移せず、サーバー情報、ルール、VIP、FAQ、モデレーター募集、お知らせ、Discord参加案内、利用規約を1ページ内で案内します。
 
 ## 主な機能
 
 - 日本語・英語の表示切り替えと選択内容の保存
 - ダーク・ライトテーマの切り替え（初期値はダーク）
 - 同一ページ内のアンカーナビゲーションとモバイルメニュー
+- Heroとページ末尾のDiscord参加導線
 - F1接続コマンドのコピーとSteam経由のRust起動
 - Discord、Tebex、モデレーター応募先への外部リンク
 - ネイティブ`details`を使用したFAQ
@@ -32,14 +33,15 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 
 ブランドの緑（ダーク `#8fbd78` / ライト `#527d43`）は維持し、色は `src/app/globals.css` のCSS変数で管理します。青紫のグラデーション、背景グリッド、Glow、浮き上がるカード演出は使いません。
 
-- Heroはサーバー名と案内文、横長の既存画像、接続操作の3段構成です。画像に文字を重ねず、F1コマンドとSteam起動は下部の接続欄にまとめています。
-- サーバー情報は紹介文と設定一覧、ルール・募集要項は見出しと本文の行、FAQ・お知らせは罫線で区切った一覧にしています。VIPは状態・料金と特典を分け、情報ごとに読みやすい配置を使います。
-- ボタン・パネルの基本角丸は6pxです。ボタンを浮かせる演出や装飾的な影を避け、フォーカスリングと44px以上のボタン高を確保します。
+- Heroは参加する価値を伝える日英の見出しと、既存画像を使ったビジュアルの2列構成です。日本語は「暮らしのペースで、Rustを楽しもう。」、英語は「Your time. Your Rust.」。サーバー名は独立して表示し、画像に本文を重ねません。チーム上限・ワイプ・平日のレイド時間は既存の設定データから表示し、F1コマンドとSteam起動は下部にまとめています。
+- セクション見出しはデスクトップでタイトルと説明を左右に分け、モバイルで縦に並べます。サーバー情報は紹介文と設定パネル、ルールは注意事項と要約一覧、VIPは状態・料金のパネルと特典の案内に分けています。FAQは中央寄せの見出しと罫線の一覧にし、セクションごとの情報量に応じた構成を使います。
+- ボタンの基本角丸は6px、画像・設定・VIPのパネルは10px、最終CTAは12pxです。余白・文字サイズ・行間で階層を作り、フォーカスリングと44px以上のボタン高を確保します。
+- お知らせの後に、控えめな緑の背景を持つ最終CTAを置いています。DiscordとルールへのリンクはHeroと同じ設定を使用し、利用規約・Footerへ続きます。新しいページや架空の実績・特典は追加しません。
 - `src/components/ui/Button.tsx` は [shadcn/ui Button](https://ui.shadcn.com/docs/components/button) のバリアント管理パターンを取り入れ、`class-variance-authority` で既存の `primary` / `secondary` / `quiet` APIを管理します。サイト固有の色とネイティブなbutton / aの意味を維持するローカル実装です。shadcn CLIによるテーマ一括置換は行っていません。
 - `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) の軽量版を基に調整しています。既存の `Reveal` から利用し、IntersectionObserverで一度だけ検知してMotionで短い濃度変化を付けます。GSAPやぼかしは導入していません。
 - SSR・JavaScript無効・IntersectionObserver非対応時も本文を表示します。Reduced Motion時は切り替えを即時にし、アンカー移動もアニメーションしません。採用コードの出典とライセンスは `THIRD_PARTY_NOTICES.md` に記載しています。
 
-UIの更新時は `pnpm typecheck`、`pnpm lint`、`pnpm format:check`、`pnpm test`、`pnpm build` に加えて `pnpm test:e2e` を実行します。360 / 375 / 390 / 768 / 1024 / 1280 / 1440pxで横スクロールと操作性を確認してください。DBを利用する統合テストと管理画面E2Eには、後述のDB設定が必要です。
+UIの更新時は `pnpm typecheck`、`pnpm lint`、`pnpm format:check`、`pnpm test`、`pnpm build` に加えて `pnpm test:e2e` を実行します。360 / 375 / 390 / 768 / 1024 / 1280 / 1440 / 1920pxで横スクロールと操作性を確認してください。DBを利用する統合テストと管理画面E2Eには、後述のDB設定が必要です。
 
 ## 必要な環境
 
@@ -170,6 +172,8 @@ NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 
 - `src/content/ja.ts`: 日本語
 - `src/content/en.ts`: 英語
+
+Heroの見出しは`hero.headline`の2行、最後の参加案内は`finalCta`から編集できます。ブランド名は`hero.title`で管理し、サーバー設定の要約は`server.settings`を参照します。
 
 静的な項目を追加・削除する場合は両言語で同じ`id`を使用し、必要に応じて`src/content/types.ts`のID一覧と型も更新してください。日英でIDが一致しない場合、表示時に`Localized content item is missing`エラーになります。お知らせ、FAQ、VIP、モデレーター募集、サーバールールの本文はTypeScriptではなく管理画面から更新します。
 
