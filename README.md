@@ -7,8 +7,9 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - 日本語・英語の表示切り替えと選択内容の保存
 - ダーク・ライトテーマの切り替え（初期値はダーク）
 - 同一ページ内のアンカーナビゲーションとモバイルメニュー
-- Heroとページ末尾のDiscord参加導線
-- F1接続コマンドのコピーとSteam経由のRust起動
+- Hero・ページ末尾・モバイルの追従バーからのDiscord参加導線
+- 曜日・時刻を選んでレイド可否を確認するインタラクティブUI
+- F1接続コマンドのコピー、完了・失敗時のフィードバック、Steam経由のRust起動
 - Discord、Tebex、モデレーター応募先への外部リンク
 - ネイティブ`details`を使用したFAQ
 - ボタンから開く利用規約モーダル
@@ -40,8 +41,18 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - ボタンの基本角丸は6px、画像・設定・VIPのパネルは8pxです。大きな角丸、Glow、装飾的な影を避け、フォーカスリングと44px以上の操作ボタン高を確保します。
 - 最終CTAはブランドの緑を使った全幅のエリアです。ボタンと本文は背景に対してコントラストを確保し、DiscordとルールへのリンクはHeroと共通にしています。
 - `src/components/ui/Button.tsx` は [shadcn/ui Button](https://ui.shadcn.com/docs/components/button) のバリアント管理パターンを取り入れ、`class-variance-authority` で既存の `primary` / `secondary` / `quiet` APIを管理します。サイト固有の色とネイティブなbutton / aの意味を維持するローカル実装です。shadcn CLIによるテーマ一括置換は行っていません。
-- `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) の軽量版を基に調整しています。既存の `Reveal` から利用し、IntersectionObserverで一度だけ検知してMotionで短い濃度変化を付けます。GSAPやぼかしは導入していません。
+- `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) の軽量版を基に調整しています。既存の `Reveal` から利用し、IntersectionObserverで一度だけ検知してMotionで短い濃度変化を付けます。12pxの移動と380msのフェードを組み合わせ、GSAPやぼかしは導入していません。
 - SSR・JavaScript無効・IntersectionObserver非対応時も本文を表示します。Reduced Motion時は切り替えを即時にし、アンカー移動もアニメーションしません。採用コードの出典とライセンスは `THIRD_PARTY_NOTICES.md` に記載しています。
+
+### 操作へのフィードバック
+
+- `RaidTimeChecker`は平日／土・日と0〜23時を選び、選択した時刻のレイド可否を即座に表示します。時刻は日本時間で、現在時刻やサーバー状態の取得は行いません。ネイティブrangeの矢印キー・Home・Endに対応し、結果はアイコン・文言・`aria-live`で伝えます。言語を切り替えても選択値を保持します。
+- モバイルの`MobileJoinBar`はHeroの参加ボタンがヘッダーより上へ移動してから表示し、最終CTA以降とメニュー表示中は隠れます。IntersectionObserverで位置の変化を検知し、セーフエリアと画面下部のスクロール余白を確保しています。
+- ボタンは150〜180msの色・矢印の変化と短い押下反応を使います。曜日の選択表示とモバイルの参加バーも短い時間で切り替えます。
+- FAQはネイティブ`details`の操作を維持し、対応ブラウザーではCSSで高さと濃度を220ms以内に切り替えます。[`interpolate-size`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/interpolate-size)は対応状況が異なるため、`@supports`で拡張し、未対応時は通常の開閉に戻します。
+- コピー成功時はチェックアイコン・完了文言・コマンド枠で応答します。クリップボードへのアクセスが拒否された場合は、再試行するまで手動コピーの案内を残します。
+- モバイルメニューからの移動後は見出しへフォーカスを移し、Escで閉じた場合はメニューボタンへ戻します。Reduced Motion時は移動・拡縮を抑え、操作結果を即時に伝えます。
+- JavaScriptが使えなくても時間帯の表と本文は表示されます。時刻確認の操作はハイドレーション後に有効になり、追従バーは拡張機能として追加されます。
 
 UIの更新時は `pnpm typecheck`、`pnpm lint`、`pnpm format:check`、`pnpm test`、`pnpm build` に加えて `pnpm test:e2e` を実行します。360 / 375 / 390 / 768 / 1024 / 1280 / 1440 / 1920pxで横スクロールと操作性を確認してください。DBを利用する統合テストと管理画面E2Eには、後述のDB設定が必要です。
 
@@ -177,7 +188,7 @@ NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 
 Heroの見出しは`hero.headline`の2行、最後の参加案内は`finalCta`から編集できます。ブランド名は`hero.title`で管理し、サーバー設定の要約は`server.settings`を参照します。
 
-レイド時間の数値は`src/content/server.ts`の`raidWindows`で管理します。日本語・英語の設定一覧と時間帯の図が同じデータを使います。時刻を変更する場合は、管理画面のルール本文やFAQの案内も合わせて更新してください。図の見出し・凡例は日英それぞれの`server.schedule`で編集します。
+レイド時間の数値は`src/content/server.ts`の`raidWindows`で管理します。日本語・英語の設定一覧と時間帯の図が同じデータを使います。時刻を変更する場合は、管理画面のルール本文やFAQの案内も合わせて更新してください。確認ツールの判定もこのデータを使います（開始時刻を含み、終了時刻を含みません）。図の見出し・凡例は日英それぞれの`server.schedule`で編集します。
 
 静的な項目を追加・削除する場合は両言語で同じ`id`を使用し、必要に応じて`src/content/types.ts`のID一覧と型も更新してください。日英でIDが一致しない場合、表示時に`Localized content item is missing`エラーになります。お知らせ、FAQ、VIP、モデレーター募集、サーバールールの本文はTypeScriptではなく管理画面から更新します。
 
