@@ -15,23 +15,30 @@ export function FinalCtaSection() {
         <Reveal>
           <div className="join-panel">
             <div className="max-w-2xl">
-              <p className="section-eyebrow">
+              <p className="section-eyebrow" data-reveal-item>
                 <LocalizedText
                   ja={ja.finalCta.eyebrow}
                   en={en.finalCta.eyebrow}
                 />
               </p>
-              <h2 className="section-title mt-5" id="join-title">
+              <h2
+                className="section-title mt-5"
+                id="join-title"
+                data-reveal-item
+              >
                 <LocalizedText ja={ja.finalCta.title} en={en.finalCta.title} />
               </h2>
-              <p className="join-description">
+              <p className="join-description" data-reveal-item>
                 <LocalizedText
                   ja={ja.finalCta.description}
                   en={en.finalCta.description}
                 />
               </p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-stretch">
+            <div
+              className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-stretch"
+              data-reveal-item
+            >
               <LocalizedExternalAction
                 action={{
                   ja: ja.hero.primaryAction,

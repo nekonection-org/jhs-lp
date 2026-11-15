@@ -62,108 +62,124 @@ export function HeroSection() {
   return (
     <section aria-labelledby="hero-title" className="hero-section" id="top">
       <Container>
-        <div className="hero-masthead">
-          <p className="hero-brand">
-            <span aria-hidden="true" />
-            {ja.hero.title}
-          </p>
-          <a href="#server" className="hero-audience">
-            <LocalizedText
-              ja={ja.server.highlights[0].title}
-              en={en.server.highlights[0].title}
-            />
-            <ArrowUpRight aria-hidden="true" className="size-3.5" />
-          </a>
-        </div>
-        <div className="hero-layout">
-          <Reveal className="hero-copy">
+        <Reveal className="hero-layout">
+          <div className="hero-copy">
+            <div className="hero-masthead" data-reveal-item>
+              <p className="hero-brand">
+                <span aria-hidden="true" />
+                {ja.hero.title}
+              </p>
+            </div>
             <h1 className="hero-headline" id="hero-title">
-              <span className="block">
+              <span className="block" data-reveal-item>
                 <LocalizedText
                   ja={ja.hero.headline[0]}
                   en={en.hero.headline[0]}
                 />
               </span>{" "}
-              <span className="block">
+              <span className="block" data-reveal-item>
                 <LocalizedText
                   ja={ja.hero.headline[1]}
                   en={en.hero.headline[1]}
                 />
               </span>
             </h1>
-          </Reveal>
-          <Reveal className="hero-introduction">
-            <p className="text-base font-semibold leading-8 sm:text-lg">
-              <LocalizedText ja={ja.hero.subtitle} en={en.hero.subtitle} />
-            </p>
-            <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
-              <LocalizedText
-                ja={ja.hero.description}
-                en={en.hero.description}
-              />
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3" id="hero-actions">
-              <LocalizedExternalAction
-                action={{
-                  ja: ja.hero.primaryAction,
-                  en: en.hero.primaryAction,
-                }}
-                common={{ ja: ja.common, en: en.common }}
-                href={externalUrls.discord}
-                className="min-h-12 px-6"
-              />
-              <LocalizedSectionAction
-                action={{
-                  ja: ja.hero.secondaryAction,
-                  en: en.hero.secondaryAction,
-                }}
-                className="min-h-12 px-6"
-              />
+            <div className="hero-introduction">
+              <p className="hero-subtitle" data-reveal-item>
+                <LocalizedText ja={ja.hero.subtitle} en={en.hero.subtitle} />
+              </p>
+              <p className="hero-description" data-reveal-item>
+                <LocalizedText
+                  ja={ja.hero.description}
+                  en={en.hero.description}
+                />
+              </p>
+              <div className="hero-actions" id="hero-actions" data-reveal-item>
+                <LocalizedExternalAction
+                  action={{
+                    ja: ja.hero.primaryAction,
+                    en: en.hero.primaryAction,
+                  }}
+                  common={{ ja: ja.common, en: en.common }}
+                  href={externalUrls.discord}
+                  className="min-h-12 px-4 sm:px-6"
+                />
+                <LocalizedSectionAction
+                  action={{
+                    ja: ja.hero.secondaryAction,
+                    en: en.hero.secondaryAction,
+                  }}
+                  className="min-h-12 px-4 sm:px-6"
+                />
+              </div>
+              <a href="#server" className="hero-audience" data-reveal-item>
+                <LocalizedText
+                  ja={ja.server.highlights[0].title}
+                  en={en.server.highlights[0].title}
+                />
+                <ArrowUpRight aria-hidden="true" className="size-3.5" />
+              </a>
             </div>
-          </Reveal>
-        </div>
-        <div className="hero-preview">
-          <figure className="hero-figure">
-            <div className="hero-image">
-              <Image
-                alt=""
-                className="object-cover object-[72%_52%] sm:object-[center_36%]"
-                fill
-                priority
-                sizes="(min-width: 1280px) 1200px, 100vw"
-                src="/main-image.png"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-[var(--hero-overlay)]"
-              />
-            </div>
-            <figcaption className="hero-image-caption">
-              <span className="text-[0.625rem] font-semibold tracking-[0.03em] whitespace-nowrap sm:text-xs">
-                {ja.hero.title}
-              </span>
-              <span className="text-right text-[0.625rem] font-medium tracking-[0.08em] whitespace-nowrap uppercase">
+          </div>
+          <a
+            className="hero-preview"
+            href="#server"
+            aria-label={locale === "ja" ? ja.server.title : en.server.title}
+            data-reveal-item
+          >
+            <div className="hero-visual-label">
+              <span>
                 <LocalizedText ja={ja.hero.eyebrow} en={en.hero.eyebrow} />
               </span>
-            </figcaption>
-          </figure>
+              <ArrowUpRight
+                aria-hidden="true"
+                className="size-4 text-[var(--accent-strong)]"
+              />
+            </div>
+            <figure className="hero-figure">
+              <div className="hero-image">
+                <Image
+                  alt=""
+                  className="object-cover object-[72%_52%] lg:object-[65%_center]"
+                  fill
+                  priority
+                  sizes="(min-width: 1280px) 480px, (min-width: 1024px) 42vw, (min-width: 640px) 704px, 100vw"
+                  src="/main-image.png"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-[var(--hero-overlay)]"
+                />
+                <span className="hero-image-mark" aria-hidden="true">
+                  JHS<span>.</span>
+                </span>
+              </div>
+              <figcaption className="hero-image-caption">
+                <span>{ja.hero.title}</span>
+                <span aria-hidden="true" className="hero-caption-rule" />
+              </figcaption>
+            </figure>
+          </a>
           <dl className="hero-facts">
-            {featuredSettings.map((id) => {
+            {featuredSettings.map((id, index) => {
               const setting = getMatchingItem(ja.server.settings, id);
               const english = getMatchingItem(en.server.settings, id);
               return (
-                <div key={id}>
-                  <dt className="text-xs font-medium text-[var(--text-muted)]">
+                <div key={id} data-reveal-item>
+                  <dt className="hero-fact-label">
+                    <span aria-hidden="true" className="hero-fact-index">
+                      0{index + 1}
+                    </span>
                     <LocalizedText ja={setting.label} en={english.label} />
                   </dt>
-                  <dd className="mt-2 text-sm font-semibold leading-6 sm:text-base">
+                  <dd className="hero-fact-value">
                     <LocalizedText ja={setting.value} en={english.value} />
                   </dd>
                 </div>
               );
             })}
           </dl>
-        </div>
+        </Reveal>
         <div className="connection-strip">
           <div>
             <h2 className="text-base font-semibold">

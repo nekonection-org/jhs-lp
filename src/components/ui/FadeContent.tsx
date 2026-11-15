@@ -5,6 +5,8 @@
 import { useEffect, type ReactNode } from "react";
 import { useAnimate, useReducedMotion } from "motion/react";
 
+import { motionTiming } from "@/lib/motion";
+
 interface FadeContentProps {
   children: ReactNode;
   className?: string;
@@ -21,22 +23,43 @@ export function FadeContent({
 
   useEffect(() => {
     const element = scope.current;
-    if (!element || reduceMotion || typeof IntersectionObserver === "undefined")
+    if (
+      !element ||
+      reduceMotion ||
+      element.dataset.revealState === "entered" ||
+      typeof IntersectionObserver === "undefined"
+    )
       return;
 
-    let animation: ReturnType<typeof animate> | undefined;
+    const items = [
+      ...element.querySelectorAll<HTMLElement>("[data-reveal-item]"),
+    ];
+    const targets = items.length > 0 ? items : [element];
+    const lines = [
+      ...element.querySelectorAll<HTMLElement>("[data-reveal-line]"),
+    ];
+    const animations: ReturnType<typeof animate>[] = [];
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          animation = animate(
-            element,
-            { opacity: [0.65, 1], y: [12, 0] },
-            {
-              duration: 0.38,
-              ease: [0.22, 1, 0.36, 1],
-              delay: Math.min(delay, 0.15),
-            },
-          );
+          element.dataset.revealState = "entered";
+          targets.forEach((target, index) => {
+            animations.push(
+              animate(
+                target,
+                { opacity: [0.4, 1], y: [16, 0] },
+                {
+                  ...motionTiming.entrance,
+                  delay: Math.min(delay, 0.08) + Math.min(index * 0.045, 0.2),
+                },
+              ),
+            );
+          });
+          lines.forEach((line) => {
+            animations.push(
+              animate(line, { scaleX: [0.25, 1] }, motionTiming.entrance),
+            );
+          });
           observer.disconnect();
         }
       },
@@ -45,10 +68,12 @@ export function FadeContent({
     observer.observe(element);
     return () => {
       observer.disconnect();
-      animation?.stop();
+      animations.forEach((animation) => animation.stop());
       // A preference change must leave content at full opacity immediately.
-      element.style.opacity = "1";
-      element.style.removeProperty("transform");
+      [...targets, ...lines].forEach((target) => {
+        target.style.opacity = "1";
+        target.style.removeProperty("transform");
+      });
     };
   }, [animate, delay, reduceMotion, scope]);
 

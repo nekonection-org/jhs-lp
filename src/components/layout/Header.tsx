@@ -15,6 +15,7 @@ import { getContent, navigationItemIds } from "@/content";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { cn } from "@/lib/cn";
 import { externalUrls } from "@/lib/constants";
+import { motionTiming } from "@/lib/motion";
 
 const focusableSelector = [
   "a[href]",
@@ -159,7 +160,7 @@ export function Header() {
             <a
               aria-current={activeSection === item.id ? "location" : undefined}
               className={cn(
-                "relative rounded-md px-2.5 py-2 text-xs font-medium whitespace-nowrap text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-secondary)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
+                "header-navigation-link relative rounded-md px-2.5 py-2 text-xs font-medium whitespace-nowrap text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
                 activeSection === item.id && "text-[var(--accent-strong)]",
               )}
               href={`#${item.id}`}
@@ -229,8 +230,19 @@ export function Header() {
                 id="mobile-navigation"
               >
                 <ul className="grid gap-1">
-                  {content.navigation.items.map((item) => (
-                    <li key={item.id}>
+                  {content.navigation.items.map((item, index) => (
+                    <motion.li
+                      key={item.id}
+                      initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        ...motionTiming.interaction,
+                        duration: reduceMotion
+                          ? 0
+                          : motionTiming.interaction.duration,
+                        delay: reduceMotion ? 0 : Math.min(index * 0.025, 0.1),
+                      }}
+                    >
                       <a
                         aria-current={
                           activeSection === item.id ? "location" : undefined
@@ -251,7 +263,7 @@ export function Header() {
                           #{item.id}
                         </span>
                       </a>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </nav>

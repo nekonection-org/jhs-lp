@@ -1,11 +1,13 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import { useTheme } from "next-themes";
 
 import type { ThemeContent } from "@/content/types";
 import { Button } from "@/components/ui/Button";
 import { useMounted } from "@/hooks/useMounted";
+import { motionTiming } from "@/lib/motion";
 
 interface ThemeToggleProps {
   content: ThemeContent;
@@ -14,6 +16,7 @@ interface ThemeToggleProps {
 
 export function ThemeToggle({ content, showLabel = false }: ThemeToggleProps) {
   const mounted = useMounted();
+  const reduceMotion = useReducedMotion();
   const { theme, setTheme } = useTheme();
   const isDark = theme !== "light";
   const nextLabel = isDark ? content.switchToLight : content.switchToDark;
@@ -42,11 +45,25 @@ export function ThemeToggle({ content, showLabel = false }: ThemeToggleProps) {
       title={nextLabel}
       variant="quiet"
     >
-      {isDark ? (
-        <Moon aria-hidden="true" className="size-4" />
-      ) : (
-        <Sun aria-hidden="true" className="size-4" />
-      )}
+      <motion.span
+        aria-hidden="true"
+        className="inline-flex"
+        key={isDark ? "dark" : "light"}
+        initial={
+          reduceMotion ? false : { opacity: 0, rotate: -20, scale: 0.85 }
+        }
+        animate={{ opacity: 1, rotate: 0, scale: 1 }}
+        transition={{
+          ...motionTiming.interaction,
+          duration: reduceMotion ? 0 : motionTiming.interaction.duration,
+        }}
+      >
+        {isDark ? (
+          <Moon aria-hidden="true" className="size-4" />
+        ) : (
+          <Sun aria-hidden="true" className="size-4" />
+        )}
+      </motion.span>
       {showLabel ? <span>{isDark ? content.dark : content.light}</span> : null}
     </Button>
   );

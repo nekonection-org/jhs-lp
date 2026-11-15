@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Noto_Sans_JP } from "next/font/google";
 import type { ReactNode } from "react";
 
 import "./globals.css";
@@ -17,6 +18,14 @@ const geist = localFont({
   variable: "--font-geist",
   display: "swap",
   weight: "100 900",
+});
+
+const notoSansJP = Noto_Sans_JP({
+  variable: "--font-noto-sans-jp",
+  display: "swap",
+  weight: "variable",
+  subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -74,7 +83,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className={geist.variable}>
+      <body className={`${geist.variable} ${notoSansJP.variable}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

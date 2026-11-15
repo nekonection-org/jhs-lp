@@ -30,16 +30,27 @@ export function SectionHeading({
         className,
       )}
     >
-      <p className="section-eyebrow">
+      <p className="section-eyebrow" data-reveal-item>
         {index ? (
           <span aria-hidden="true" className="section-index">
             {index}
           </span>
         ) : null}
         {eyebrow}
+        {align !== "center" ? (
+          <span
+            className="section-heading-line"
+            aria-hidden="true"
+            data-reveal-line
+          />
+        ) : null}
       </p>
-      <h2 className="section-title">{title}</h2>
-      <p className="section-description">{description}</p>
+      <h2 className="section-title" data-reveal-item>
+        {title}
+      </h2>
+      <p className="section-description" data-reveal-item>
+        {description}
+      </p>
     </header>
   );
 }
