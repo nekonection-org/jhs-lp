@@ -33,10 +33,12 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 
 ブランドの緑（ダーク `#8fbd78` / ライト `#527d43`）は維持し、色は `src/app/globals.css` のCSS変数で管理します。青紫のグラデーション、背景グリッド、Glow、浮き上がるカード演出は使いません。
 
-- Heroは参加する価値を伝える日英の見出しと、既存画像を使ったビジュアルの2列構成です。日本語は「暮らしのペースで、Rustを楽しもう。」、英語は「Your time. Your Rust.」。サーバー名は独立して表示し、画像に本文を重ねません。チーム上限・ワイプ・平日のレイド時間は既存の設定データから表示し、F1コマンドとSteam起動は下部にまとめています。
-- セクション見出しはデスクトップでタイトルと説明を左右に分け、モバイルで縦に並べます。サーバー情報は紹介文と設定パネル、ルールは注意事項と要約一覧、VIPは状態・料金のパネルと特典の案内に分けています。FAQは中央寄せの見出しと罫線の一覧にし、セクションごとの情報量に応じた構成を使います。
-- ボタンの基本角丸は6px、画像・設定・VIPのパネルは10px、最終CTAは12pxです。余白・文字サイズ・行間で階層を作り、フォーカスリングと44px以上のボタン高を確保します。
-- お知らせの後に、控えめな緑の背景を持つ最終CTAを置いています。DiscordとルールへのリンクはHeroと同じ設定を使用し、利用規約・Footerへ続きます。新しいページや架空の実績・特典は追加しません。
+- SaaS・プロダクトサイトを意識し、Heroは中央に見出し・説明・CTAを集約しています。日本語は「暮らしのペースで、Rustを楽しもう。」、英語は「Your time. Your Rust.」。色の強調を抑え、文字の太さと余白で優先順位を示します。
+- 横長の既存画像と設定サマリーを1つのフレームにまとめています。画像上には小さなサーバー名とカテゴリだけを置き、説明文・操作ボタンは画像の外で読める構成です。チーム上限・ワイプ・平日のレイド時間は `server.settings` から表示します。
+- セクションは01〜06の番号と見出しで整理しています。紹介文と設定、注意事項とルール一覧、VIPの状態と特典を分け、FAQは中央寄せの見出しと罫線の一覧にしています。
+- サーバー情報には平日・週末のレイド可能時間を比較する `RaidSchedule` を配置しています。時刻・凡例・表の見出しで内容を伝え、色だけに依存しません。サーバーの稼働状況やオンライン人数を取得・表示する機能ではありません。
+- ボタンの基本角丸は6px、画像・設定・VIPのパネルは8pxです。大きな角丸、Glow、装飾的な影を避け、フォーカスリングと44px以上の操作ボタン高を確保します。
+- 最終CTAはブランドの緑を使った全幅のエリアです。ボタンと本文は背景に対してコントラストを確保し、DiscordとルールへのリンクはHeroと共通にしています。
 - `src/components/ui/Button.tsx` は [shadcn/ui Button](https://ui.shadcn.com/docs/components/button) のバリアント管理パターンを取り入れ、`class-variance-authority` で既存の `primary` / `secondary` / `quiet` APIを管理します。サイト固有の色とネイティブなbutton / aの意味を維持するローカル実装です。shadcn CLIによるテーマ一括置換は行っていません。
 - `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) の軽量版を基に調整しています。既存の `Reveal` から利用し、IntersectionObserverで一度だけ検知してMotionで短い濃度変化を付けます。GSAPやぼかしは導入していません。
 - SSR・JavaScript無効・IntersectionObserver非対応時も本文を表示します。Reduced Motion時は切り替えを即時にし、アンカー移動もアニメーションしません。採用コードの出典とライセンスは `THIRD_PARTY_NOTICES.md` に記載しています。
@@ -174,6 +176,8 @@ NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 - `src/content/en.ts`: 英語
 
 Heroの見出しは`hero.headline`の2行、最後の参加案内は`finalCta`から編集できます。ブランド名は`hero.title`で管理し、サーバー設定の要約は`server.settings`を参照します。
+
+レイド時間の数値は`src/content/server.ts`の`raidWindows`で管理します。日本語・英語の設定一覧と時間帯の図が同じデータを使います。時刻を変更する場合は、管理画面のルール本文やFAQの案内も合わせて更新してください。図の見出し・凡例は日英それぞれの`server.schedule`で編集します。
 
 静的な項目を追加・削除する場合は両言語で同じ`id`を使用し、必要に応じて`src/content/types.ts`のID一覧と型も更新してください。日英でIDが一致しない場合、表示時に`Localized content item is missing`エラーになります。お知らせ、FAQ、VIP、モデレーター募集、サーバールールの本文はTypeScriptではなく管理画面から更新します。
 
