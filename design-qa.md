@@ -1,18 +1,22 @@
-# ミニマルで先鋭的なLPへの刷新
+# レイド時間のタイムゾーン対応と背景画像の削除
 
 確認日: 2026-11-16（JST）
 
 ## 変更内容
 
-大きなブランド表記と非対称な構図を軸に、本文も含めたレイアウトを再構成しました。
+大きなブランド表記と緑のブランドカラーを維持し、Hero下のレイド時間案内を更新しました。
 
 - HeroのH1は「JAPAN / HIDEAWAY」です。1行目を左、2行目を右へ寄せ、緑のピリオドでブランド色を添えています。日本語・英語の紹介文はその下に表示します。
 - 画面幅に応じた文字サイズを使用し、モバイルも同じ構図を維持します。紹介文・説明・CTAはモバイルでは縦に並べます。
-- 既存の風景を横長の帯として配置し、サーバー情報へのリンクと平日・土日のレイド時間を表示します。時間帯は `raidWindows` が参照元です。画像を取得できなくても暗い背景上に案内を残します。
-- 本文の固定見出し・左右の細いコラム構成を整理しました。設定は表、ルールは縦の番号付き一覧、VIPは詳細と特典、募集案内は活動内容を大きく扱う非対称な構成です。
+- レイド時間の背景画像・暗幕・画像のズームアニメーションを削除しました。細い罫線で現在の可否・次の開始または終了・カウントダウンとタイムゾーン操作を整理します。
+- 可否は端末の現在時刻と`raidWindows`から毎秒再計算し、タブ・ページへの復帰時も同期します。Rustサーバーへの状態問い合わせは行いません。
+- 曜日のルールは日本時間基準のまま、選択したタイムゾーンへ日時を変換します。7日間の時間表は開始・終了それぞれの日付を表示し、海外の日付またぎ・夏時間にも対応します。
+- タイムゾーン選択を保存し、言語を切り替えても維持します。ストレージ利用不可・不正な保存値でも表示できます。端末で検出した地域は主要地域のリストに追加します。
+- 日本時間の基準表は初期HTMLに残し、JavaScript無効でも読めます。ライブ表示の操作はハイドレーション後に有効になります。
+- 本文は設定表、ルールの番号付き一覧、VIPの詳細と特典、活動内容を大きく扱う非対称な募集案内という既存の構成を維持しています。
 - FAQは中央の導入に続けて質問を並べ、最終CTAも中央に配置します。ネイティブFAQ、ルール全文、規約、DBで管理する内容と公開状態の扱いを維持しています。
 - ダークの緑 `#8fbd78` とライトの緑 `#527d43` を維持しています。Glow・背景グリッド・3D・追従カーソル・背景の常時アニメーションは追加していません。
-- 16px・420msの段階表示と、画像の初回700ms表示を使用します。Reduced Motion、JavaScript無効・配信失敗、IntersectionObserver非対応でも本文を表示します。依存関係・画像素材・未確認のサーバー情報の追加はありません。
+- 16px・420msの段階表示を使用します。Reduced Motion、JavaScript無効・配信失敗、IntersectionObserver非対応でも本文を表示します。依存関係・画像素材・未確認のサーバー情報の追加はありません。
 
 ## 実画面の確認
 
@@ -20,17 +24,16 @@
 
 390px・1440pxではHero・全体・サーバー情報・最終CTAを保存し、日本語ではルール・VIP・FAQ・募集案内・お知らせ・Footerも保存しています。日本語の紹介文へのNoto Sans JPの適用をChromiumのフォント情報でも確認しています。ブランド表記の英字にはGeistを使います。
 
-静止画は有限のアニメーションを完了させて撮影し、動画には実際のモーションを残しています。開発画面（localhost:3000）でも390pxのタッチ操作によるアンカー移動・参加バー・メニュー・Esc操作を確認しています。
+静止画は有限のアニメーションを完了させて撮影しています。展開した7日間の時間表はAustralia/Sydneyを選び、終了が翌日に変わる状態も保存しています。開発画面（localhost:3000）の390px表示でも、UTCへの切替・現在の可否・7日間の展開・タッチでのメニュー操作・Escでの閉じる操作を確認しました。
 
 生成物はローカル検証用で、Git管理外です。
 
-- `test-results/future-minimal/{dark,light}-{ja,en}-{390,1440}.png`
-- `test-results/future-minimal/{dark,light}-{ja,en}-{390,1440}-{hero,server,cta}.png`
-- `test-results/future-minimal/{dark,light}-ja-{390,1440}-{rules,vip,faq,moderator,news,footer}.png`
-- `test-results/future-minimal/desktop-motion.webm`
-- `test-results/future-minimal/mobile-motion.webm`
-- `test-results/future-minimal/viewport-checks.json`
-- `test-results/future-minimal/font-checks.json`
+- `test-results/raid-timezones/{dark,light}-{ja,en}-{390,1440}.png`
+- `test-results/raid-timezones/{dark,light}-{ja,en}-{390,1440}-{hero,server,cta}.png`
+- `test-results/raid-timezones/{dark,light}-ja-{390,1440}-{rules,vip,faq,moderator,news,footer}.png`
+- `test-results/raid-timezones/{dark,light}-{ja,en}-{390,1440}-raid-clock.png`
+- `test-results/raid-timezones/viewport-checks.json`
+- `test-results/raid-timezones/font-checks.json`
 
 ## 検証結果
 
@@ -39,12 +42,14 @@
 | `pnpm typecheck`              | 成功                                                |
 | `pnpm lint`                   | 成功                                                |
 | `pnpm format:check`           | 成功                                                |
-| `pnpm test`                   | 127件成功、DB統合テスト8件は既定設定でスキップ      |
+| `pnpm test`                   | 134件成功、DB統合テスト8件は既定設定でスキップ      |
 | `pnpm build`                  | 成功                                                |
-| 本番ビルドに対するPlaywright  | 34件成功、管理画面7件は専用設定を有効にせずスキップ |
+| 本番ビルドに対するPlaywright  | 40件成功、管理画面7件は専用設定を有効にせずスキップ |
 | 両テーマ・日英・8種類の画面幅 | 32パターン成功                                      |
 
-レイアウトのE2Eは360×640 / 360×900 / 768×900 / 1024×900 / 1440×900pxで、ブランド表記とCTAの収まり、紹介・風景の順序、アンカーの操作を検証しています。FAQの縦配置、画像取得失敗時の案内、Reduced Motionへの変更と再表示も確認しています。
+レイアウトのE2Eは360×640 / 360×900 / 768×900 / 1024×900 / 1440×900pxで、ブランド表記とCTAの収まり、紹介・レイド時間の順序、アンカーの操作を検証しています。FAQの縦配置、背景画像の削除、基準時間のセル内の収まり、Reduced Motionへの変更と再表示も確認しています。
+
+18時の開始・0時の終了・週末への切替、日付またぎ、米国の夏時間切替、ネパールの45分オフセット、タイムゾーン保存、不正な保存値、タブ復帰時の時刻同期を検証しています。
 
 テーマ・言語の保存、メニューのフォーカス管理、FAQ・規約、レイド時間の確認、コピーと失敗時の案内、モバイル参加バー、ストレージ制限、JavaScript無効・配信失敗・IntersectionObserver非対応も通過しています。
 
