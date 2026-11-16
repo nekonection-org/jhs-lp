@@ -31,6 +31,7 @@ test("接続コマンドを実際にコピーし、完了表示を返す", async
   page,
 }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.locator(".connection-guide > summary").click();
   await page
     .getByRole("button", { name: ja.hero.connection.copyLabel, exact: true })
     .click();
@@ -60,6 +61,7 @@ test("コピーが拒否された場合は手動コピーの案内を読み続�
       },
     });
   });
+  await page.locator(".connection-guide > summary").click();
   await page
     .getByRole("button", { name: ja.hero.connection.copyLabel, exact: true })
     .click();
@@ -83,7 +85,11 @@ test.describe("モバイルの参加導線", () => {
   }) => {
     const bar = page.locator(".mobile-join-bar");
     await expect(bar).toHaveCount(0);
-    await page.locator("#server h2").scrollIntoViewIfNeeded();
+    await page
+      .locator("#server h2")
+      .evaluate((heading) =>
+        heading.scrollIntoView({ block: "start", behavior: "instant" }),
+      );
     await expect(bar).toBeVisible();
     await expect(bar.getByRole("link")).toHaveAttribute(
       "href",
@@ -102,7 +108,11 @@ test.describe("モバイルの参加導線", () => {
     await expect(bar).toHaveCount(0);
     await page.getByRole("contentinfo").scrollIntoViewIfNeeded();
     await expect(bar).toHaveCount(0);
-    await page.locator("#server h2").scrollIntoViewIfNeeded();
+    await page
+      .locator("#server h2")
+      .evaluate((heading) =>
+        heading.scrollIntoView({ block: "start", behavior: "instant" }),
+      );
     await expect(bar).toBeVisible();
     expect(
       await page.evaluate(

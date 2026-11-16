@@ -162,7 +162,7 @@ export function Header() {
             <a
               aria-current={activeSection === item.id ? "location" : undefined}
               className={cn(
-                "header-navigation-link relative rounded-md px-2.5 py-2 text-xs font-medium whitespace-nowrap text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
+                "header-navigation-link relative rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
                 activeSection === item.id && "text-[var(--accent-strong)]",
               )}
               href={`#${item.id}`}

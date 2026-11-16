@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { ContentIcon } from "@/components/ui/ContentIcon";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionDisclosure } from "@/components/ui/SectionDisclosure";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { en, ja } from "@/content";
@@ -50,166 +51,171 @@ export async function VipSection() {
           />
         </Reveal>
 
-        <div className="vip-content">
-          <Reveal>
-            <div className="vip-plan">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <StatusBadge
-                  en={en.common.statusLabels[englishContent.status]}
-                  ja={ja.common.statusLabels[japaneseContent.status]}
-                  status={japaneseContent.status}
-                />
-              </div>
-              <h3 className="mt-4 text-2xl font-bold tracking-[-0.035em]">
-                <LocalizedText
-                  ja={japaneseContent.statusTitle}
-                  en={englishContent.statusTitle}
-                />
-              </h3>
-              <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
-                <LocalizedText
-                  ja={japaneseContent.statusDescription}
-                  en={englishContent.statusDescription}
-                />
-              </p>
-
-              <dl className="mt-6 divide-y divide-[var(--border)] border-y border-[var(--border)]">
-                {japaneseContent.details.map((detail) => {
-                  const englishDetail = getMatchingItem(
-                    englishContent.details,
-                    detail.id,
-                  );
-
-                  return (
-                    <div
-                      className="grid gap-2 py-4 sm:grid-cols-2"
-                      key={detail.id}
-                    >
-                      <dt className="text-xs font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">
-                        <LocalizedText
-                          ja={detail.label}
-                          en={englishDetail.label}
-                        />
-                      </dt>
-                      <dd className="font-semibold text-[var(--text-primary)]">
-                        <LocalizedText
-                          ja={detail.value}
-                          en={englishDetail.value}
-                        />
-                      </dd>
-                    </div>
-                  );
-                })}
-              </dl>
-
-              <div className="mt-auto pt-7">
-                {japanesePurchaseAction && englishPurchaseAction ? (
-                  <LocalizedExternalAction
-                    action={{
-                      ja: japanesePurchaseAction,
-                      en: englishPurchaseAction,
-                    }}
-                    common={{ ja: ja.common, en: en.common }}
-                    href={externalUrls.tebex}
+        <SectionDisclosure
+          className="vip-details"
+          label={{ ja: ja.detailLabels.vip, en: en.detailLabels.vip }}
+        >
+          <div className="vip-content">
+            <Reveal>
+              <div className="vip-plan">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <StatusBadge
+                    en={en.common.statusLabels[englishContent.status]}
+                    ja={ja.common.statusLabels[japaneseContent.status]}
+                    status={japaneseContent.status}
                   />
-                ) : (
-                  <div className="flex items-start gap-3 text-sm leading-6 text-[var(--text-secondary)]">
-                    <LockKeyhole
-                      aria-hidden="true"
-                      className="mt-0.5 size-4 shrink-0"
+                </div>
+                <h3 className="mt-4 text-2xl font-bold tracking-[-0.035em]">
+                  <LocalizedText
+                    ja={japaneseContent.statusTitle}
+                    en={englishContent.statusTitle}
+                  />
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
+                  <LocalizedText
+                    ja={japaneseContent.statusDescription}
+                    en={englishContent.statusDescription}
+                  />
+                </p>
+
+                <dl className="mt-6 divide-y divide-[var(--border)] border-y border-[var(--border)]">
+                  {japaneseContent.details.map((detail) => {
+                    const englishDetail = getMatchingItem(
+                      englishContent.details,
+                      detail.id,
+                    );
+
+                    return (
+                      <div
+                        className="grid gap-2 py-4 sm:grid-cols-2"
+                        key={detail.id}
+                      >
+                        <dt className="text-xs font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">
+                          <LocalizedText
+                            ja={detail.label}
+                            en={englishDetail.label}
+                          />
+                        </dt>
+                        <dd className="font-semibold text-[var(--text-primary)]">
+                          <LocalizedText
+                            ja={detail.value}
+                            en={englishDetail.value}
+                          />
+                        </dd>
+                      </div>
+                    );
+                  })}
+                </dl>
+
+                <div className="mt-auto pt-7">
+                  {japanesePurchaseAction && englishPurchaseAction ? (
+                    <LocalizedExternalAction
+                      action={{
+                        ja: japanesePurchaseAction,
+                        en: englishPurchaseAction,
+                      }}
+                      common={{ ja: ja.common, en: en.common }}
+                      href={externalUrls.tebex}
                     />
-                    <p>
+                  ) : (
+                    <div className="flex items-start gap-3 text-sm leading-6 text-[var(--text-secondary)]">
+                      <LockKeyhole
+                        aria-hidden="true"
+                        className="mt-0.5 size-4 shrink-0"
+                      />
+                      <p>
+                        <LocalizedText
+                          ja={japaneseContent.purchaseUnavailableMessage}
+                          en={englishContent.purchaseUnavailableMessage}
+                        />
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.06}>
+              <div className="vip-benefits">
+                <div className="flex items-center gap-3">
+                  <BadgeCheck
+                    aria-hidden="true"
+                    className="size-5 text-[var(--accent-strong)]"
+                  />
+                  <h3 className="text-xl font-bold tracking-[-0.025em]">
+                    <LocalizedText
+                      ja={japaneseContent.benefitsTitle}
+                      en={englishContent.benefitsTitle}
+                    />
+                  </h3>
+                </div>
+
+                {japaneseBenefits.length > 0 ? (
+                  <div className="mt-6 divide-y divide-[var(--border)]">
+                    {japaneseBenefits.map((benefit) => {
+                      const englishBenefit = getMatchingItem(
+                        englishBenefits,
+                        benefit.id,
+                      );
+
+                      return (
+                        <div className="py-5" key={benefit.id}>
+                          <div className="flex items-start gap-3">
+                            {benefit.icon ? (
+                              <ContentIcon
+                                className="mt-0.5 size-5 shrink-0 text-[var(--accent-strong)]"
+                                name={benefit.icon}
+                              />
+                            ) : null}
+                            <div>
+                              <h4 className="font-bold">
+                                <LocalizedText
+                                  ja={benefit.title}
+                                  en={englishBenefit.title}
+                                />
+                              </h4>
+                              <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">
+                                <LocalizedText
+                                  ja={benefit.description}
+                                  en={englishBenefit.description}
+                                />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="mt-6 flex flex-col items-start py-4">
+                    <span className="text-[var(--text-muted)]">
+                      <LockKeyhole aria-hidden="true" className="size-5" />
+                    </span>
+                    <h4 className="mt-5 text-lg font-bold">
                       <LocalizedText
-                        ja={japaneseContent.purchaseUnavailableMessage}
-                        en={englishContent.purchaseUnavailableMessage}
+                        ja={japaneseContent.emptyBenefitsTitle}
+                        en={englishContent.emptyBenefitsTitle}
+                      />
+                    </h4>
+                    <p className="mt-2 max-w-lg text-sm leading-6 text-[var(--text-secondary)]">
+                      <LocalizedText
+                        ja={japaneseContent.emptyBenefitsDescription}
+                        en={englishContent.emptyBenefitsDescription}
                       />
                     </p>
                   </div>
                 )}
-              </div>
-            </div>
-          </Reveal>
 
-          <Reveal delay={0.06}>
-            <div className="vip-benefits">
-              <div className="flex items-center gap-3">
-                <BadgeCheck
-                  aria-hidden="true"
-                  className="size-5 text-[var(--accent-strong)]"
-                />
-                <h3 className="text-xl font-bold tracking-[-0.025em]">
+                <p className="mt-6 border-t border-[var(--border)] pt-5 text-xs leading-5 text-[var(--text-muted)]">
                   <LocalizedText
-                    ja={japaneseContent.benefitsTitle}
-                    en={englishContent.benefitsTitle}
+                    ja={japaneseContent.notice}
+                    en={englishContent.notice}
                   />
-                </h3>
+                </p>
               </div>
-
-              {japaneseBenefits.length > 0 ? (
-                <div className="mt-6 divide-y divide-[var(--border)]">
-                  {japaneseBenefits.map((benefit) => {
-                    const englishBenefit = getMatchingItem(
-                      englishBenefits,
-                      benefit.id,
-                    );
-
-                    return (
-                      <div className="py-5" key={benefit.id}>
-                        <div className="flex items-start gap-3">
-                          {benefit.icon ? (
-                            <ContentIcon
-                              className="mt-0.5 size-5 shrink-0 text-[var(--accent-strong)]"
-                              name={benefit.icon}
-                            />
-                          ) : null}
-                          <div>
-                            <h4 className="font-bold">
-                              <LocalizedText
-                                ja={benefit.title}
-                                en={englishBenefit.title}
-                              />
-                            </h4>
-                            <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">
-                              <LocalizedText
-                                ja={benefit.description}
-                                en={englishBenefit.description}
-                              />
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="mt-6 flex flex-col items-start py-4">
-                  <span className="text-[var(--text-muted)]">
-                    <LockKeyhole aria-hidden="true" className="size-5" />
-                  </span>
-                  <h4 className="mt-5 text-lg font-bold">
-                    <LocalizedText
-                      ja={japaneseContent.emptyBenefitsTitle}
-                      en={englishContent.emptyBenefitsTitle}
-                    />
-                  </h4>
-                  <p className="mt-2 max-w-lg text-sm leading-6 text-[var(--text-secondary)]">
-                    <LocalizedText
-                      ja={japaneseContent.emptyBenefitsDescription}
-                      en={englishContent.emptyBenefitsDescription}
-                    />
-                  </p>
-                </div>
-              )}
-
-              <p className="mt-6 border-t border-[var(--border)] pt-5 text-xs leading-5 text-[var(--text-muted)]">
-                <LocalizedText
-                  ja={japaneseContent.notice}
-                  en={englishContent.notice}
-                />
-              </p>
-            </div>
-          </Reveal>
-        </div>
+            </Reveal>
+          </div>
+        </SectionDisclosure>
       </Container>
     </section>
   );

@@ -93,23 +93,6 @@ export function ServerSchedule() {
   );
   const state = now === null ? null : getRaidState(now);
   const nextWipe = now === null ? null : getNextWipe(now);
-  const wipeDateParts =
-    nextWipe === null
-      ? null
-      : Object.fromEntries(
-          new Intl.DateTimeFormat(locale === "ja" ? "ja-JP" : "en-GB", {
-            timeZone,
-            year: "numeric",
-            month: "short",
-            day: "2-digit",
-            weekday: "long",
-            hour: "2-digit",
-            minute: "2-digit",
-            hourCycle: "h23",
-          })
-            .formatToParts(nextWipe)
-            .map(({ type, value }) => [type, value]),
-        );
   const wipeCountdown =
     now !== null && nextWipe !== null ? getWipeCountdown(nextWipe - now) : null;
   const wipeReference = getMatchingItem(
@@ -136,25 +119,7 @@ export function ServerSchedule() {
               nextWipe === null ? undefined : new Date(nextWipe).toISOString()
             }
           >
-            <span className="wipe-date-day" aria-hidden="true">
-              {wipeDateParts?.day ?? "—"}
-            </span>
-            <span className="wipe-date-detail" aria-hidden="true">
-              <span>
-                {wipeDateParts
-                  ? `${wipeDateParts.year} / ${wipeDateParts.month}`
-                  : "—"}
-              </span>
-              <span>{wipeDateParts?.weekday ?? "—"}</span>
-              <strong>
-                {wipeDateParts
-                  ? `${wipeDateParts.hour}:${wipeDateParts.minute}`
-                  : "—"}
-              </strong>
-            </span>
-            <span className="sr-only">
-              {nextWipe === null ? "—" : dateTime(nextWipe)}
-            </span>
+            {nextWipe === null ? "—" : dateTime(nextWipe)}
           </motion.time>
           <p className="wipe-time-zone">{timeZone}</p>
           <p className="wipe-countdown">
@@ -172,47 +137,34 @@ export function ServerSchedule() {
           <p className="wipe-reference">{wipeReference}</p>
         </div>
         <div className="server-planner-tools" data-reveal-item>
-          <div className="server-planner-toolbar">
-            <label htmlFor="raid-time-zone">{copy.timeZone}</label>
-            <select
-              id="raid-time-zone"
-              value={timeZone}
-              onChange={(event) => store.setTimeZone(event.target.value)}
-              disabled={now === null}
-            >
-              {zones.map((zone) => (
-                <option key={zone} value={zone}>
-                  {zone === deviceZone ? `${zone} · ${copy.deviceZone}` : zone}
-                </option>
-              ))}
-            </select>
-            <p className="raid-current-time">
-              <span>{copy.now}</span>
-              <time
-                dateTime={
-                  now === null ? undefined : new Date(now).toISOString()
-                }
-              >
-                {now === null
-                  ? "—"
-                  : new Intl.DateTimeFormat(
-                      locale === "ja" ? "ja-JP" : "en-GB",
-                      {
-                        timeZone,
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                        hourCycle: "h23",
-                        timeZoneName: "shortOffset",
-                      },
-                    ).format(now)}
-              </time>
-            </p>
-          </div>
           <div className="server-planner-checker">
-            <RaidTimeChecker timeZone={timeZone} now={now} />
+            <RaidTimeChecker
+              timeZone={timeZone}
+              now={now}
+              timeZoneControl={
+                <>
+                  <div className="server-planner-toolbar">
+                    <label htmlFor="raid-time-zone">{copy.timeZone}</label>
+                    <select
+                      id="raid-time-zone"
+                      value={timeZone}
+                      onChange={(event) =>
+                        store.setTimeZone(event.target.value)
+                      }
+                      disabled={now === null}
+                    >
+                      {zones.map((zone) => (
+                        <option key={zone} value={zone}>
+                          {zone === deviceZone
+                            ? `${zone} · ${copy.deviceZone}`
+                            : zone}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              }
+            />
           </div>
         </div>
       </div>
@@ -250,8 +202,8 @@ export function ServerSchedule() {
         ) : (
           <p className="server-schedule-note">{copy.loading}</p>
         )}
+        <p className="server-schedule-note">{copy.note}</p>
       </details>
-      <p className="server-schedule-note">{copy.note}</p>
     </div>
   );
 }

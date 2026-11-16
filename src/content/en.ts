@@ -61,16 +61,21 @@ export const en = {
       destination: "discord",
     },
   },
+  detailLabels: {
+    connection: "Connection options",
+    server: "Server settings & Japan-time hours",
+    rules: "More important rules",
+    vip: "Explore VIP",
+    moderator: "Responsibilities & requirements",
+  },
   hero: {
-    indexLabel: "Before you join",
-    wordmark: ["Japan", "Hideaway"],
     headline: ["Your time.", "Your Rust."],
     id: "top",
     eyebrow: "Rust Community Server",
     title: "Japan Hideaway Server",
     subtitle: "A Rust server with raid restrictions",
     description:
-      "A community server with settings close to official servers and designated no-raid hours, where working adults and students can play with peace of mind.",
+      "A Rust community for working adults and students. Scheduled raid hours make room for life beyond the game.",
     primaryAction: {
       id: "hero-discord",
       label: "Join Discord",

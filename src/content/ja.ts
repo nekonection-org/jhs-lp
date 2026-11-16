@@ -61,16 +61,21 @@ export const ja = {
       destination: "discord",
     },
   },
+  detailLabels: {
+    connection: "接続方法を見る",
+    server: "サーバー設定・日本時間の時間表",
+    rules: "その他の重要ルール",
+    vip: "VIPの詳細を見る",
+    moderator: "活動内容・応募条件を見る",
+  },
   hero: {
-    indexLabel: "参加前のガイド",
-    wordmark: ["Japan", "Hideaway"],
     headline: ["暮らしのペースで、", "Rustを楽しもう。"],
     id: "top",
     eyebrow: "Rust Community Server",
     title: "Japan Hideaway Server",
     subtitle: "レイド制限がついたRustサーバー",
     description:
-      "社会人や学生が安心して遊べる、レイド禁止時間を設定した公式サーバーの仕様に近いコミュニティサーバーです。",
+      "社会人・学生向けのRustコミュニティサーバー。レイド可能時間を設け、限られた時間でも遊びやすく。",
     primaryAction: {
       id: "hero-discord",
       label: "Discordに参加",

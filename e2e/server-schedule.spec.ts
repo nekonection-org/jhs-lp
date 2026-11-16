@@ -111,6 +111,8 @@ test("JavaScriptなしでも基準の時間表とワイプ周期を読める", a
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto("/");
+  await page.locator(".server-reference > summary").click();
+  await expect(page.locator("#server .raid-schedule")).toBeVisible();
   await expect(page.locator("#server .raid-schedule")).toContainText(
     "18:00–24:00 JST",
   );

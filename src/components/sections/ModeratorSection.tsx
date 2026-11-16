@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionDisclosure } from "@/components/ui/SectionDisclosure";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { en, ja } from "@/content";
@@ -90,35 +91,46 @@ export async function ModeratorSection() {
           </Reveal>
         </div>
 
-        <div className="moderator-grid">
-          {japaneseContent.items.map((item, index) => {
-            const englishItem = getMatchingItem(englishContent.items, item.id);
+        <SectionDisclosure
+          className="moderator-details"
+          label={{
+            ja: ja.detailLabels.moderator,
+            en: en.detailLabels.moderator,
+          }}
+        >
+          <div className="moderator-grid">
+            {japaneseContent.items.map((item, index) => {
+              const englishItem = getMatchingItem(
+                englishContent.items,
+                item.id,
+              );
 
-            return (
-              <Reveal delay={index * 0.05} key={item.id}>
-                <FeatureCard
-                  number={String(index + 1).padStart(2, "0")}
-                  className="moderator-feature md:grid-cols-1"
-                  description={
-                    <LocalizedText
-                      ja={item.description}
-                      en={englishItem.description}
-                    />
-                  }
-                  icon={item.icon}
-                  status={item.status}
-                  statusLabel={{
-                    ja: ja.common.statusLabels[item.status],
-                    en: en.common.statusLabels[englishItem.status],
-                  }}
-                  title={
-                    <LocalizedText ja={item.title} en={englishItem.title} />
-                  }
-                />
-              </Reveal>
-            );
-          })}
-        </div>
+              return (
+                <Reveal delay={index * 0.05} key={item.id}>
+                  <FeatureCard
+                    number={String(index + 1).padStart(2, "0")}
+                    className="moderator-feature md:grid-cols-1"
+                    description={
+                      <LocalizedText
+                        ja={item.description}
+                        en={englishItem.description}
+                      />
+                    }
+                    icon={item.icon}
+                    status={item.status}
+                    statusLabel={{
+                      ja: ja.common.statusLabels[item.status],
+                      en: en.common.statusLabels[englishItem.status],
+                    }}
+                    title={
+                      <LocalizedText ja={item.title} en={englishItem.title} />
+                    }
+                  />
+                </Reveal>
+              );
+            })}
+          </div>
+        </SectionDisclosure>
 
         <Reveal className="mt-6">
           <div className="grid gap-5 py-5 lg:grid-cols-[1fr_auto] lg:items-center">

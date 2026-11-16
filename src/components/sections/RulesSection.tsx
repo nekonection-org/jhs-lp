@@ -1,9 +1,10 @@
-import { ChevronDown, ScrollText, TriangleAlert } from "lucide-react";
+import { ChevronDown, ScrollText } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionDisclosure } from "@/components/ui/SectionDisclosure";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
@@ -13,6 +14,33 @@ export async function RulesSection() {
   const result = await getPublicRulesContent();
   const japaneseContent = result.item?.translations.ja ?? ja.rules;
   const englishContent = result.item?.translations.en ?? en.rules;
+
+  function renderRule(
+    item: (typeof japaneseContent.items)[number],
+    index: number,
+  ) {
+    const englishItem = getMatchingItem(englishContent.items, item.id);
+
+    return (
+      <Reveal delay={index * 0.035} key={item.id}>
+        <FeatureCard
+          number={String(index + 1).padStart(2, "0")}
+          className="rule-feature"
+          description={
+            <LocalizedText ja={item.description} en={englishItem.description} />
+          }
+          icon={item.icon}
+          important={"important" in item && item.important}
+          status={item.status}
+          statusLabel={{
+            ja: ja.common.statusLabels[item.status],
+            en: en.common.statusLabels[englishItem.status],
+          }}
+          title={<LocalizedText ja={item.title} en={englishItem.title} />}
+        />
+      </Reveal>
+    );
+  }
 
   return (
     <section className="section-shell chapter-section" id="rules">
@@ -43,63 +71,35 @@ export async function RulesSection() {
                 }
               />
             </Reveal>
-
-            <Reveal className="mt-8">
-              <aside className="flex items-start gap-4 border-l-2 border-[var(--danger)] py-1 pl-5">
-                <span className="pt-1 text-[var(--danger)]">
-                  <TriangleAlert aria-hidden="true" className="size-5" />
-                </span>
-                <div>
-                  <h3 className="font-bold text-[var(--text-primary)]">
-                    <LocalizedText
-                      ja={japaneseContent.noticeTitle}
-                      en={englishContent.noticeTitle}
-                    />
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                    <LocalizedText
-                      ja={japaneseContent.notice}
-                      en={englishContent.notice}
-                    />
-                  </p>
-                </div>
-              </aside>
-            </Reveal>
           </div>
           <div className="rules-grid">
-            {japaneseContent.items.map((item, index) => {
-              const englishItem = getMatchingItem(
-                englishContent.items,
-                item.id,
-              );
-
-              return (
-                <Reveal delay={index * 0.035} key={item.id}>
-                  <FeatureCard
-                    number={String(index + 1).padStart(2, "0")}
-                    className="rule-feature"
-                    description={
-                      <LocalizedText
-                        ja={item.description}
-                        en={englishItem.description}
-                      />
-                    }
-                    icon={item.icon}
-                    important={"important" in item && item.important}
-                    status={item.status}
-                    statusLabel={{
-                      ja: ja.common.statusLabels[item.status],
-                      en: en.common.statusLabels[englishItem.status],
-                    }}
-                    title={
-                      <LocalizedText ja={item.title} en={englishItem.title} />
-                    }
-                  />
-                </Reveal>
-              );
-            })}
+            {japaneseContent.items.slice(0, 3).map(renderRule)}
           </div>
         </div>
+        <SectionDisclosure
+          className="rules-additional"
+          label={{ ja: ja.detailLabels.rules, en: en.detailLabels.rules }}
+        >
+          <aside className="mb-8 border-l-2 border-[var(--border-strong)] pl-5">
+            <h3 className="text-lg font-semibold">
+              <LocalizedText
+                ja={japaneseContent.noticeTitle}
+                en={englishContent.noticeTitle}
+              />
+            </h3>
+            <p className="mt-3 text-sm text-[var(--text-secondary)]">
+              <LocalizedText
+                ja={japaneseContent.notice}
+                en={englishContent.notice}
+              />
+            </p>
+          </aside>
+          <div className="rules-grid">
+            {japaneseContent.items
+              .slice(3)
+              .map((item, index) => renderRule(item, index + 3))}
+          </div>
+        </SectionDisclosure>
         <Reveal className="mt-10">
           <details className="rulebook surface-card group overflow-hidden bg-[var(--surface)]">
             <summary className="flex min-h-16 cursor-pointer list-none items-center gap-4 px-5 py-4 font-bold text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--focus)] sm:px-6">

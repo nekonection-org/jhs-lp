@@ -33,7 +33,7 @@ export default async function Home({ searchParams }: HomeProps) {
         />
       </a>
       <Header />
-      <main className="relative" id="main-content" tabIndex={-1}>
+      <main className="landing-page relative" id="main-content" tabIndex={-1}>
         <HeroSection />
         <ServerSection />
         <RulesSection />

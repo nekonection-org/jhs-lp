@@ -5,6 +5,7 @@ import { LocalizedText } from "@/components/ui/LocalizedText";
 import { RaidSchedule } from "@/components/ui/RaidSchedule";
 import { ServerSchedule } from "@/components/ui/ServerSchedule";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionDisclosure } from "@/components/ui/SectionDisclosure";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
@@ -36,69 +37,74 @@ export function ServerSection() {
         <Reveal className="server-planner-reveal">
           <ServerSchedule />
         </Reveal>
-        <div className="server-reference-grid">
-          <Reveal className="settings-panel">
-            <h3 className="text-lg font-semibold">
-              <LocalizedText
-                ja={ja.server.settingsTitle}
-                en={en.server.settingsTitle}
-              />
-            </h3>
-            <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-              <LocalizedText
-                ja={ja.server.settingsDescription}
-                en={en.server.settingsDescription}
-              />
-            </p>
-            <dl className="server-specifications">
-              {ja.server.settings.map((setting) => {
-                const englishSetting = getMatchingItem(
-                  en.server.settings,
-                  setting.id,
-                );
+        <SectionDisclosure
+          className="server-reference"
+          label={{ ja: ja.detailLabels.server, en: en.detailLabels.server }}
+        >
+          <div className="server-reference-grid">
+            <Reveal className="settings-panel">
+              <h3 className="text-lg font-semibold">
+                <LocalizedText
+                  ja={ja.server.settingsTitle}
+                  en={en.server.settingsTitle}
+                />
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                <LocalizedText
+                  ja={ja.server.settingsDescription}
+                  en={en.server.settingsDescription}
+                />
+              </p>
+              <dl className="server-specifications">
+                {ja.server.settings.map((setting) => {
+                  const englishSetting = getMatchingItem(
+                    en.server.settings,
+                    setting.id,
+                  );
 
-                return (
-                  <div
-                    className="server-specification"
-                    key={setting.id}
-                    data-reveal-item
-                  >
-                    <dt className="text-sm text-[var(--text-secondary)]">
-                      <LocalizedText
-                        ja={setting.label}
-                        en={englishSetting.label}
-                      />
-                    </dt>
-                    <dd className="text-sm font-semibold tracking-[-0.01em] text-[var(--text-primary)]">
-                      <LocalizedText
-                        ja={setting.value}
-                        en={englishSetting.value}
-                      />
-                    </dd>
-                  </div>
-                );
-              })}
-            </dl>
-          </Reveal>
-          <Reveal className="server-hours-reference">
-            <RaidSchedule />
-          </Reveal>
-        </div>
-
-        <Reveal className="mt-6">
-          <div className="flex items-start gap-3 text-xs leading-6 text-[var(--text-muted)]">
-            <Info
-              aria-hidden="true"
-              className="mt-0.5 size-5 shrink-0 text-[var(--accent-strong)]"
-            />
-            <p>
-              <LocalizedText
-                ja={ja.server.pendingNotice}
-                en={en.server.pendingNotice}
-              />
-            </p>
+                  return (
+                    <div
+                      className="server-specification"
+                      key={setting.id}
+                      data-reveal-item
+                    >
+                      <dt className="text-sm text-[var(--text-secondary)]">
+                        <LocalizedText
+                          ja={setting.label}
+                          en={englishSetting.label}
+                        />
+                      </dt>
+                      <dd className="text-sm font-semibold tracking-[-0.01em] text-[var(--text-primary)]">
+                        <LocalizedText
+                          ja={setting.value}
+                          en={englishSetting.value}
+                        />
+                      </dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            </Reveal>
+            <Reveal className="server-hours-reference">
+              <RaidSchedule />
+            </Reveal>
           </div>
-        </Reveal>
+
+          <Reveal className="mt-6">
+            <div className="flex items-start gap-3 text-xs leading-6 text-[var(--text-muted)]">
+              <Info
+                aria-hidden="true"
+                className="mt-0.5 size-5 shrink-0 text-[var(--accent-strong)]"
+              />
+              <p>
+                <LocalizedText
+                  ja={ja.server.pendingNotice}
+                  en={en.server.pendingNotice}
+                />
+              </p>
+            </div>
+          </Reveal>
+        </SectionDisclosure>
       </Container>
     </section>
   );

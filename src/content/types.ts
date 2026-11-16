@@ -149,8 +149,6 @@ export interface SectionActionContent {
 }
 
 export interface HeroContent {
-  readonly indexLabel: string;
-  readonly wordmark: readonly [string, string];
   readonly headline: readonly [string, string];
   readonly id: "top";
   readonly eyebrow: string;
@@ -386,6 +384,13 @@ export interface FooterContent {
 }
 
 export interface SiteContent {
+  readonly detailLabels: {
+    readonly connection: string;
+    readonly server: string;
+    readonly rules: string;
+    readonly vip: string;
+    readonly moderator: string;
+  };
   readonly locale: Locale;
   readonly metadata: MetadataContent;
   readonly common: CommonContent;

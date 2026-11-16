@@ -2,7 +2,7 @@
 
 import { Ban, Check, CircleAlert } from "lucide-react";
 import { motion } from "motion/react";
-import { useId, useMemo, useState } from "react";
+import { type ReactNode, useId, useMemo, useState } from "react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -18,9 +18,14 @@ import {
 interface RaidTimeCheckerProps {
   timeZone: string;
   now: number | null;
+  timeZoneControl?: ReactNode;
 }
 
-export function RaidTimeChecker({ timeZone, now }: RaidTimeCheckerProps) {
+export function RaidTimeChecker({
+  timeZone,
+  now,
+  timeZoneControl,
+}: RaidTimeCheckerProps) {
   const id = useId();
   const reduceMotion = useReducedMotion();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -60,6 +65,7 @@ export function RaidTimeChecker({ timeZone, now }: RaidTimeCheckerProps) {
         </p>
       </div>
       <div className="raid-checker-controls">
+        {timeZoneControl}
         <div className="raid-date-time-fields">
           <div>
             <label htmlFor={`${id}-date`}>
@@ -98,7 +104,7 @@ export function RaidTimeChecker({ timeZone, now }: RaidTimeCheckerProps) {
             />
           </div>
         </div>
-        <p className="raid-check-zone">{timeZone}</p>
+
         {candidates.length > 1 ? (
           <div className="raid-time-occurrence">
             <label htmlFor={`${id}-occurrence`}>

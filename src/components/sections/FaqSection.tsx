@@ -1,6 +1,4 @@
 import { FaqList } from "@/components/sections/FaqList";
-import { LocalizedExternalAction } from "@/components/ui/ActionLink";
-import { externalUrls } from "@/lib/constants";
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
@@ -34,14 +32,6 @@ export async function FaqSection() {
               title={<LocalizedText ja={ja.faq.title} en={en.faq.title} />}
             />
           </Reveal>
-
-          <LocalizedExternalAction
-            action={{ ja: ja.hero.primaryAction, en: en.hero.primaryAction }}
-            common={{ ja: ja.common, en: en.common }}
-            href={externalUrls.discord}
-            variant="secondary"
-            className="mt-7"
-          />
         </div>
 
         <div className="faq-answers">
