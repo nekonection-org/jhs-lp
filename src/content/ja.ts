@@ -67,6 +67,11 @@ export const ja = {
     moderator: "活動内容・応募条件を見る",
   },
   hero: {
+    backgroundMotion: {
+      pause: "背景を停止",
+      resume: "背景を再生",
+      reduced: "背景の動き：オフ",
+    },
     headline: ["暮らしのペースで、", "Rustを楽しもう。"],
     id: "top",
     eyebrow: "Rust Community Server",

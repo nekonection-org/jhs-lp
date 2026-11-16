@@ -150,6 +150,11 @@ export interface SectionActionContent {
 
 export interface HeroContent {
   readonly headline: readonly [string, string];
+  readonly backgroundMotion: {
+    readonly pause: string;
+    readonly resume: string;
+    readonly reduced: string;
+  };
   readonly id: "top";
   readonly eyebrow: string;
   readonly title: string;

@@ -443,47 +443,170 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 .hero-layout {
   min-width: 0;
-  padding-block: 3rem 1.5rem;
+  padding-block: 3rem 4.5rem;
 }
-.hero-architecture {
+.hero-rhythm {
   position: absolute;
   z-index: 0;
-  width: 530px;
-  height: 530px;
-  right: -330px;
-  top: -80px;
+  width: 500px;
+  height: 500px;
+  right: -205px;
+  top: 0;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0.5;
   color: var(--text-primary);
-  mask-image: linear-gradient(90deg, transparent, #000 45%);
+  mask-image: linear-gradient(90deg, transparent, #000 55%);
 }
-.architecture-entrance,
-.architecture-entrance svg {
+.rhythm-entrance,
+.rhythm-entrance svg {
   width: 100%;
   height: 100%;
 }
-.architecture-plane {
+.rhythm-orbit {
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.4;
+}
+.rhythm-sky {
+  fill: color-mix(in srgb, var(--text-primary) 3%, var(--background));
+}
+.rhythm-sun-disc {
+  fill: var(--text-primary);
+  fill-opacity: 0.14;
+}
+.rhythm-sun-ring {
+  stroke: var(--text-primary);
+  stroke-opacity: 0.15;
+}
+.rhythm-clouds {
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.25;
+}
+.rhythm-ridge-far {
+  fill: color-mix(in srgb, var(--text-primary) 7%, var(--background));
+}
+.rhythm-ridge-line {
+  stroke: var(--text-primary);
+  stroke-opacity: 0.12;
+}
+.rhythm-ridge-mid {
   fill: color-mix(in srgb, var(--text-primary) 4%, var(--background));
 }
-.architecture-plane-lower {
-  fill: color-mix(in srgb, var(--text-primary) 2%, var(--background));
+.rhythm-ridge-near {
+  fill: var(--background);
 }
-.architecture-contour {
-  stroke: currentColor;
+.rhythm-trail {
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.25;
+}
+.rhythm-shelter-wall {
+  fill: var(--background);
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.3;
+}
+.rhythm-shelter-roof {
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.6;
+}
+.rhythm-window {
+  fill: var(--accent);
+}
+.rhythm-frame {
+  stroke: var(--text-secondary);
   stroke-opacity: 0.2;
-  stroke-width: 0.8;
-  vector-effect: non-scaling-stroke;
 }
-.architecture-edge {
-  stroke: currentColor;
-  stroke-opacity: 0.55;
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-.architecture-accent {
+.rhythm-hour {
   stroke: var(--accent);
-  stroke-width: 1.5;
-  vector-effect: non-scaling-stroke;
+  stroke-opacity: 0.6;
+}
+.rhythm-sun {
+  animation: rhythm-daylight 32s ease-in-out infinite;
+}
+.rhythm-clouds {
+  animation: rhythm-air 18s ease-in-out infinite;
+}
+.rhythm-distant-ridge {
+  animation: rhythm-distance 24s ease-in-out infinite;
+}
+.rhythm-window {
+  animation: rhythm-home 8s ease-in-out infinite;
+}
+.hero-rhythm
+  :is(.rhythm-sun, .rhythm-clouds, .rhythm-distant-ridge, .rhythm-window) {
+  animation-play-state: paused;
+}
+.hero-rhythm[data-active="true"]
+  :is(.rhythm-sun, .rhythm-clouds, .rhythm-distant-ridge, .rhythm-window) {
+  animation-play-state: running;
+}
+@keyframes rhythm-daylight {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(32px, -18px);
+  }
+  50% {
+    transform: translate(64px, 0);
+  }
+  75% {
+    transform: translate(32px, 18px);
+  }
+}
+@keyframes rhythm-air {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-36px);
+  }
+}
+@keyframes rhythm-distance {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(12px);
+  }
+}
+@keyframes rhythm-home {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.hero-motion-control {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding-inline: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.hero-motion-control:hover {
+  color: var(--text-primary);
+}
+.hero-motion-control:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.hero-motion-control:disabled {
+  cursor: default;
+}
+.server-introduction .section-description {
+  max-width: 46rem;
+  text-wrap: balance;
 }
 .hero-brand {
   font-size: 0.9375rem;
@@ -939,7 +1062,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 
 @media (min-width: 640px) {
   .hero-layout {
-    padding-block: 4rem 1.5rem;
+    padding-block: 4rem 4.5rem;
   }
   .hero-headline {
     margin-top: 2.5rem;
@@ -964,13 +1087,13 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .hero-layout {
     padding-block: 5rem 6rem;
   }
-  .hero-architecture {
-    width: 720px;
-    height: 720px;
-    right: -325px;
-    top: -30px;
+  .hero-rhythm {
+    width: 640px;
+    height: 640px;
+    right: -310px;
+    top: 20px;
     opacity: 1;
-    mask-image: linear-gradient(90deg, transparent, #000 28%);
+    mask-image: linear-gradient(90deg, transparent, #000 35%);
   }
 }
 @media (min-width: 1024px) {
@@ -981,11 +1104,12 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     width: 62%;
     max-width: 44rem;
   }
-  .hero-architecture {
-    width: 850px;
-    height: 850px;
-    right: -290px;
-    top: -95px;
+  .hero-rhythm {
+    width: 730px;
+    height: 730px;
+    right: -145px;
+    top: -10px;
+    mask-image: linear-gradient(90deg, transparent, #000 15%);
   }
   .hero-headline {
     margin-top: 3rem;
@@ -1107,13 +1231,18 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-scroll-scene,
-  .architecture-upper,
-  .architecture-lower,
+  .rhythm-landscape,
   [data-motion-profile] [data-reveal-item],
   [data-motion-profile="aperture"] {
     transform: none !important;
     clip-path: none !important;
     opacity: 1 !important;
+  }
+  .hero-rhythm
+    :is(.rhythm-sun, .rhythm-clouds, .rhythm-distant-ridge, .rhythm-window) {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1;
   }
   html {
     scroll-behavior: auto;

@@ -232,41 +232,82 @@ test("通常のスクロールにHeroが反応し、項目は見えたときに�
   await expect(setting).toHaveCSS("transform", "none");
 });
 
-test("画像を使わない背景の層がスクロールで開き、Reduced Motionでは静止する", async ({
+test("暮らしのペースを表す背景が自動で動き、停止・再開・画面外停止に対応する", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  const art = page.locator(".hero-architecture");
+  const art = page.locator(".hero-rhythm");
+  const sun = art.locator(".rhythm-sun");
+  const control = page.locator(".hero-motion-control");
   await expect(art).toHaveAttribute("aria-hidden", "true");
   await expect(art.locator("svg")).toBeVisible();
-  await expect(page.locator(".hero-stage img, .hero-hazmat")).toHaveCount(0);
-  await expect(art.locator(".architecture-entrance")).toHaveAttribute(
-    "data-reveal-state",
-    "entered",
-  );
-  const upper = art.locator(".architecture-upper");
-  const lower = art.locator(".architecture-lower");
-  await page.evaluate(() => window.scrollTo({ top: 240, behavior: "instant" }));
+  await expect(page.locator(".hero-stage img")).toHaveCount(0);
+  await expect(art).toHaveAttribute("data-active", "true");
+  await expect(sun).toHaveCSS("animation-play-state", "running");
+  const firstFrame = await sun.evaluate((el) => getComputedStyle(el).transform);
   await expect
-    .poll(() =>
-      upper.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41),
-    )
-    .toBeGreaterThan(0);
-  await expect
-    .poll(() =>
-      lower.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41),
-    )
-    .toBeLessThan(0);
-  expect(await page.evaluate(() => window.scrollY)).toBe(240);
+    .poll(() => sun.evaluate((el) => getComputedStyle(el).transform))
+    .not.toBe(firstFrame);
+  expect(await page.evaluate(() => scrollY)).toBe(0);
+  await control.click();
+  await expect(control).toHaveAttribute("aria-pressed", "true");
+  await expect(sun).toHaveCSS("animation-play-state", "paused");
+  const frozen = await sun.evaluate(async (el) => {
+    const before = getComputedStyle(el).transform;
+    for (let i = 0; i < 10; i++) await new Promise(requestAnimationFrame);
+    return { before, after: getComputedStyle(el).transform };
+  });
+  expect(frozen.before).toBe(frozen.after);
+  await control.click();
+  await expect(sun).toHaveCSS("animation-play-state", "running");
+  await page
+    .locator("#server h2")
+    .evaluate((el) =>
+      el.scrollIntoView({ block: "start", behavior: "instant" }),
+    );
+  await expect(art).toHaveAttribute("data-active", "false");
+  await expect(sun).toHaveCSS("animation-play-state", "paused");
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await expect(art).toHaveAttribute("data-active", "true");
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(upper).toHaveCSS("transform", "none");
-  await expect(lower).toHaveCSS("transform", "none");
-  await expect(art.locator(".architecture-entrance")).toHaveCSS(
-    "clip-path",
-    "none",
-  );
+  await expect(sun).toHaveCSS("animation-name", "none");
+  await expect(sun).toHaveCSS("transform", "none");
+  await expect(art.locator(".rhythm-landscape")).toHaveCSS("transform", "none");
+  await expect(control).toBeDisabled();
   await expect(art.locator("svg")).toBeVisible();
+});
+
+test("サーバー情報の紹介文が見出しの直下に揃い、日英と各画面幅で収まる", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  for (const locale of ["ja", "en"]) {
+    await page.evaluate(
+      (language) => localStorage.setItem("jhs-locale", language),
+      locale,
+    );
+    for (const width of [360, 390, 768, 1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/");
+      await expect(page.locator("html")).toHaveAttribute("lang", locale);
+      const title = await page.locator("#server h2").boundingBox();
+      const description = await page
+        .locator(".server-introduction .section-description")
+        .boundingBox();
+      if (!title || !description)
+        throw new Error("Server introduction must be rendered");
+      expect(description.x).toBe(title.x);
+      expect(description.y).toBeGreaterThanOrEqual(title.y + title.height + 16);
+      expect(description.x + description.width).toBeLessThanOrEqual(width - 19);
+      await expect(
+        page.locator(
+          `.server-introduction .section-description [data-locale-content=${locale}]`,
+        ),
+      ).toBeVisible();
+    }
+  }
 });
 
 test("サーバー情報は左右から登場し、ルールのマスクとは異なる動きになる", async ({

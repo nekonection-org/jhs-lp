@@ -16,7 +16,7 @@ export function ServerSection() {
           <Reveal className="server-introduction">
             <SectionHeading
               index="01"
-              layout="split"
+              layout="stack"
               description={
                 <LocalizedText
                   ja={ja.server.description}

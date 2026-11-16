@@ -67,6 +67,11 @@ export const en = {
     moderator: "Responsibilities & requirements",
   },
   hero: {
+    backgroundMotion: {
+      pause: "Pause background",
+      resume: "Play background",
+      reduced: "Background motion off",
+    },
     headline: ["Your time.", "Your Rust."],
     id: "top",
     eyebrow: "Rust Community Server",
