@@ -136,7 +136,7 @@ export function Header({ homePath = "" }: HeaderProps) {
       data-menu-open={menuOpen}
       className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--header)] backdrop-blur-sm"
     >
-      <Container className="flex min-h-[4.75rem] items-center gap-3">
+      <Container className="flex min-h-[4.75rem] max-w-none items-center gap-3 xl:px-10">
         <a
           className="group mr-auto inline-flex min-h-11 items-center gap-3 rounded-lg pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
           href={`${homePath}#top`}
@@ -162,13 +162,13 @@ export function Header({ homePath = "" }: HeaderProps) {
 
         <nav
           aria-label={content.navigation.ariaLabel}
-          className="hidden items-center gap-0.5 xl:flex"
+          className="ml-auto hidden items-center gap-0.5 xl:flex"
         >
           {content.navigation.items.map((item) => (
             <a
               aria-current={activeSection === item.id ? "location" : undefined}
               className={cn(
-                "header-navigation-link relative rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
+                "header-navigation-link relative rounded-md px-2 py-2 text-[0.8125rem] font-medium whitespace-nowrap text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
                 activeSection === item.id && "text-[var(--accent-strong)]",
               )}
               href={`${homePath}#${item.id}`}
