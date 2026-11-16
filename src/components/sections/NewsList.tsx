@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, Newspaper, WifiOff } from "lucide-react";
 import Link from "next/link";
 
+import { Footer } from "@/components/layout/Footer";
 import { NewsArticle } from "@/components/news/NewsArticle";
 import { NewsDialog } from "@/components/news/NewsDialog";
 
@@ -89,6 +90,7 @@ export function NewsList({ result }: NewsListProps) {
             <Reveal delay={index * 0.04} key={item.id}>
               <article className="news-item">
                 <NewsDialog
+                  footer={<Footer idPrefix={`news-${item.id}-`} />}
                   href={`/news/${encodeURIComponent(item.id)}${result.pagination.page > 1 ? `?newsPage=${result.pagination.page}` : ""}`}
                   titleId={`news-dialog-title-${item.id}`}
                   trigger={

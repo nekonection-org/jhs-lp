@@ -9,12 +9,13 @@ import { LocalizedText } from "@/components/ui/LocalizedText";
 import { en, getContent, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
 
-export function TermsDialog() {
+export function TermsDialog({ idPrefix = "" }: { idPrefix?: string }) {
   const { locale } = useLanguage();
   const content = getContent(locale);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
+  const dialogId = `${idPrefix}terms-dialog`;
 
   useEffect(() => {
     if (!open) {
@@ -59,7 +60,7 @@ export function TermsDialog() {
     <>
       <button
         type="button"
-        aria-controls="terms-dialog"
+        aria-controls={dialogId}
         aria-expanded={open}
         aria-haspopup="dialog"
         aria-label={content.terms.openLabel}
@@ -71,9 +72,9 @@ export function TermsDialog() {
       </button>
 
       <dialog
-        id="terms-dialog"
-        aria-describedby="terms-dialog-description"
-        aria-labelledby="terms-dialog-title"
+        id={dialogId}
+        aria-describedby={`${dialogId}-description`}
+        aria-labelledby={`${dialogId}-title`}
         className="terms-dialog m-auto max-h-[min(88dvh,56rem)] w-[min(calc(100%-2rem),58rem)] overflow-hidden rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] p-0 text-[var(--text-primary)] shadow-[0_28px_90px_rgba(0,0,0,0.55)] backdrop:bg-black/80 backdrop:backdrop-blur-sm"
         onClick={handleBackdropClick}
         onClose={handleClose}
@@ -87,7 +88,7 @@ export function TermsDialog() {
               </p>
               <h2
                 className="mt-1 text-xl font-bold tracking-[-0.025em] sm:text-2xl"
-                id="terms-dialog-title"
+                id={`${dialogId}-title`}
               >
                 <LocalizedText
                   ja={ja.terms.dialogLabel}
@@ -108,7 +109,7 @@ export function TermsDialog() {
           <div className="overscroll-contain overflow-y-auto px-5 py-6 sm:px-7 sm:py-8">
             <div
               className="space-y-4 text-sm leading-7 text-[var(--text-secondary)] sm:text-base"
-              id="terms-dialog-description"
+              id={`${dialogId}-description`}
             >
               {ja.terms.introduction.map((paragraph, index) => (
                 <p key={paragraph}>

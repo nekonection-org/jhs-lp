@@ -1,5 +1,21 @@
 # お知らせセクションのデザイン確認
 
+## ヘッダー・フッターの共通化
+
+- Source visual truth: 通常ページの既存`Header`・`Footer`と、今回の「お知らせでも変えない」という指定。ナビゲーションの13px化と右寄せを両方に適用。
+- Implementation: `/tmp/jhs-shared-home-desktop.png`、`/tmp/jhs-shared-news-desktop.png`、`/tmp/jhs-shared-news-footer-desktop.png`（1440 × 900px）、`/tmp/jhs-shared-news-footer-mobile.png`（390 × 844px）。いずれもdeviceScaleFactor 1、同じCSSピクセルで撮影。
+- State: 日本語・ダークテーマ、公開済みのお知らせをページ遷移なしで表示。通常ページと詳細のロゴ・メニュー・言語・テーマ・Discordボタン・フッター文言を比較。
+- Fonts / typography: メニューは両方13px。通常ページと詳細のヘッダー・フッターで、文字サイズ・行高・ボタンの最小高が同じことをブラウザーで検証。
+- Spacing / layout rhythm: 共通ヘッダーの内容を画面の右側へ寄せ、左右余白を確保。本文後にフッターを表示。詳細を閉じる操作はヘッダーの外に配置し、通常のナビゲーション構成を維持。
+- Colors / tokens: 同じコンポーネントとテーマ変数を使用。詳細の本文・背景にのみ既存のガラス表現を維持。
+- Image quality / content: ロゴは共通の既存画像。サイト名、フッターの案内、著作権、利用規約、リンクは通常ページと同じ。新しい素材や文言の事実追加なし。
+- Comparison history: 初回確認でLP用の文字サイズが詳細の共通部品へ及ぶ差異を発見。ダイアログをLPの本文用スタイルから除外し、再撮影して通常ページと比較した。対応が必要なP0 / P1 / P2の差異なし。
+- Focused comparison: 全体画像でロゴ・リンク・本文・フッターを判読でき、文字サイズはブラウザーの算出値も比較したため、追加の拡大画像は不要。
+- Interaction checklist: 一覧への復帰、ヘッダー・フッターからのセクション移動、モバイルメニューの開閉とEsc、利用規約の開閉とEsc、フォーカスの復帰、日英・テーマ切替、ID重複なしを検証。
+- Verification: 型チェック、Lint、フォーマット、単体テスト184件、Production Build、E2E50件が通過。公開画面のブラウザー例外なし。
+
+final result: passed
+
 ## 最新の詳細画面の参考画像に合わせた調整
 
 - Source visual truth: 今回の会話に添付された詳細画面の参考画像（1458 × 902px）。中央の枠付き本文、上部ヘッダー、その間の一覧へ戻るリンクを参照。

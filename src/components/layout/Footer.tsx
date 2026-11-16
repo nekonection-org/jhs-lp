@@ -9,10 +9,12 @@ import { getMatchingItem } from "@/lib/content";
 
 interface FooterProps {
   homePath?: "" | "/";
+  idPrefix?: string;
 }
 
-export function Footer({ homePath = "" }: FooterProps) {
+export function Footer({ homePath = "", idPrefix = "" }: FooterProps) {
   const year = new Date().getFullYear();
+  const navigationLabelId = `${idPrefix}footer-navigation-label`;
 
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--surface)]">
@@ -51,13 +53,13 @@ export function Footer({ homePath = "" }: FooterProps) {
           </div>
 
           <div>
-            <span className="sr-only" id="footer-navigation-label">
+            <span className="sr-only" id={navigationLabelId}>
               <LocalizedText
                 ja={ja.footer.navigationLabel}
                 en={en.footer.navigationLabel}
               />
             </span>
-            <nav aria-labelledby="footer-navigation-label">
+            <nav aria-labelledby={navigationLabelId}>
               <ul className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm sm:grid-cols-3">
                 {ja.navigation.items.map((item) => {
                   const englishItem = getMatchingItem(
@@ -86,7 +88,7 @@ export function Footer({ homePath = "" }: FooterProps) {
             &copy; {year} {ja.footer.copyrightName}
           </p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <TermsDialog />
+            <TermsDialog idPrefix={idPrefix} />
             <a
               className="inline-flex min-h-11 w-fit items-center gap-1.5 rounded-sm font-semibold text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
               href={`${homePath}#top`}

@@ -140,6 +140,7 @@ test("returns to the list and navigates to a section from the article header", a
   await expect(trigger).toBeFocused();
   await trigger.click();
   await dialog
+    .locator("header")
     .getByRole("navigation")
     .getByRole("link", {
       name: "ルール",
@@ -150,4 +151,102 @@ test("returns to the list and navigates to a section from the article header", a
   await expect(page.locator("#rules h2").first()).toBeFocused();
   await expect(page.locator("#rules h2").first()).toBeInViewport();
   await expect(page).toHaveURL(url);
+});
+
+test("shares the landing page header and footer, including terms and footer links", async ({
+  page,
+}) => {
+  const typography = (root: Element) =>
+    [
+      ...root.querySelectorAll<HTMLElement>(
+        ".text-sm, .text-xs, .interactive-button",
+      ),
+    ]
+      .filter((element) => element.getClientRects().length > 0)
+      .map((element) => {
+        const style = getComputedStyle(element);
+        return [style.fontSize, style.lineHeight, style.minHeight];
+      });
+  const headerText = await page
+    .locator("header[data-menu-open]")
+    .first()
+    .innerText();
+  const footerText = await page.locator("footer").first().innerText();
+  const headerTypography = await page
+    .locator("header[data-menu-open]")
+    .first()
+    .evaluate(typography);
+  const footerTypography = await page
+    .locator("footer")
+    .first()
+    .evaluate(typography);
+  await page.locator("#news .news-summary").first().click();
+  const dialog = page.locator(".news-dialog[open]");
+  await expect(dialog.locator("header[data-menu-open]")).toHaveText(
+    headerText,
+    { useInnerText: true },
+  );
+  await expect(dialog.locator("footer")).toHaveText(footerText, {
+    useInnerText: true,
+  });
+  expect(
+    await dialog.locator("header[data-menu-open]").evaluate(typography),
+  ).toEqual(headerTypography);
+  expect(await dialog.locator("footer").evaluate(typography)).toEqual(
+    footerTypography,
+  );
+  await expect(dialog.locator(".header-navigation-link").first()).toHaveCSS(
+    "font-size",
+    "13px",
+  );
+  const duplicateIds = await page.evaluate(() => {
+    const ids = [...document.querySelectorAll("[id]")].map((el) => el.id);
+    return ids.filter((id, index) => ids.indexOf(id) !== index);
+  });
+  expect(duplicateIds).toEqual([]);
+  const footer = dialog.locator("footer");
+  await footer.getByRole("button", { name: ja.terms.openLabel }).click();
+  const terms = page.getByRole("dialog", { name: ja.terms.dialogLabel });
+  await expect(terms).toBeVisible();
+  await page.keyboard.press("Tab");
+  expect(
+    await terms.evaluate((el) => el.contains(document.activeElement)),
+  ).toBe(true);
+  await page.keyboard.press("Escape");
+  await expect(terms).not.toBeVisible();
+  await expect(dialog).toBeVisible();
+  await footer.getByRole("link", { name: "ルール", exact: true }).click();
+  await expect(dialog).not.toBeVisible();
+  await expect(page.locator("#rules h2").first()).toBeFocused();
+});
+
+test("uses the shared mobile menu without closing the announcement on menu Escape", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator("#news .news-summary").first().click();
+  const dialog = page.locator(".news-dialog[open]");
+  const header = dialog.locator("header[data-menu-open]");
+  const menuButton = header.getByRole("button", {
+    name: ja.navigation.openMenu,
+  });
+  await menuButton.click();
+  const menu = header.getByRole("navigation", {
+    name: ja.navigation.mobileMenuLabel,
+  });
+  await expect(menu.getByRole("link").first()).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(header).toHaveAttribute("data-menu-open", "false");
+  await expect(dialog).toBeVisible();
+  await expect(menuButton).toBeFocused();
+  await menuButton.click();
+  await header.getByRole("button", { name: ja.language.english }).click();
+  await header.getByRole("button", { name: en.theme.switchToLight }).click();
+  await expect(page.locator("html")).toHaveClass(/\blight\b/);
+  await header
+    .getByRole("navigation", { name: en.navigation.mobileMenuLabel })
+    .getByRole("link", { name: /Rules/ })
+    .click();
+  await expect(dialog).not.toBeVisible();
+  await expect(page.locator("#rules h2").first()).toBeFocused();
 });

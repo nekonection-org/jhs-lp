@@ -2,7 +2,6 @@
 
 import { ArrowLeft, X } from "lucide-react";
 import { useAnimate } from "motion/react";
-import Image from "next/image";
 import {
   useEffect,
   useId,
@@ -15,9 +14,8 @@ import {
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { Button } from "@/components/ui/Button";
-import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { Header } from "@/components/layout/Header";
 import { LocalizedText } from "@/components/ui/LocalizedText";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { en, getContent, ja } from "@/content";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { motionTiming } from "@/lib/motion";
@@ -27,6 +25,7 @@ interface NewsDialogProps {
   titleId: string;
   trigger: ReactNode;
   children: ReactNode;
+  footer: ReactNode;
 }
 
 export function NewsDialog({
@@ -34,6 +33,7 @@ export function NewsDialog({
   titleId,
   trigger,
   children,
+  footer,
 }: NewsDialogProps) {
   const { locale } = useLanguage();
   const content = getContent(locale);
@@ -145,17 +145,32 @@ export function NewsDialog({
       triggerRef.current?.focus({ preventScroll: true });
   }
 
-  function navigateToSection(event: MouseEvent<HTMLAnchorElement>, id: string) {
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
-      return;
-    event.preventDefault();
+  function navigateToSection(id: string) {
     if (closingRef.current) return;
     navigationRef.current = id;
     void closeNews();
   }
 
+  function handleFooterClick(event: MouseEvent<HTMLDivElement>) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return;
+    const link =
+      event.target instanceof Element
+        ? event.target.closest<HTMLAnchorElement>('a[href^="#"]')
+        : null;
+    if (!link) return;
+    event.preventDefault();
+    navigateToSection(link.hash.slice(1));
+  }
+
   function handleKeyDown(event: KeyboardEvent<HTMLDialogElement>) {
-    if (event.key !== "Tab") return;
+    if (
+      event.key !== "Tab" ||
+      (event.target instanceof Element &&
+        event.target.closest("dialog") !== event.currentTarget) ||
+      event.currentTarget.querySelector('header[data-menu-open="true"]')
+    )
+      return;
     const controls = [
       ...event.currentTarget.querySelectorAll<HTMLElement>(
         'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
@@ -196,6 +211,7 @@ export function NewsDialog({
         className="news-dialog"
         id={dialogId}
         onCancel={(event) => {
+          if (event.target !== event.currentTarget) return;
           event.preventDefault();
           void closeNews();
         }}
@@ -204,65 +220,42 @@ export function NewsDialog({
         ref={dialogRef}
       >
         <div className="news-dialog-panel">
-          <div className="news-dialog-bar">
-            <a
-              className="news-dialog-brand"
-              href="#top"
-              onClick={(event) => navigateToSection(event, "top")}
+          {open ? (
+            <Header
+              activeSectionOverride="news"
+              idPrefix={`${dialogId}-`}
+              onSectionNavigate={navigateToSection}
+            />
+          ) : null}
+          <div className="news-dialog-actions">
+            <button
+              className="news-back-link news-dialog-back"
+              onClick={() => {
+                void closeNews();
+              }}
+              type="button"
             >
-              <Image alt="" width={36} height={36} src="/icon.png" />
-              <span>
-                <strong>Japan Hideaway</strong>
-                <small>Rust Community Server</small>
-              </span>
-            </a>
-            <nav
-              aria-label={content.navigation.ariaLabel}
-              className="news-dialog-navigation"
+              <ArrowLeft aria-hidden="true" className="size-4 shrink-0" />
+              <LocalizedText ja={ja.news.backToList} en={en.news.backToList} />
+            </button>
+            <Button
+              aria-label={content.news.closeLabel}
+              className="size-11 shrink-0 px-0"
+              onClick={() => {
+                void closeNews();
+              }}
+              variant="quiet"
             >
-              {content.navigation.items.map((item) => (
-                <a
-                  aria-current={item.id === "news" ? "location" : undefined}
-                  href={`#${item.id}`}
-                  key={item.id}
-                  onClick={(event) => navigateToSection(event, item.id)}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-            <div className="news-dialog-controls">
-              <LanguageToggle compact content={content.language} />
-              <ThemeToggle content={content.theme} />
-              <Button
-                aria-label={content.news.closeLabel}
-                className="size-11 shrink-0 px-0"
-                onClick={() => {
-                  void closeNews();
-                }}
-                variant="quiet"
-              >
-                <X aria-hidden="true" className="size-5" />
-              </Button>
-            </div>
+              <X aria-hidden="true" className="size-5" />
+            </Button>
           </div>
           <div className="news-dialog-scroll" ref={scrollRef}>
-            <div className="news-dialog-content">
-              <button
-                className="news-back-link news-dialog-back"
-                onClick={() => {
-                  void closeNews();
-                }}
-                type="button"
-              >
-                <ArrowLeft aria-hidden="true" className="size-4 shrink-0" />
-                <LocalizedText
-                  ja={ja.news.backToList}
-                  en={en.news.backToList}
-                />
-              </button>
-              {children}
-            </div>
+            <div className="news-dialog-content">{children}</div>
+            {open ? (
+              <div className="news-dialog-footer" onClick={handleFooterClick}>
+                {footer}
+              </div>
+            ) : null}
           </div>
         </div>
       </dialog>

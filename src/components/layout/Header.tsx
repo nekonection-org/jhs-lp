@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -14,6 +14,7 @@ import { Container } from "@/components/ui/Container";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { getContent, navigationItemIds } from "@/content";
+import type { NavigableSectionId } from "@/content/types";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { cn } from "@/lib/cn";
 import { externalUrls } from "@/lib/constants";
@@ -27,18 +28,29 @@ const focusableSelector = [
 
 interface HeaderProps {
   homePath?: "" | "/";
+  idPrefix?: string;
+  activeSectionOverride?: NavigableSectionId;
+  onSectionNavigate?: (sectionId: string) => void;
 }
 
-export function Header({ homePath = "" }: HeaderProps) {
+export function Header({
+  homePath = "",
+  idPrefix = "",
+  activeSectionOverride,
+  onSectionNavigate,
+}: HeaderProps) {
   const { locale } = useLanguage();
   const content = getContent(locale);
   const japaneseContent = getContent("ja");
   const englishContent = getContent("en");
-  const activeSection = useActiveSection(navigationItemIds);
+  const observedSection = useActiveSection(navigationItemIds);
+  const activeSection = activeSectionOverride ?? observedSection;
+  const mobileNavigationId = `${idPrefix}mobile-navigation`;
   const reduceMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const brandRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const desktopQuery = window.matchMedia("(min-width: 1280px)");
@@ -55,9 +67,7 @@ export function Header({ homePath = "" }: HeaderProps) {
       setMenuOpen(false);
 
       if (focusWasInsideMenu) {
-        document
-          .querySelector<HTMLElement>(`header a[href="${homePath}#top"]`)
-          ?.focus();
+        brandRef.current?.focus();
       }
     }
 
@@ -131,6 +141,22 @@ export function Header({ homePath = "" }: HeaderProps) {
     }
   }
 
+  function navigateToSection(
+    event: MouseEvent<HTMLAnchorElement>,
+    sectionId: string,
+    fromMobile = false,
+  ) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return;
+    if (onSectionNavigate) {
+      event.preventDefault();
+      setMenuOpen(false);
+      onSectionNavigate(sectionId);
+    } else if (fromMobile) {
+      closeMenu(sectionId);
+    }
+  }
+
   return (
     <header
       data-menu-open={menuOpen}
@@ -140,6 +166,8 @@ export function Header({ homePath = "" }: HeaderProps) {
         <a
           className="group mr-auto inline-flex min-h-11 items-center gap-3 rounded-lg pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
           href={`${homePath}#top`}
+          onClick={(event) => navigateToSection(event, "top")}
+          ref={brandRef}
         >
           <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface)] transition-colors duration-200 group-hover:border-[var(--accent)]">
             <Image
@@ -173,12 +201,13 @@ export function Header({ homePath = "" }: HeaderProps) {
               )}
               href={`${homePath}#${item.id}`}
               key={item.id}
+              onClick={(event) => navigateToSection(event, item.id)}
             >
               {item.label}
               {activeSection === item.id ? (
                 <motion.span
                   className="absolute inset-x-2 bottom-0 h-px bg-[var(--accent)]"
-                  layoutId="active-navigation"
+                  layoutId={`${idPrefix}active-navigation`}
                   transition={{
                     ...motionTiming.interaction,
                     duration: reduceMotion
@@ -207,7 +236,7 @@ export function Header({ homePath = "" }: HeaderProps) {
         </div>
 
         <Button
-          aria-controls="mobile-navigation"
+          aria-controls={mobileNavigationId}
           aria-expanded={menuOpen}
           aria-label={
             menuOpen
@@ -243,7 +272,7 @@ export function Header({ homePath = "" }: HeaderProps) {
             <Container className="flex h-full flex-col overflow-y-auto py-6">
               <nav
                 aria-label={content.navigation.mobileMenuLabel}
-                id="mobile-navigation"
+                id={mobileNavigationId}
               >
                 <ul className="grid gap-1">
                   {content.navigation.items.map((item) => (
@@ -258,7 +287,9 @@ export function Header({ homePath = "" }: HeaderProps) {
                             "border-[var(--border)] bg-[var(--surface)] text-[var(--accent-strong)]",
                         )}
                         href={`${homePath}#${item.id}`}
-                        onClick={() => closeMenu(item.id)}
+                        onClick={(event) =>
+                          navigateToSection(event, item.id, true)
+                        }
                       >
                         {item.label}
                         <span
