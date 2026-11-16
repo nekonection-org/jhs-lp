@@ -62,6 +62,7 @@ export const ja = {
     },
   },
   hero: {
+    indexLabel: "参加前のガイド",
     wordmark: ["Japan", "Hideaway"],
     headline: ["暮らしのペースで、", "Rustを楽しもう。"],
     id: "top",

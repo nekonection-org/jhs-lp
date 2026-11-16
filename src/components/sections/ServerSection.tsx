@@ -11,7 +11,7 @@ import { getMatchingItem } from "@/lib/content";
 
 export function ServerSection() {
   return (
-    <section className="section-shell" id="server">
+    <section className="section-shell server-section" id="server">
       <Container>
         <div className="server-overview">
           <Reveal className="server-introduction">

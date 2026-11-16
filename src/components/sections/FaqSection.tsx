@@ -13,7 +13,7 @@ export async function FaqSection() {
 
   return (
     <section
-      className="section-shell border-y border-[var(--border)] bg-[var(--surface)]"
+      className="section-shell faq-section border-y border-[var(--border)] bg-[var(--surface)]"
       id="faq"
     >
       <Container className="faq-layout">

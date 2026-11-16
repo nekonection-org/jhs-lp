@@ -14,6 +14,7 @@ import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
 import { externalUrls, rustConnection } from "@/lib/constants";
+import { getMatchingItem } from "@/lib/content";
 
 type CopyState = "idle" | "copied" | "error";
 
@@ -109,6 +110,28 @@ export function HeroSection() {
               </div>
             </div>
           </div>
+          <nav
+            className="hero-index"
+            aria-label={
+              locale === "ja" ? ja.hero.indexLabel : en.hero.indexLabel
+            }
+          >
+            <p className="hero-index-label">
+              <LocalizedText ja={ja.hero.indexLabel} en={en.hero.indexLabel} />
+            </p>
+            {(["server", "rules", "faq"] as const).map((id) => (
+              <a href={`#${id}`} key={id} data-reveal-item>
+                <span className="hero-index-number" aria-hidden="true">
+                  {id === "server" ? "01" : id === "rules" ? "02" : "04"}
+                </span>
+                <LocalizedText
+                  ja={getMatchingItem(ja.navigation.items, id).label}
+                  en={getMatchingItem(en.navigation.items, id).label}
+                />
+                <ArrowDown aria-hidden="true" className="size-4" />
+              </a>
+            ))}
+          </nav>
         </Reveal>
         <div className="connection-strip">
           <div>

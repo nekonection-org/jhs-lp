@@ -93,6 +93,23 @@ export function ServerSchedule() {
   );
   const state = now === null ? null : getRaidState(now);
   const nextWipe = now === null ? null : getNextWipe(now);
+  const wipeDateParts =
+    nextWipe === null
+      ? null
+      : Object.fromEntries(
+          new Intl.DateTimeFormat(locale === "ja" ? "ja-JP" : "en-GB", {
+            timeZone,
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+            weekday: "long",
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23",
+          })
+            .formatToParts(nextWipe)
+            .map(({ type, value }) => [type, value]),
+        );
   const wipeCountdown =
     now !== null && nextWipe !== null ? getWipeCountdown(nextWipe - now) : null;
   const wipeReference = getMatchingItem(
@@ -119,7 +136,25 @@ export function ServerSchedule() {
               nextWipe === null ? undefined : new Date(nextWipe).toISOString()
             }
           >
-            {nextWipe === null ? "—" : dateTime(nextWipe)}
+            <span className="wipe-date-day" aria-hidden="true">
+              {wipeDateParts?.day ?? "—"}
+            </span>
+            <span className="wipe-date-detail" aria-hidden="true">
+              <span>
+                {wipeDateParts
+                  ? `${wipeDateParts.year} / ${wipeDateParts.month}`
+                  : "—"}
+              </span>
+              <span>{wipeDateParts?.weekday ?? "—"}</span>
+              <strong>
+                {wipeDateParts
+                  ? `${wipeDateParts.hour}:${wipeDateParts.minute}`
+                  : "—"}
+              </strong>
+            </span>
+            <span className="sr-only">
+              {nextWipe === null ? "—" : dateTime(nextWipe)}
+            </span>
           </motion.time>
           <p className="wipe-time-zone">{timeZone}</p>
           <p className="wipe-countdown">

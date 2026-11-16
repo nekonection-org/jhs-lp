@@ -62,6 +62,7 @@ export const en = {
     },
   },
   hero: {
+    indexLabel: "Before you join",
     wordmark: ["Japan", "Hideaway"],
     headline: ["Your time.", "Your Rust."],
     id: "top",

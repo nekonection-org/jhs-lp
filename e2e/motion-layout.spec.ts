@@ -43,11 +43,7 @@ for (const viewport of [
       expect(bounds.x + bounds.width).toBeLessThanOrEqual(viewport.width - 19);
     }
     expect(actions.y + actions.height).toBeLessThanOrEqual(viewport.height);
-    if (viewport.width >= 1024) {
-      expect(intro.x).toBeGreaterThan(headline.x + headline.width);
-    } else {
-      expect(intro.y).toBeGreaterThanOrEqual(headline.y + headline.height);
-    }
+    expect(intro.y).toBeGreaterThanOrEqual(headline.y + headline.height);
     expect(media.y).toBeGreaterThanOrEqual(intro.y + intro.height);
     await expect(page.locator("#top .server-planner")).toHaveCount(0);
     expect(
@@ -93,7 +89,7 @@ test("レイド時間の背景画像を使わず、紹介・参加・ルール�
   await expect(page).toHaveURL(/#rules$/);
 });
 
-test("FAQはデスクトップで案内と質問を分け、モバイルでは読み順に並ぶ", async ({
+test("FAQは広い導入に続き、本文を右へずらして読み順に配置する", async ({
   page,
 }) => {
   for (const width of [390, 1440]) {
@@ -104,11 +100,8 @@ test("FAQはデスクトップで案内と質問を分け、モバイルでは�
     const answers = await page.locator(".faq-answers").boundingBox();
     if (!heading || !answers)
       throw new Error("FAQ introduction and answers must be rendered");
-    if (width >= 1024) {
-      expect(answers.x).toBeGreaterThan(heading.x + heading.width);
-    } else {
-      expect(answers.y).toBeGreaterThanOrEqual(heading.y + heading.height);
-    }
+    expect(answers.y).toBeGreaterThanOrEqual(heading.y + heading.height);
+    if (width >= 1024) expect(answers.x).toBeGreaterThan(heading.x);
     await expect(
       page.locator(".faq-heading").getByRole("link", { name: /Discordに参加/ }),
     ).toHaveAttribute("href", e2eEnvironment.discordUrl);
@@ -172,4 +165,27 @@ test("進捗ラインを設けず、スクロール先の情報と日時操作�
         ),
     )
     .toBe(true);
+});
+
+test("Heroのガイドからキーボードで各セクションへ移動でき、英語にも切り替わる", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const guide = page.getByRole("navigation", { name: "参加前のガイド" });
+  for (const id of ["server", "rules", "faq"]) {
+    const link = guide.locator(`a[href="#${id}"]`);
+    await link.focus();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(new RegExp(`#${id}$`));
+  }
+  await page.getByRole("button", { name: /English|英語/, exact: true }).click();
+  const englishGuide = page.getByRole("navigation", {
+    name: "Before you join",
+  });
+  await expect(
+    englishGuide.getByRole("link", { name: /Server/ }),
+  ).toHaveAttribute("href", "#server");
+  await expect(
+    englishGuide.getByRole("link", { name: /Rules/ }),
+  ).toHaveAttribute("href", "#rules");
 });
