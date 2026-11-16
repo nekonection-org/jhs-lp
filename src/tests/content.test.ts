@@ -131,7 +131,7 @@ describe("localized content", () => {
     expect(getMatchingItem(ja.server.settings, "team-limit").value).toBe(
       "最大4人（Solo / Duo / Trio / Quad）",
     );
-    expect(getMatchingItem(ja.server.settings, "map-size").value).toBe("3500");
+    expect(getMatchingItem(ja.server.settings, "map-size").value).toBe("3750");
     expect(getMatchingItem(ja.server.settings, "map-bp-wipe").value).toBe(
       "毎週金曜日 18:00 JST",
     );

@@ -18,7 +18,7 @@ describe("ServerSection", () => {
       "最大4人（Solo / Duo / Trio / Quad）",
     );
     expect(screen.getByText("マップサイズ").closest("div")).toHaveTextContent(
-      "3500",
+      "3750",
     );
     expect(
       screen.getByText("マップ・BPワイプ").closest("div"),

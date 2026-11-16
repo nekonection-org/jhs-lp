@@ -169,7 +169,7 @@ export const ja = {
         label: "チーム上限",
         value: "最大4人（Solo / Duo / Trio / Quad）",
       },
-      { id: "map-size", label: "マップサイズ", value: "3500" },
+      { id: "map-size", label: "マップサイズ", value: "3750" },
       {
         id: "map-bp-wipe",
         label: "マップ・BPワイプ",

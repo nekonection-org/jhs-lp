@@ -169,7 +169,7 @@ export const en = {
         label: "Team limit",
         value: "Up to 4 players (Solo / Duo / Trio / Quad)",
       },
-      { id: "map-size", label: "Map size", value: "3500" },
+      { id: "map-size", label: "Map size", value: "3750" },
       {
         id: "map-bp-wipe",
         label: "Map / BP wipe",
