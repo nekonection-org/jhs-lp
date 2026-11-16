@@ -60,6 +60,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+## Generated Hero illustration
+
+`public/images/hazmat-operative.webp` was generated for this project with the built-in image_gen tool. It is an original illustration, not an extracted game screenshot or official Facepunch asset. The final prompt and encoding details are recorded in `design-assets/hazmat-prompt.md`.
+
 ## Noto Sans JP
 
 Source: https://github.com/google/fonts/tree/main/ofl/notosansjp
