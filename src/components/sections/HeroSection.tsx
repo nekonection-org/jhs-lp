@@ -14,7 +14,6 @@ import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
 import { externalUrls, rustConnection } from "@/lib/constants";
-import { SectionDisclosure } from "@/components/ui/SectionDisclosure";
 
 type CopyState = "idle" | "copied" | "error";
 
@@ -98,16 +97,13 @@ export function HeroSection() {
           </div>
         </Reveal>
         <div className="hero-utilities">
-          <SectionDisclosure
+          <section
             className="connection-guide"
-            label={{
-              ja: ja.detailLabels.connection,
-              en: en.detailLabels.connection,
-            }}
+            aria-labelledby="connection-title"
           >
             <div className="connection-strip">
               <div>
-                <h2 className="text-base font-semibold">
+                <h2 className="text-xl font-semibold" id="connection-title">
                   <LocalizedText
                     ja={ja.hero.connection.title}
                     en={en.hero.connection.title}
@@ -205,7 +201,7 @@ export function HeroSection() {
                 </p>
               )}
             </div>
-          </SectionDisclosure>
+          </section>
           <a className="hero-explore" href="#server">
             <LocalizedText ja={ja.server.title} en={en.server.title} />
             <ArrowDown aria-hidden="true" className="size-4" />

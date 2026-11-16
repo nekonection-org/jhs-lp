@@ -1,6 +1,5 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
 import { useState, useSyncExternalStore } from "react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -168,11 +167,8 @@ export function ServerSchedule() {
           </div>
         </div>
       </div>
-      <details className="raid-upcoming">
-        <summary>
-          {copy.upcoming}
-          <ChevronDown aria-hidden="true" className="size-4" />
-        </summary>
+      <section className="raid-upcoming" aria-labelledby="raid-upcoming-title">
+        <h3 id="raid-upcoming-title">{copy.upcoming}</h3>
         {state ? (
           <ol aria-label={copy.upcoming}>
             {state.upcoming.map((window) => (
@@ -203,7 +199,7 @@ export function ServerSchedule() {
           <p className="server-schedule-note">{copy.loading}</p>
         )}
         <p className="server-schedule-note">{copy.note}</p>
-      </details>
+      </section>
     </div>
   );
 }

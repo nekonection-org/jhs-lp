@@ -385,8 +385,6 @@ export interface FooterContent {
 
 export interface SiteContent {
   readonly detailLabels: {
-    readonly connection: string;
-    readonly server: string;
     readonly rules: string;
     readonly vip: string;
     readonly moderator: string;

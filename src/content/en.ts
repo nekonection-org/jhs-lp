@@ -62,8 +62,6 @@ export const en = {
     },
   },
   detailLabels: {
-    connection: "Connection options",
-    server: "Server settings & Japan-time hours",
     rules: "More important rules",
     vip: "Explore VIP",
     moderator: "Responsibilities & requirements",

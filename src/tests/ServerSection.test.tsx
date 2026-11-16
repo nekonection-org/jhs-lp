@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
@@ -43,7 +43,6 @@ describe("ServerSection", () => {
         <ServerSection />
       </LanguageProvider>,
     );
-    fireEvent.click(screen.getByText("サーバー設定・日本時間の時間表"));
     const table = screen.getByRole("table", {
       name: /レイド時間を、ひと目で。/,
     });

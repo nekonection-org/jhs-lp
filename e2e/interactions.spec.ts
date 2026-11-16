@@ -31,7 +31,6 @@ test("接続コマンドを実際にコピーし、完了表示を返す", async
   page,
 }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.locator(".connection-guide > summary").click();
   await page
     .getByRole("button", { name: ja.hero.connection.copyLabel, exact: true })
     .click();
@@ -61,7 +60,6 @@ test("コピーが拒否された場合は手動コピーの案内を読み続�
       },
     });
   });
-  await page.locator(".connection-guide > summary").click();
   await page
     .getByRole("button", { name: ja.hero.connection.copyLabel, exact: true })
     .click();

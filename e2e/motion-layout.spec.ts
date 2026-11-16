@@ -82,7 +82,6 @@ test("レイド時間の背景画像を使わず、紹介・参加・ルール�
   await expect(
     page.locator("#hero-actions").getByRole("link", { name: /Discordに参加/ }),
   ).toHaveAttribute("href", e2eEnvironment.discordUrl);
-  await page.locator(".server-reference > summary").click();
   await expect(page.locator("#server .raid-schedule")).toBeVisible();
   await page.locator('#hero-actions a[href="#rules"]').click();
   await expect(page).toHaveURL(/#rules$/);
@@ -179,8 +178,6 @@ test("補足情報は初期状態で閉じ、キーボードで開閉でき、�
 }) => {
   await page.goto("/");
   for (const selector of [
-    ".connection-guide",
-    ".server-reference",
     ".rules-additional",
     ".vip-details",
     ".moderator-details",
@@ -196,9 +193,10 @@ test("補足情報は初期状態で閉じ、キーボードで開閉でき、�
     await expect(summary).toBeFocused();
   }
   await page.getByRole("button", { name: /English|英語/, exact: true }).click();
-  const summary = page.locator(".connection-guide > summary");
-  await expect(summary).toHaveText(/Connection options/);
-  await summary.focus();
-  await page.keyboard.press("Enter");
+  await expect(
+    page
+      .locator(".connection-guide")
+      .getByRole("heading", { level: 2, name: "Connect to the Server" }),
+  ).toBeVisible();
   await expect(page.locator(".connection-command")).toBeVisible();
 });

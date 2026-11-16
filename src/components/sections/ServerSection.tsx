@@ -5,7 +5,6 @@ import { LocalizedText } from "@/components/ui/LocalizedText";
 import { RaidSchedule } from "@/components/ui/RaidSchedule";
 import { ServerSchedule } from "@/components/ui/ServerSchedule";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionDisclosure } from "@/components/ui/SectionDisclosure";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
@@ -37,10 +36,7 @@ export function ServerSection() {
         <Reveal className="server-planner-reveal">
           <ServerSchedule />
         </Reveal>
-        <SectionDisclosure
-          className="server-reference"
-          label={{ ja: ja.detailLabels.server, en: en.detailLabels.server }}
-        >
+        <div className="server-reference">
           <div className="server-reference-grid">
             <Reveal className="settings-panel">
               <h3 className="text-lg font-semibold">
@@ -104,7 +100,7 @@ export function ServerSection() {
               </p>
             </div>
           </Reveal>
-        </SectionDisclosure>
+        </div>
       </Container>
     </section>
   );

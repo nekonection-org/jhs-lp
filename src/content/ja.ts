@@ -62,8 +62,6 @@ export const ja = {
     },
   },
   detailLabels: {
-    connection: "接続方法を見る",
-    server: "サーバー設定・日本時間の時間表",
     rules: "その他の重要ルール",
     vip: "VIPの詳細を見る",
     moderator: "活動内容・応募条件を見る",
