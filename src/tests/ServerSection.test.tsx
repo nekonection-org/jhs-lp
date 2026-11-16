@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
@@ -35,31 +35,5 @@ describe("ServerSection", () => {
     expect(screen.queryByText("前哨基地統合")).not.toBeInTheDocument();
     expect(screen.getByText("サーバー情報").closest("h2")).not.toBeNull();
     expect(screen.getByText(/基本方針と/)).toBeInTheDocument();
-  });
-
-  it("exposes weekday and weekend raid windows as a labeled table", () => {
-    render(
-      <LanguageProvider>
-        <ServerSection />
-      </LanguageProvider>,
-    );
-    const table = screen.getByRole("table", {
-      name: /レイド時間を、ひと目で。/,
-    });
-    expect(within(table).getByRole("row", { name: /平日/ })).toHaveTextContent(
-      "18:00–24:00 JST",
-    );
-    expect(
-      within(table).getByRole("row", { name: /土・日/ }),
-    ).toHaveTextContent("12:00–24:00 JST");
-    const figure = screen.getByRole("figure", {
-      name: /レイド時間を、ひと目で。/,
-    });
-    expect(
-      within(figure).getByText("レイド可能", { exact: true }),
-    ).toBeInTheDocument();
-    expect(
-      within(figure).getByText("レイド禁止", { exact: true }),
-    ).toBeInTheDocument();
   });
 });

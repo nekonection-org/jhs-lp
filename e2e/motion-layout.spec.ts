@@ -82,7 +82,7 @@ test("レイド時間の背景画像を使わず、紹介・参加・ルール�
   await expect(
     page.locator("#hero-actions").getByRole("link", { name: /Discordに参加/ }),
   ).toHaveAttribute("href", e2eEnvironment.discordUrl);
-  await expect(page.locator("#server .raid-schedule")).toBeVisible();
+  await expect(page.locator("#server .raid-schedule")).toHaveCount(0);
   await page.locator('#hero-actions a[href="#rules"]').click();
   await expect(page).toHaveURL(/#rules$/);
 });
@@ -199,4 +199,35 @@ test("補足情報は初期状態で閉じ、キーボードで開閉でき、�
       .getByRole("heading", { level: 2, name: "Connect to the Server" }),
   ).toBeVisible();
   await expect(page.locator(".connection-command")).toBeVisible();
+});
+
+test("通常のスクロールにHeroが反応し、項目は見えたときに表示、Reduced Motionで停止する", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(page.locator(".hero-layout")).toHaveAttribute(
+    "data-reveal-state",
+    "entered",
+  );
+  const scene = page.locator(".hero-scroll-scene");
+  await page.evaluate(() => window.scrollTo({ top: 240, behavior: "instant" }));
+  await expect
+    .poll(() =>
+      scene.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m42),
+    )
+    .toBeLessThan(0);
+  expect(await page.evaluate(() => window.scrollY)).toBe(240);
+  await expect
+    .poll(() =>
+      scene.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m42),
+    )
+    .toBeGreaterThanOrEqual(-20);
+  const setting = page.locator(".server-specification").last();
+  await expect(setting).not.toHaveAttribute("data-reveal-state", "entered");
+  await setting.scrollIntoViewIfNeeded();
+  await expect(setting).toHaveAttribute("data-reveal-state", "entered");
+  await expect(setting).toHaveCSS("opacity", "1");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(scene).toHaveCSS("transform", "none");
+  await expect(setting).toHaveCSS("transform", "none");
 });

@@ -24,6 +24,7 @@ export function FinalCtaSection() {
               <h2
                 className="section-title mt-5"
                 id="join-title"
+                data-reveal-kind="heading"
                 data-reveal-item
               >
                 <LocalizedText ja={ja.finalCta.title} en={en.finalCta.title} />

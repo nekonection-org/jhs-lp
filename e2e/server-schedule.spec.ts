@@ -105,7 +105,7 @@ test("保存不可でも端末の45分オフセットの地域で確認できる
   await context.close();
 });
 
-test("JavaScriptなしでも接続方法・サーバー設定・時間表を展開せず読める", async ({
+test("JavaScriptなしでも接続方法・サーバー設定・ワイプ周期を展開せず読める", async ({
   browser,
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
@@ -114,9 +114,9 @@ test("JavaScriptなしでも接続方法・サーバー設定・時間表を展�
   await expect(page.locator(".connection-command")).toBeVisible();
   await expect(page.locator("#server .settings-panel")).toBeVisible();
   await expect(page.locator("#top details, #server details")).toHaveCount(0);
-  await expect(page.locator("#server .raid-schedule")).toBeVisible();
-  await expect(page.locator("#server .raid-schedule")).toContainText(
-    "18:00–24:00 JST",
+  await expect(page.locator("#server .raid-schedule")).toHaveCount(0);
+  await expect(page.locator(".settings-panel")).toContainText(
+    "18:00〜24:00 JST",
   );
   await expect(page.locator("#server .wipe-reference")).toContainText(
     "毎週金曜日 18:00 JST",
@@ -170,23 +170,15 @@ test("ワイプの日時と残り時間をタイムゾーンへ変換し、予�
   await expect(wipe.locator(".wipe-countdown")).toContainText("7日 00:00:00");
 });
 
-test("7日間の時間表は日付またぎと夏時間をそれぞれの日付で変換する", async ({
+test("次回ワイプと現地日時の確認だけを残し、重複する時間表を表示しない", async ({
   page,
 }) => {
-  await page.clock.install({ time: new Date("2026-10-31T00:00:00Z") });
   await page.goto("/");
-  await page.getByLabel("表示タイムゾーン").selectOption("America/New_York");
-  const rows = page.locator(".raid-upcoming li");
-  await expect(rows).toHaveCount(7);
-  await expect(rows.first()).toBeVisible();
-  await expect(rows.last()).toBeVisible();
-  await expect(rows.nth(0).locator(".raid-upcoming-times")).toContainText(
-    "23:00",
-  );
-  await expect(rows.nth(0).locator(".raid-upcoming-times")).toContainText(
-    "11:00",
-  );
-  await expect(rows.nth(1).locator(".raid-upcoming-times")).toContainText(
-    "10:00",
-  );
+  await expect(page.locator(".raid-upcoming, .raid-schedule")).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "これから7日間のレイド時間" }),
+  ).toHaveCount(0);
+  await expect(page.locator(".wipe-countdown-block")).toBeVisible();
+  await expect(page.getByLabel("表示タイムゾーン")).toBeEnabled();
+  await expect(page.getByLabel("確認する日付")).toBeEnabled();
 });

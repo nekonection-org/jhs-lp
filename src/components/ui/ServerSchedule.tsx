@@ -12,7 +12,6 @@ import { getNextWipe, getWipeCountdown } from "@/lib/wipe-schedule";
 import { en, ja } from "@/content";
 import {
   formatRaidDateTime,
-  getRaidState,
   isValidTimeZone,
   raidTimeZones,
 } from "@/lib/raid-schedule";
@@ -90,7 +89,6 @@ export function ServerSchedule() {
     store.getSnapshot,
     () => initialSnapshot,
   );
-  const state = now === null ? null : getRaidState(now);
   const nextWipe = now === null ? null : getNextWipe(now);
   const wipeCountdown =
     now !== null && nextWipe !== null ? getWipeCountdown(nextWipe - now) : null;
@@ -167,39 +165,7 @@ export function ServerSchedule() {
           </div>
         </div>
       </div>
-      <section className="raid-upcoming" aria-labelledby="raid-upcoming-title">
-        <h3 id="raid-upcoming-title">{copy.upcoming}</h3>
-        {state ? (
-          <ol aria-label={copy.upcoming}>
-            {state.upcoming.map((window) => (
-              <li key={window.japanDate}>
-                <p className="raid-japan-date">
-                  <span>{copy.japanDate}</span>
-                  <time dateTime={window.japanDate}>{window.japanDate}</time>
-                </p>
-                <div className="raid-upcoming-times">
-                  <p>
-                    <span>{copy.starts}</span>
-                    <time dateTime={new Date(window.start).toISOString()}>
-                      {dateTime(window.start)}
-                    </time>
-                  </p>
-                  <span aria-hidden="true">→</span>
-                  <p>
-                    <span>{copy.ends}</span>
-                    <time dateTime={new Date(window.end).toISOString()}>
-                      {dateTime(window.end)}
-                    </time>
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        ) : (
-          <p className="server-schedule-note">{copy.loading}</p>
-        )}
-        <p className="server-schedule-note">{copy.note}</p>
-      </section>
+      <p className="server-schedule-note">{copy.note}</p>
     </div>
   );
 }

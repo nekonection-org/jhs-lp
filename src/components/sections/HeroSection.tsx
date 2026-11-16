@@ -11,6 +11,7 @@ import {
 import { Container } from "@/components/ui/Container";
 import { Button, buttonStyles } from "@/components/ui/Button";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { HeroScrollScene } from "@/components/ui/HeroScrollScene";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
 import { externalUrls, rustConnection } from "@/lib/constants";
@@ -55,47 +56,54 @@ export function HeroSection() {
   return (
     <section aria-labelledby="hero-title" className="hero-section" id="top">
       <Container>
-        <Reveal className="hero-layout">
-          <p className="hero-brand" data-reveal-item>
-            {ja.hero.title}
-          </p>
-          <h1 className="hero-headline" id="hero-title" data-reveal-item>
-            {(["ja", "en"] as const).map((language) => (
-              <span data-locale-content={language} key={language}>
-                {(language === "ja" ? ja : en).hero.headline.map((line) => (
-                  <span className="hero-headline-line" key={line}>
-                    {line}{" "}
-                  </span>
-                ))}
-              </span>
-            ))}
-          </h1>
-          <div className="hero-introduction" data-reveal-item>
-            <p className="hero-description">
-              <LocalizedText
-                ja={ja.hero.description}
-                en={en.hero.description}
-              />
+        <HeroScrollScene>
+          <Reveal className="hero-layout">
+            <p className="hero-brand" data-reveal-item>
+              {ja.hero.title}
             </p>
-            <div className="hero-actions" id="hero-actions">
-              <LocalizedExternalAction
-                action={{
-                  ja: ja.hero.primaryAction,
-                  en: en.hero.primaryAction,
-                }}
-                common={{ ja: ja.common, en: en.common }}
-                href={externalUrls.discord}
-              />
-              <LocalizedSectionAction
-                action={{
-                  ja: ja.hero.secondaryAction,
-                  en: en.hero.secondaryAction,
-                }}
-                variant="secondary"
-              />
+            <h1 className="hero-headline" id="hero-title">
+              {(["ja", "en"] as const).map((language) => (
+                <span data-locale-content={language} key={language}>
+                  {(language === "ja" ? ja : en).hero.headline.map((line) => (
+                    <span
+                      className="hero-headline-line"
+                      key={line}
+                      data-reveal-item
+                      data-reveal-kind="heading"
+                    >
+                      {line}{" "}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </h1>
+            <div className="hero-introduction" data-reveal-item>
+              <p className="hero-description">
+                <LocalizedText
+                  ja={ja.hero.description}
+                  en={en.hero.description}
+                />
+              </p>
+              <div className="hero-actions" id="hero-actions">
+                <LocalizedExternalAction
+                  action={{
+                    ja: ja.hero.primaryAction,
+                    en: en.hero.primaryAction,
+                  }}
+                  common={{ ja: ja.common, en: en.common }}
+                  href={externalUrls.discord}
+                />
+                <LocalizedSectionAction
+                  action={{
+                    ja: ja.hero.secondaryAction,
+                    en: en.hero.secondaryAction,
+                  }}
+                  variant="secondary"
+                />
+              </div>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        </HeroScrollScene>
         <div className="hero-utilities">
           <section
             className="connection-guide"

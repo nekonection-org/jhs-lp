@@ -2,7 +2,6 @@ import { Info } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
-import { RaidSchedule } from "@/components/ui/RaidSchedule";
 import { ServerSchedule } from "@/components/ui/ServerSchedule";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -80,9 +79,6 @@ export function ServerSection() {
                   );
                 })}
               </dl>
-            </Reveal>
-            <Reveal className="server-hours-reference">
-              <RaidSchedule />
             </Reveal>
           </div>
 

@@ -1,4 +1,4 @@
-// Shared by the localized settings list and the visual raid schedule.
+// Shared by the localized settings list and the raid-time checker.
 export const raidWindows = {
   weekdays: { start: 18, end: 24 },
   weekends: { start: 12, end: 24 },

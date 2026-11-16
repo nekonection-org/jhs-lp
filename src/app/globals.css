@@ -432,46 +432,8 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   isolation: isolate;
   overflow: clip;
 }
-/* A single still, neutral light source. Never applied to the raid controls. */
-.hero-section::before {
-  position: absolute;
-  z-index: -1;
-  pointer-events: none;
-  content: "";
-  width: min(56rem, 95vw);
-  height: 55rem;
-  right: -10rem;
-  top: -22rem;
-  background: radial-gradient(
-    ellipse at center,
-    rgb(255 255 255 / 0.18),
-    transparent 66%
-  );
-}
-.hero-section::after {
-  position: absolute;
-  z-index: -1;
-  pointer-events: none;
-  content: "";
-  top: 5rem;
-  right: 15%;
-  width: 1px;
-  height: 25rem;
-  transform: rotate(28deg);
-  transform-origin: top;
-  background: linear-gradient(
-    transparent,
-    rgb(255 255 255 / 0.8) 35%,
-    transparent
-  );
-  box-shadow: 0 0 60px 16px rgb(255 255 255 / 0.07);
-}
-.light .hero-section::before {
-  background: radial-gradient(ellipse at center, #fff 10%, transparent 67%);
-}
-.light .hero-section::after {
-  background: linear-gradient(transparent, rgb(70 75 85 / 0.3), transparent);
-  box-shadow: 0 0 60px 16px rgb(60 65 75 / 0.03);
+.hero-scroll-scene {
+  position: relative;
 }
 .hero-layout {
   min-width: 0;
@@ -757,44 +719,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .raid-selected-instant {
   margin-top: 0.5rem;
 }
-.raid-japan-date,
-.raid-upcoming-times p > span {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-.raid-upcoming {
-  margin-top: 2rem;
-}
-.raid-upcoming h3 {
-  padding-block: 1.5rem;
-  font-size: 1.125rem;
-  font-weight: 500;
-}
-.raid-upcoming li {
-  display: grid;
-  gap: 1rem;
-  padding-block: 1.5rem;
-  border-top: 1px solid var(--border);
-}
-.raid-japan-date {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.raid-upcoming-times {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  gap: 0.5rem;
-  align-items: center;
-}
-.raid-upcoming-times p > span {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-.raid-upcoming-times time {
-  font-size: 1rem;
-  font-variant-numeric: tabular-nums;
-}
 .server-schedule-note {
   max-width: 48rem;
   margin-top: 1rem;
@@ -827,45 +751,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   font-weight: 500;
   overflow-wrap: anywhere;
 }
-.raid-schedule-table {
-  width: 100%;
-  margin-top: 1rem;
-  border-collapse: separate;
-  border-spacing: 0 1.5rem;
-  table-layout: fixed;
-}
-.raid-label-column {
-  width: 5.5rem;
-}
-.raid-schedule-table th {
-  padding-right: 1rem;
-  text-align: left;
-  vertical-align: bottom;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-.raid-track {
-  display: grid;
-  height: 1.25rem;
-  overflow: hidden;
-  border: 1px solid var(--border-strong);
-  border-radius: 3px;
-  background: var(--surface-secondary);
-}
-.raid-track-allowed {
-  border-left: 1px solid var(--accent);
-  background: var(--accent);
-}
-.raid-axis {
-  display: flex;
-  justify-content: space-between;
-  margin-left: 5.5rem;
-  font-size: 0.875rem;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-secondary);
-}
-
 .rules-layout,
 .vip-layout,
 .moderator-introduction,
@@ -1032,11 +917,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .hero-headline {
     margin-top: 3rem;
   }
-  .hero-section::after {
-    top: 6rem;
-    right: 20%;
-    height: 32rem;
-  }
   .hero-description {
     max-width: 30rem;
   }
@@ -1084,10 +964,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .raid-japan-equivalent {
     grid-column: 1 / -1;
   }
-  .raid-upcoming li {
-    grid-template-columns: minmax(0, 0.6fr) minmax(0, 1fr);
-    gap: 2rem;
-  }
   .rules-layout {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
     gap: 6rem;
@@ -1134,6 +1010,26 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .news-layout {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
     gap: 6rem;
+  }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .landing-page
+    .interactive-button:not([aria-disabled="true"]):not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+  .feature-row h3 {
+    transition: transform 180ms ease;
+  }
+  .feature-row:hover h3 {
+    transform: translateX(4px);
+  }
+}
+@media (min-width: 1024px) {
+  .rules-introduction,
+  .faq-heading {
+    position: sticky;
+    top: 7rem;
+    align-self: start;
   }
 }
 @media (prefers-reduced-motion: reduce) {

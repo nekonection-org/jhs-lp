@@ -282,39 +282,28 @@ test("最終CTAから同じDiscordとルールへ移動でき、英語にも切�
   ).toHaveAttribute("href", e2eEnvironment.discordUrl);
 });
 
-test("レイド時間の図がモバイルとデスクトップで正しい時間比率と目盛りを保つ", async ({
+test("不要なレイド時間表とHero背景を表示せず、設定と日時確認を残す", async ({
   page,
 }) => {
   for (const width of [360, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    const schedule = page.getByRole("figure", {
-      name: ja.server.schedule.title,
-    });
-    await schedule.scrollIntoViewIfNeeded();
-    const axis = await schedule.locator(".raid-axis").boundingBox();
-    expect(axis).not.toBeNull();
-    const measurements = await schedule
-      .locator(".raid-track")
-      .evaluateAll((tracks) =>
-        tracks.map((track) => {
-          const allowed = track.querySelector(".raid-track-allowed");
-          const bounds = track.getBoundingClientRect();
-          return {
-            left: bounds.left,
-            ratio:
-              (allowed?.getBoundingClientRect().width ?? 0) / track.clientWidth,
-          };
+    await expect(page.locator(".raid-upcoming, .raid-schedule")).toHaveCount(0);
+    await expect(
+      page.getByRole("heading", { name: "レイド時間を、ひと目で。" }),
+    ).toHaveCount(0);
+    await expect(page.locator(".settings-panel")).toBeVisible();
+    await expect(page.locator(".raid-checker")).toBeVisible();
+    for (const pseudo of ["::before", "::after"]) {
+      const style = await page.locator(".hero-section").evaluate(
+        (el, pseudo) => ({
+          content: getComputedStyle(el, pseudo).content,
+          image: getComputedStyle(el, pseudo).backgroundImage,
         }),
+        pseudo,
       );
-    expect(measurements).toHaveLength(2);
-    const [weekday, weekend] = measurements;
-    if (!axis || !weekday || !weekend) {
-      throw new Error("Both raid windows and the time axis must be rendered");
+      expect(style.content).toBe("none");
+      expect(style.image).toBe("none");
     }
-    for (const measurement of measurements)
-      expect(Math.abs(measurement.left - axis.x)).toBeLessThanOrEqual(1);
-    expect(Math.abs(weekday.ratio - 0.25)).toBeLessThan(0.02);
-    expect(Math.abs(weekend.ratio - 0.5)).toBeLessThan(0.02);
   }
 });

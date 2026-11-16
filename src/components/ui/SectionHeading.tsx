@@ -45,7 +45,7 @@ export function SectionHeading({
           />
         ) : null}
       </p>
-      <h2 className="section-title" data-reveal-item>
+      <h2 className="section-title" data-reveal-item data-reveal-kind="heading">
         {title}
       </h2>
       <p className="section-description" data-reveal-item>
