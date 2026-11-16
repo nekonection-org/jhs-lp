@@ -22,7 +22,7 @@
 
 # local operational guides
 /docs/cloudflare-access-admin-setup.local.md
-
+AGENTS.md
 # debug
 npm-debug.log*
 pnpm-debug.log*
