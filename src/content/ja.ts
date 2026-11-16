@@ -100,6 +100,23 @@ export const ja = {
   },
   server: {
     schedule: {
+      live: {
+        title: "いま、レイドできる？",
+        reference: "基準の時間帯",
+        timeZone: "表示タイムゾーン",
+        deviceZone: "端末のタイムゾーン",
+        now: "現在時刻",
+        loading: "現在時刻を確認中",
+        opens: "次のレイド開始",
+        closes: "レイド終了",
+        untilOpen: "開始まで",
+        untilClose: "終了まで",
+        upcoming: "これから7日間のレイド時間",
+        starts: "開始",
+        ends: "終了",
+        note: "平日・土日の区分は日本時間が基準です。日時は選択したタイムゾーンに変換されます。可否は端末の時計と時間帯ルールに基づく目安です。臨時変更はDiscordをご確認ください。",
+        japanDate: "日本での日付",
+      },
       title: "レイド時間を、ひと目で。",
       description:
         "平日と週末で異なるレイド可能時間。すべて日本時間（JST）でご案内しています。",

@@ -9,7 +9,7 @@ for (const viewport of [
   { width: 1024, height: 900 },
   { width: 1440, height: 900 },
 ]) {
-  test(`${viewport.width}×${viewport.height}: 大きなブランド表記と紹介・操作が収まり、風景へ読み進められる`, async ({
+  test(`${viewport.width}×${viewport.height}: 大きなブランド表記と紹介・操作が収まり、レイド時間を確認できる`, async ({
     page,
   }) => {
     await page.setViewportSize(viewport);
@@ -33,10 +33,10 @@ for (const viewport of [
     const last = await page.locator(".hero-wordmark-last").boundingBox();
     const intro = await page.locator(".hero-introduction").boundingBox();
     const actions = await page.locator("#hero-actions").boundingBox();
-    const media = await page.locator(".hero-media").boundingBox();
+    const media = await page.locator(".raid-clock").boundingBox();
     if (!headline || !first || !last || !intro || !actions || !media)
       throw new Error(
-        "Brand, introduction, actions and landscape must be rendered",
+        "Brand, introduction, actions and raid clock must be rendered",
       );
     for (const bounds of [headline, first, last, intro, actions, media]) {
       expect(bounds.x).toBeGreaterThanOrEqual(20);
@@ -53,6 +53,13 @@ for (const viewport of [
         () => document.documentElement.scrollWidth - innerWidth,
       ),
     ).toBeLessThanOrEqual(1);
+    expect(
+      await page
+        .locator(".hero-window-times dd")
+        .evaluateAll((cells) =>
+          cells.every((cell) => cell.scrollWidth <= cell.clientWidth + 1),
+        ),
+    ).toBe(true);
     const explore = page.locator("a.hero-explore");
     if (viewport.width === 1440) {
       await explore.click();
@@ -71,15 +78,15 @@ for (const viewport of [
   });
 }
 
-test("風景画像の読み込みに失敗しても紹介文・レイド時間・参加導線を利用できる", async ({
+test("レイド時間の背景画像を使わず、紹介・参加・ルールへの導線を表示する", async ({
   page,
 }) => {
-  await page.route("**/_next/image*", (route) =>
-    route.request().url().includes("main-image")
-      ? route.abort()
-      : route.continue(),
-  );
   await page.goto("/");
+  await expect(page.locator(".hero-cover-image, .hero-scrim")).toHaveCount(0);
+  await expect(page.locator(".raid-clock")).toHaveCSS(
+    "background-image",
+    "none",
+  );
   await expect(
     page.getByRole("heading", { level: 1, name: ja.hero.wordmark.join(" ") }),
   ).toBeVisible();
@@ -124,10 +131,6 @@ test("表示中にReduced Motionへ切り替えても本文を表示し、再表
       }),
     );
   await expect.poll(settled).toBe(true);
-  await expect(page.locator(".hero-cover-image")).toHaveCSS(
-    "animation-name",
-    "none",
-  );
   await page.locator("#server h2").scrollIntoViewIfNeeded();
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.locator("#hero-title").scrollIntoViewIfNeeded();

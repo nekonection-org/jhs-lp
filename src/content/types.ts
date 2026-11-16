@@ -200,6 +200,23 @@ export type ServerSettingItems = IdentifiedItems<
 
 export interface ServerContent extends SectionIntroduction<"server"> {
   readonly schedule: {
+    readonly live: {
+      readonly title: string;
+      readonly reference: string;
+      readonly timeZone: string;
+      readonly deviceZone: string;
+      readonly now: string;
+      readonly loading: string;
+      readonly opens: string;
+      readonly closes: string;
+      readonly untilOpen: string;
+      readonly untilClose: string;
+      readonly upcoming: string;
+      readonly starts: string;
+      readonly ends: string;
+      readonly note: string;
+      readonly japanDate: string;
+    };
     readonly title: string;
     readonly description: string;
     readonly weekdays: string;

@@ -100,6 +100,23 @@ export const en = {
   },
   server: {
     schedule: {
+      live: {
+        title: "Can I raid right now?",
+        reference: "Reference hours",
+        timeZone: "Display time zone",
+        deviceZone: "Device time zone",
+        now: "Current time",
+        loading: "Checking the current time",
+        opens: "Next raid starts",
+        closes: "Raiding ends",
+        untilOpen: "Starts in",
+        untilClose: "Ends in",
+        upcoming: "Raiding hours for the next 7 days",
+        starts: "Starts",
+        ends: "Ends",
+        note: "Weekdays and weekends follow Japan time. Dates and times are converted to your selected zone. Availability is a guide based on your device clock and the time rules. Check Discord for temporary changes.",
+        japanDate: "Date in Japan",
+      },
       title: "Know your raiding hours.",
       description:
         "Different hours for weekdays and weekends. All times are in Japan Standard Time (JST).",

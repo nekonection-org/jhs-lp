@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { Check, Copy, Gamepad2, ArrowDown } from "lucide-react";
+import { Check, Copy, Gamepad2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
@@ -14,7 +13,7 @@ import { Button, buttonStyles } from "@/components/ui/Button";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
-import { formatRaidHour, raidWindows } from "@/content/server";
+import { RaidClock } from "@/components/ui/RaidClock";
 import { externalUrls, rustConnection } from "@/lib/constants";
 
 type CopyState = "idle" | "copied" | "error";
@@ -113,61 +112,7 @@ export function HeroSection() {
           </div>
         </Reveal>
         <Reveal className="hero-visual">
-          <div className="hero-cover">
-            <div className="hero-media">
-              <Image
-                alt=""
-                className="hero-cover-image object-cover object-[65%_center] lg:object-[center_45%]"
-                fill
-                priority
-                sizes="(min-width: 1200px) 1136px, (min-width: 640px) calc(100vw - 64px), calc(100vw - 40px)"
-                src="/main-image.png"
-              />
-              <div className="hero-scrim" aria-hidden="true" />
-              <div className="hero-image-content">
-                <a className="hero-explore" href="#server">
-                  <LocalizedText ja={ja.server.title} en={en.server.title} />
-                  <ArrowDown aria-hidden="true" className="size-4" />
-                </a>
-                <div className="hero-raid-reference">
-                  <p className="hero-window-heading">
-                    <LocalizedText
-                      ja={ja.server.schedule.allowed}
-                      en={en.server.schedule.allowed}
-                    />
-                    <span>JST</span>
-                  </p>
-                  <dl className="hero-window-times">
-                    {Object.entries(raidWindows).map(([day, window]) => (
-                      <div key={day}>
-                        <dt>
-                          <LocalizedText
-                            ja={
-                              day === "weekdays"
-                                ? ja.server.schedule.weekdays
-                                : ja.server.schedule.weekends
-                            }
-                            en={
-                              day === "weekdays"
-                                ? en.server.schedule.weekdays
-                                : en.server.schedule.weekends
-                            }
-                          />
-                        </dt>
-                        <dd>
-                          <span>{formatRaidHour(window.start)}</span>
-                          <span className="hero-window-dash" aria-hidden="true">
-                            —
-                          </span>
-                          <span>{formatRaidHour(window.end)}</span>
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </div>
-            </div>
-          </div>
+          <RaidClock />
         </Reveal>
         <div className="connection-strip">
           <div>
