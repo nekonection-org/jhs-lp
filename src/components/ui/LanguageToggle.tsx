@@ -1,7 +1,9 @@
 "use client";
 
 import { Fragment, useId } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 import type { LanguageContent } from "@/content/types";
 import { useLanguage } from "@/components/providers/LanguageProvider";

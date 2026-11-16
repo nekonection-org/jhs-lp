@@ -1,6 +1,6 @@
 export const motionTiming = {
   entrance: {
-    duration: 0.42,
+    duration: 0.4,
     ease: [0.22, 1, 0.36, 1],
   },
   interaction: {

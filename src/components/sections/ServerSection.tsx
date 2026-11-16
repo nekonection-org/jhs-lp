@@ -3,7 +3,7 @@ import { Info } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { RaidSchedule } from "@/components/ui/RaidSchedule";
-import { RaidTimeChecker } from "@/components/ui/RaidTimeChecker";
+import { ServerSchedule } from "@/components/ui/ServerSchedule";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { en, ja } from "@/content";
@@ -32,6 +32,11 @@ export function ServerSection() {
               }
             />
           </Reveal>
+        </div>
+        <Reveal className="server-planner-reveal">
+          <ServerSchedule />
+        </Reveal>
+        <div className="server-reference-grid">
           <Reveal className="settings-panel">
             <h3 className="text-lg font-semibold">
               <LocalizedText
@@ -56,6 +61,7 @@ export function ServerSection() {
                   <div
                     className="grid gap-2 py-4 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] sm:items-baseline sm:gap-4"
                     key={setting.id}
+                    data-reveal-item
                   >
                     <dt className="text-sm text-[var(--text-secondary)]">
                       <LocalizedText
@@ -74,14 +80,8 @@ export function ServerSection() {
               })}
             </dl>
           </Reveal>
-        </div>
-
-        <div className="server-schedule">
-          <Reveal>
+          <Reveal className="server-hours-reference">
             <RaidSchedule />
-          </Reveal>
-          <Reveal>
-            <RaidTimeChecker />
           </Reveal>
         </div>
 

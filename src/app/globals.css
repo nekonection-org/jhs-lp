@@ -317,37 +317,14 @@ html[data-locale="en"] [data-locale-content="en"] {
   margin-top: 1.5rem;
 }
 
-.hero-visual {
-  margin-top: clamp(2.5rem, 5vw, 4rem);
-}
-
-.raid-clock {
-  padding-block: 1.5rem;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.raid-clock-heading {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.raid-clock-heading h2 {
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
 .hero-explore {
-  display: inline-flex;
-  min-height: 2.75rem;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  min-height: 3.5rem;
+  margin-top: 1.5rem;
   color: var(--text-secondary);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
 }
 
 .hero-explore svg {
@@ -355,148 +332,148 @@ html[data-locale="en"] [data-locale-content="en"] {
 }
 
 .hero-explore:hover svg {
-  transform: translateY(3px);
+  transform: translateY(4px);
 }
 
-.raid-clock-layout {
+.server-planner-reveal {
+  margin-top: 2.5rem;
+}
+
+.server-planner {
+  padding-block: 1.5rem;
+  border-block: 1px solid var(--border);
+}
+
+.server-planner-toolbar {
   display: grid;
-  gap: 2rem;
+  gap: 0.5rem;
 }
 
-.raid-clock-current,
-.raid-clock-controls {
-  min-width: 0;
-}
-
-.raid-live-status {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-height: 3.5rem;
-  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-  font-weight: 500;
-  letter-spacing: -0.04em;
-}
-
-.raid-live-status[data-allowed="true"] {
-  color: var(--accent-strong);
-}
-
-.raid-status-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.raid-next-transition {
-  margin-top: 1.25rem;
-}
-
-.raid-next-transition p,
-.raid-countdown > span:first-child,
-.raid-clock-controls label,
-.raid-current-time > span,
-.hero-window-heading,
-.hero-window-times dt,
-.raid-japan-date,
-.raid-upcoming-times p > span {
+.server-planner-toolbar > label,
+.raid-date-time-fields label,
+.raid-time-occurrence label {
   font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
-.raid-next-transition time {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: clamp(1.0625rem, 2.2vw, 1.5rem);
-  font-variant-numeric: tabular-nums;
-}
-
-.raid-countdown {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.raid-countdown > span:last-child {
-  font-family: var(--font-technical);
-  font-size: 0.9375rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.raid-clock-controls label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.raid-clock-controls select {
+.server-planner select,
+.raid-date-time-fields input {
   width: 100%;
+  min-width: 0;
   min-height: 2.75rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: 6px;
-  padding: 0.625rem 0.5rem;
+  padding: 0.625rem 0.75rem;
   background: var(--background);
   color: var(--text-primary);
   font-size: 0.875rem;
 }
 
+.server-planner :is(select, input):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.server-planner-panels {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.server-planner-panels > div {
+  min-width: 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-strong);
+  transition:
+    border-color 180ms ease,
+    translate 180ms ease;
+}
+
+.server-planner .wipe-countdown-block {
+  margin: 0;
+}
+
+.planner-panel-index {
+  margin-bottom: 1.25rem;
+  color: var(--text-muted);
+  font-family: var(--font-technical);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+}
+
 .raid-current-time {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem 1rem;
-  margin-top: 0.75rem;
-}
-
-.raid-current-time time {
-  font-size: 0.8125rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.hero-raid-reference {
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border);
-}
-
-.hero-window-heading {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.hero-window-heading > span:last-child {
-  font-family: var(--font-technical);
-  font-size: 0.6875rem;
-}
-
-.hero-window-times {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: 0.75rem;
-}
-
-.hero-window-times > div + div {
-  padding-left: 1rem;
-  border-left: 1px solid var(--border);
-}
-
-.hero-window-times dd {
-  display: flex;
-  align-items: baseline;
-  gap: 0.375rem;
-  margin-top: 0.375rem;
-  font-family: var(--font-technical);
-  font-size: clamp(0.8125rem, 2vw, 1.125rem);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.hero-window-dash {
+  font-size: 0.75rem;
   color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.raid-date-time-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.raid-date-time-fields label,
+.raid-time-occurrence label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.raid-time-occurrence {
+  margin-block: 1rem;
+}
+
+.raid-check-zone,
+.raid-japan-equivalent,
+.raid-selected-instant {
+  margin-top: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.raid-selected-instant {
+  margin-top: 0.25rem;
+  color: inherit;
+}
+
+.raid-japan-date,
+.raid-upcoming-times p > span {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.server-reference-grid {
+  display: grid;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.server-reference-grid .settings-panel {
+  padding: 0;
+  border: 0;
+}
+
+.scroll-progress {
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  transform-origin: left;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .server-planner-panels > div:hover {
+    translate: 0 -3px;
+    border-color: var(--accent);
+  }
 }
 
 .raid-upcoming {
@@ -554,7 +531,7 @@ html[data-locale="en"] [data-locale-content="en"] {
   font-variant-numeric: tabular-nums;
 }
 
-.raid-clock-note {
+.server-schedule-note {
   margin-top: 0.5rem;
   max-width: 60rem;
   font-size: 0.75rem;
@@ -681,10 +658,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 
 .settings-panel dd {
   font-weight: 500;
-}
-
-.server-schedule {
-  margin-top: 2.5rem;
 }
 
 .rules-introduction {
@@ -879,70 +852,11 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 
 .raid-checker {
-  margin-top: 1.75rem;
-  padding-block: 2rem;
-  border-block: 1px solid var(--border);
+  min-width: 0;
 }
 
 .raid-checker-intro {
   max-width: 28rem;
-}
-
-.raid-day-switch {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.25rem;
-  margin-top: 1rem;
-  padding: 0.25rem;
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
-  background: var(--background);
-}
-
-.raid-day-button {
-  position: relative;
-  min-height: 2.75rem;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  color: var(--text-secondary);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color 150ms ease;
-}
-
-.raid-day-button[aria-pressed="true"],
-.raid-day-button:hover {
-  color: var(--text-primary);
-}
-
-.raid-day-button:focus-visible,
-.raid-hour-input:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 3px;
-}
-
-.raid-day-button:disabled,
-.raid-hour-input:disabled {
-  cursor: default;
-  opacity: 0.6;
-}
-
-.raid-day-indicator {
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--border-strong);
-  border-radius: inherit;
-  background: var(--surface-secondary);
-}
-
-.raid-hour-input {
-  display: block;
-  width: 100%;
-  height: 2.75rem;
-  margin-block: 0.25rem;
-  accent-color: var(--accent-strong);
-  cursor: pointer;
 }
 
 .raid-check-result {
@@ -993,14 +907,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
     gap: 4rem;
   }
-  .raid-clock-layout {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
-  }
-  .raid-clock-controls {
-    padding-left: 1.5rem;
-    border-left: 1px solid var(--border);
-  }
   .raid-upcoming li {
     grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr);
     align-items: center;
@@ -1028,34 +934,8 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 
 @media (min-width: 1024px) {
-  .raid-clock-layout {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
-    gap: 4rem;
-  }
-  .raid-clock-controls {
-    padding-left: 2rem;
-  }
   .server-overview {
     gap: 3rem;
-  }
-  .server-schedule {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: 4rem;
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-  }
-  .server-schedule .raid-schedule,
-  .server-schedule .raid-checker {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-  }
-  .server-schedule > div + div {
-    padding-left: 2rem;
-    border-left: 1px solid var(--border);
   }
   .vip-content {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
@@ -1337,4 +1217,41 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .markdown-content :is(a, .markdown-table-scroll, pre):focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .server-planner-toolbar {
+    grid-template-columns: auto minmax(12rem, 22rem) minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+  }
+  .server-planner-toolbar .raid-current-time {
+    justify-self: end;
+  }
+}
+
+@media (min-width: 1024px) {
+  .server-planner-panels {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 4rem;
+  }
+  .server-reference-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress {
+    display: none;
+  }
+  .server-planner [data-reveal-item],
+  .raid-japan-equivalent,
+  .wipe-countdown-block > time,
+  .raid-check-result > span {
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+  }
 }

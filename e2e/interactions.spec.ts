@@ -1,44 +1,29 @@
 import { expect, test } from "@playwright/test";
 
-import { en, ja } from "../src/content";
+import { ja } from "../src/content";
 import { e2eEnvironment } from "./environment";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
-test("曜日と時刻をキーボードで選び、日英で同じレイド判定を確認できる", async ({
-  page,
-}) => {
-  const checker = page.locator(".raid-checker");
-  const slider = checker.getByRole("slider");
-  const result = checker.locator(".raid-check-result");
-  await expect(slider).toBeEnabled();
-  await slider.focus();
-  await page.keyboard.press("ArrowLeft");
-  await expect(slider).toHaveValue("17");
-  await expect(result).toHaveAttribute("data-allowed", "false");
-  await expect(result).toContainText(ja.server.schedule.blocked);
-  await checker
-    .getByRole("button", { name: ja.server.schedule.weekends, exact: true })
-    .click();
-  await expect(result).toHaveAttribute("data-allowed", "true");
-  await page.getByRole("button", { name: /English|英語/i }).click();
-  await expect(
-    checker.getByRole("button", {
-      name: en.server.schedule.weekends,
-      exact: true,
-    }),
-  ).toHaveAttribute("aria-pressed", "true");
-  await expect(result).toContainText(en.server.schedule.allowed);
-  await expect(slider).toHaveAttribute("aria-valuetext", "17:00 JST");
-  await slider.focus();
-  await page.keyboard.press("Home");
-  await expect(slider).toHaveValue("0");
-  await expect(result).toHaveAttribute("data-allowed", "false");
-  await page.keyboard.press("End");
-  await expect(slider).toHaveValue("23");
-  await expect(result).toHaveAttribute("data-allowed", "true");
+test("現地の日付と時刻をキーボードで確認できる", async ({ page }) => {
+  const date = page.getByLabel("確認する日付");
+  const time = page.getByLabel(/確認する時刻/);
+  await date.fill("2026-11-16");
+  await time.fill("17:59");
+  await expect(page.locator(".raid-check-result")).toHaveAttribute(
+    "data-allowed",
+    "false",
+  );
+  await time.focus();
+  await page.keyboard.press("Tab");
+  await expect(date).toBeEnabled();
+  await time.fill("18:00");
+  await expect(page.locator(".raid-check-result")).toHaveAttribute(
+    "data-allowed",
+    "true",
+  );
 });
 
 test("接続コマンドを実際にコピーし、完了表示を返す", async ({
@@ -127,22 +112,18 @@ test.describe("モバイルの参加導線", () => {
   });
 });
 
-test("Reduced Motionでも曜日と時刻の切替が機能し、ボタンを拡縮しない", async ({
+test("Reduced Motionでも日時の切替が機能し、ボタンを拡縮しない", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
-  const slider = page.locator(".raid-checker").getByRole("slider");
-  await expect(slider).toBeEnabled();
-  await slider.focus();
-  await page.keyboard.press("Home");
+  await page.getByLabel("確認する日付").fill("2026-11-16");
+  await page.getByLabel(/確認する時刻/).fill("00:00");
   await expect(page.locator(".raid-check-result")).toHaveAttribute(
     "data-allowed",
     "false",
   );
-  const button = page.locator(".raid-day-button").last();
-  await button.click();
-  await expect(button).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".scroll-progress")).toHaveCount(0);
   const action = page.locator('#hero-actions a[href="#rules"]');
   await action.scrollIntoViewIfNeeded();
   await action.hover();

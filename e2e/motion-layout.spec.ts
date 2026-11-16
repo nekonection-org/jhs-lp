@@ -33,10 +33,10 @@ for (const viewport of [
     const last = await page.locator(".hero-wordmark-last").boundingBox();
     const intro = await page.locator(".hero-introduction").boundingBox();
     const actions = await page.locator("#hero-actions").boundingBox();
-    const media = await page.locator(".raid-clock").boundingBox();
+    const media = await page.locator("#server .server-planner").boundingBox();
     if (!headline || !first || !last || !intro || !actions || !media)
       throw new Error(
-        "Brand, introduction, actions and raid clock must be rendered",
+        "Brand, introduction, actions and server planner must be rendered",
       );
     for (const bounds of [headline, first, last, intro, actions, media]) {
       expect(bounds.x).toBeGreaterThanOrEqual(20);
@@ -45,21 +45,12 @@ for (const viewport of [
     expect(actions.y + actions.height).toBeLessThanOrEqual(viewport.height);
     expect(intro.y).toBeGreaterThanOrEqual(headline.y + headline.height);
     expect(media.y).toBeGreaterThanOrEqual(intro.y + intro.height);
-    await expect(page.locator(".hero-window-times > div")).toHaveCount(2);
-    await expect(page.locator(".hero-window-times")).toContainText("18:00");
-    await expect(page.locator(".hero-window-times")).toContainText("12:00");
+    await expect(page.locator("#top .server-planner")).toHaveCount(0);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth - innerWidth,
       ),
     ).toBeLessThanOrEqual(1);
-    expect(
-      await page
-        .locator(".hero-window-times dd")
-        .evaluateAll((cells) =>
-          cells.every((cell) => cell.scrollWidth <= cell.clientWidth + 1),
-        ),
-    ).toBe(true);
     const explore = page.locator("a.hero-explore");
     if (viewport.width === 1440) {
       await explore.click();
@@ -83,7 +74,7 @@ test("レイド時間の背景画像を使わず、紹介・参加・ルール�
 }) => {
   await page.goto("/");
   await expect(page.locator(".hero-cover-image, .hero-scrim")).toHaveCount(0);
-  await expect(page.locator(".raid-clock")).toHaveCSS(
+  await expect(page.locator("#server .server-planner")).toHaveCSS(
     "background-image",
     "none",
   );
@@ -93,7 +84,7 @@ test("レイド時間の背景画像を使わず、紹介・参加・ルール�
   await expect(
     page.locator("#hero-actions").getByRole("link", { name: /Discordに参加/ }),
   ).toHaveAttribute("href", e2eEnvironment.discordUrl);
-  await expect(page.locator(".hero-window-times")).toBeVisible();
+  await expect(page.locator("#server .raid-schedule")).toBeVisible();
   await page.locator('#hero-actions a[href="#rules"]').click();
   await expect(page).toHaveURL(/#rules$/);
 });
@@ -127,7 +118,9 @@ test("表示中にReduced Motionへ切り替えても本文を表示し、再表
     hero.locator("[data-reveal-item]").evaluateAll((items) =>
       items.every((item) => {
         const style = getComputedStyle(item);
-        return style.opacity === "1" && style.transform === "none";
+        return (
+          style.opacity === "1" && new DOMMatrix(style.transform).isIdentity
+        );
       }),
     );
   await expect.poll(settled).toBe(true);
@@ -136,4 +129,42 @@ test("表示中にReduced Motionへ切り替えても本文を表示し、再表
   await page.locator("#hero-title").scrollIntoViewIfNeeded();
   await expect.poll(settled).toBe(true);
   expect(runtimeErrors).toEqual([]);
+});
+
+test("スクロールでサーバー情報と操作を表示し、Reduced Motionでは進捗バーを隠す", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const progress = page.locator(".scroll-progress");
+  await expect(progress).toHaveCount(1);
+  await page.locator("#server h2").scrollIntoViewIfNeeded();
+  await expect(page.locator(".server-introduction")).toHaveAttribute(
+    "data-reveal-state",
+    "entered",
+  );
+  await page.locator(".server-planner").scrollIntoViewIfNeeded();
+  await expect(page.locator(".server-planner-reveal")).toHaveAttribute(
+    "data-reveal-state",
+    "entered",
+  );
+  await expect
+    .poll(() =>
+      progress.evaluate((element) => getComputedStyle(element).transform),
+    )
+    .not.toBe("matrix(0, 0, 0, 1, 0, 0)");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(progress).toHaveCount(0);
+  await expect
+    .poll(() =>
+      page
+        .locator(".server-planner [data-reveal-item]")
+        .evaluateAll((items) =>
+          items.every(
+            (item) =>
+              getComputedStyle(item).opacity === "1" &&
+              new DOMMatrix(getComputedStyle(item).transform).isIdentity,
+          ),
+        ),
+    )
+    .toBe(true);
 });

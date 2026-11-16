@@ -1,11 +1,16 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
+import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import { ServerSection } from "@/components/sections/ServerSection";
 
 describe("ServerSection", () => {
   it("renders each server setting as a separate description-list item", () => {
-    const { container } = render(<ServerSection />);
+    const { container } = render(
+      <LanguageProvider>
+        <ServerSection />
+      </LanguageProvider>,
+    );
 
     expect(screen.getByText("設定").closest("h3")).not.toBeNull();
     expect(container.querySelectorAll("#server dl > div")).toHaveLength(6);
@@ -33,7 +38,11 @@ describe("ServerSection", () => {
   });
 
   it("exposes weekday and weekend raid windows as a labeled table", () => {
-    render(<ServerSection />);
+    render(
+      <LanguageProvider>
+        <ServerSection />
+      </LanguageProvider>,
+    );
     const table = screen.getByRole("table", {
       name: /レイド時間を、ひと目で。/,
     });

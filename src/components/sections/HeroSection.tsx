@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy, Gamepad2 } from "lucide-react";
+import { Check, Copy, Gamepad2, ArrowDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
@@ -13,7 +13,6 @@ import { Button, buttonStyles } from "@/components/ui/Button";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
-import { RaidClock } from "@/components/ui/RaidClock";
 import { externalUrls, rustConnection } from "@/lib/constants";
 
 type CopyState = "idle" | "copied" | "error";
@@ -110,9 +109,6 @@ export function HeroSection() {
               </div>
             </div>
           </div>
-        </Reveal>
-        <Reveal className="hero-visual">
-          <RaidClock />
         </Reveal>
         <div className="connection-strip">
           <div>
@@ -211,6 +207,10 @@ export function HeroSection() {
             </p>
           )}
         </div>
+        <a className="hero-explore" href="#server">
+          <LocalizedText ja={ja.server.title} en={en.server.title} />
+          <ArrowDown aria-hidden="true" className="size-4" />
+        </a>
       </Container>
     </section>
   );

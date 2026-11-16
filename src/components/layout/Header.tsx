@@ -1,15 +1,18 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { LocalizedExternalAction } from "@/components/ui/ActionLink";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { getContent, navigationItemIds } from "@/content";
 import { useActiveSection } from "@/hooks/useActiveSection";
@@ -214,6 +217,7 @@ export function Header() {
         </Button>
       </Container>
 
+      <ScrollProgress />
       <AnimatePresence initial={false}>
         {menuOpen ? (
           <motion.div

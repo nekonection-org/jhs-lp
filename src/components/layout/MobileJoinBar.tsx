@@ -1,7 +1,9 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { LocalizedExternalAction } from "@/components/ui/ActionLink";

@@ -1,37 +1,93 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { RaidTimeChecker } from "@/components/ui/RaidTimeChecker";
 
-describe("RaidTimeChecker", () => {
-  it("updates the result when the selected day changes at the same time", async () => {
-    const user = userEvent.setup();
-    render(<RaidTimeChecker />);
-    const checker = screen.getByRole("region", { name: /時間を選んで確認/ });
-    const slider = within(checker).getByRole("slider");
-    const result = checker.querySelector(".raid-check-result");
-    fireEvent.change(slider, { target: { value: "17" } });
-    expect(result).toHaveAttribute("data-allowed", "false");
-    expect(result).toHaveTextContent("17:00 JST");
+const now = Date.parse("2026-11-16T00:00:00Z");
 
-    const weekend = within(checker).getByRole("button", { name: /土・日/ });
-    await user.click(weekend);
-    expect(weekend).toHaveAttribute("aria-pressed", "true");
-    expect(
-      within(checker).getByRole("button", { name: /平日/ }),
-    ).toHaveAttribute("aria-pressed", "false");
-    expect(result).toHaveAttribute("data-allowed", "true");
-    expect(slider).toHaveAttribute("aria-valuetext", "17:00 JST");
+function setSelection(date: string, time: string) {
+  fireEvent.change(screen.getByLabelText(/確認する日付/), {
+    target: { value: date },
+  });
+  fireEvent.change(screen.getByLabelText(/確認する時刻/), {
+    target: { value: time },
+  });
+}
+
+describe("RaidTimeChecker", () => {
+  it("uses the Tokyo rule date instead of the local weekday", () => {
+    const { container } = render(
+      <RaidTimeChecker now={now} timeZone="America/New_York" />,
+    );
+    setSelection("2026-11-20", "21:59");
+    expect(container.querySelector(".raid-check-result")).toHaveAttribute(
+      "data-allowed",
+      "false",
+    );
+    setSelection("2026-11-20", "22:00");
+    expect(container.querySelector(".raid-check-result")).toHaveAttribute(
+      "data-allowed",
+      "true",
+    );
+    expect(container.querySelector(".raid-japan-equivalent")).toHaveTextContent(
+      "11月21日(土) 12:00",
+    );
   });
 
-  it("announces midnight as blocked without losing the selected day", () => {
-    const { container } = render(<RaidTimeChecker />);
-    fireEvent.change(screen.getByRole("slider"), { target: { value: "0" } });
-    const result = container.querySelector(".raid-check-result");
-    expect(result).toHaveAttribute("role", "status");
-    expect(result).toHaveAttribute("aria-live", "polite");
-    expect(result).toHaveAttribute("data-allowed", "false");
-    expect(result).toHaveTextContent("00:00 JST");
+  it("rejects midnight and recomputes a preserved wall time when the zone changes", () => {
+    const { container, rerender } = render(
+      <RaidTimeChecker now={now} timeZone="Asia/Tokyo" />,
+    );
+    setSelection("2026-11-16", "00:00");
+    expect(screen.getByRole("status")).toHaveAttribute("data-allowed", "false");
+    setSelection("2026-11-16", "18:00");
+    expect(screen.getByRole("status")).toHaveAttribute("data-allowed", "true");
+    rerender(<RaidTimeChecker now={now} timeZone="America/New_York" />);
+    expect(screen.getByLabelText(/確認する時刻/)).toHaveValue("18:00");
+    expect(screen.getByRole("status")).toHaveAttribute("data-allowed", "false");
+    expect(container.querySelector(".raid-japan-equivalent")).toHaveTextContent(
+      "11月17日(火) 08:00",
+    );
+  });
+
+  it("distinguishes missing and repeated wall times during DST changes", () => {
+    const { container } = render(
+      <RaidTimeChecker now={now} timeZone="America/New_York" />,
+    );
+    setSelection("2026-03-08", "02:30");
+    expect(screen.getByRole("status")).toHaveAttribute(
+      "data-allowed",
+      "unknown",
+    );
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "この日時は存在しません",
+    );
+    expect(container.querySelector(".raid-japan-equivalent")).toBeNull();
+    setSelection("2026-11-01", "01:30");
+    const select = screen.getByLabelText(
+      /同じ時刻が2回あります。UTCオフセットを選択/,
+    );
+    expect(select.querySelectorAll("option")).toHaveLength(2);
+    fireEvent.change(select, {
+      target: { value: Date.parse("2026-11-01T06:30:00Z") },
+    });
+    expect(
+      container.querySelector(".raid-selected-instant time"),
+    ).toHaveAttribute("datetime", "2026-11-01T06:30:00.000Z");
+  });
+
+  it("keeps SSR controls disabled and requests a complete date and time", () => {
+    const { rerender } = render(
+      <RaidTimeChecker now={null} timeZone="Asia/Tokyo" />,
+    );
+    expect(screen.getByLabelText(/確認する日付/)).toBeDisabled();
+    expect(screen.getByLabelText(/確認する時刻/)).toBeDisabled();
+    rerender(<RaidTimeChecker now={now} timeZone="Asia/Tokyo" />);
+    fireEvent.change(screen.getByLabelText(/確認する日付/), {
+      target: { value: "" },
+    });
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "日付と時刻を選択してください",
+    );
   });
 });
