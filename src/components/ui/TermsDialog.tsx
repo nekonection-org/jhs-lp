@@ -1,17 +1,15 @@
 "use client";
 
-import { FileText, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { Button } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
-import { Reveal } from "@/components/ui/Reveal";
 import { en, getContent, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
 
-export function TermsSection() {
+export function TermsDialog() {
   const { locale } = useLanguage();
   const content = getContent(locale);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -58,58 +56,31 @@ export function TermsSection() {
   }
 
   return (
-    <section
-      aria-labelledby="terms-section-title"
-      className="border-t border-[var(--border)] py-8 sm:py-10"
-    >
-      <Container>
-        <Reveal>
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex max-w-3xl items-start gap-4">
-              <span className="pt-1 text-[var(--accent-strong)]">
-                <FileText aria-hidden="true" className="size-5" />
-              </span>
-              <div>
-                <p className="section-eyebrow">
-                  <LocalizedText ja={ja.terms.eyebrow} en={en.terms.eyebrow} />
-                </p>
-                <h2
-                  className="mt-1 text-xl font-bold tracking-[-0.025em]"
-                  id="terms-section-title"
-                >
-                  <LocalizedText ja={ja.terms.title} en={en.terms.title} />
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                  <LocalizedText
-                    ja={ja.terms.description}
-                    en={en.terms.description}
-                  />
-                </p>
-              </div>
-            </div>
-            <Button
-              className="w-full shrink-0 sm:w-auto"
-              onClick={openTerms}
-              ref={triggerRef}
-              variant="secondary"
-            >
-              <FileText aria-hidden="true" className="size-4" />
-              <LocalizedText ja={ja.terms.openLabel} en={en.terms.openLabel} />
-            </Button>
-          </div>
-        </Reveal>
-      </Container>
+    <>
+      <button
+        type="button"
+        aria-controls="terms-dialog"
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        aria-label={content.terms.openLabel}
+        className="inline-flex min-h-11 items-center rounded-sm font-semibold text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+        onClick={openTerms}
+        ref={triggerRef}
+      >
+        <LocalizedText ja={ja.terms.title} en={en.terms.title} />
+      </button>
 
       <dialog
+        id="terms-dialog"
         aria-describedby="terms-dialog-description"
         aria-labelledby="terms-dialog-title"
-        className="m-auto max-h-[min(88dvh,56rem)] w-[min(calc(100%-2rem),58rem)] overflow-hidden rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] p-0 text-[var(--text-primary)] shadow-[0_28px_90px_rgba(0,0,0,0.55)] backdrop:bg-black/80 backdrop:backdrop-blur-sm"
+        className="terms-dialog m-auto max-h-[min(88dvh,56rem)] w-[min(calc(100%-2rem),58rem)] overflow-hidden rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] p-0 text-[var(--text-primary)] shadow-[0_28px_90px_rgba(0,0,0,0.55)] backdrop:bg-black/80 backdrop:backdrop-blur-sm"
         onClick={handleBackdropClick}
         onClose={handleClose}
         ref={dialogRef}
       >
         <div className="flex max-h-[min(88dvh,56rem)] flex-col">
-          <header className="flex items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--surface)] px-5 py-4 sm:px-7">
+          <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--surface)] px-5 py-4 sm:px-7">
             <div>
               <p className="text-xs font-bold tracking-[0.12em] text-[var(--accent-strong)] uppercase">
                 <LocalizedText ja={ja.terms.eyebrow} en={en.terms.eyebrow} />
@@ -132,7 +103,7 @@ export function TermsSection() {
             >
               <X aria-hidden="true" className="size-5" />
             </Button>
-          </header>
+          </div>
 
           <div className="overscroll-contain overflow-y-auto px-5 py-6 sm:px-7 sm:py-8">
             <div
@@ -208,7 +179,7 @@ export function TermsSection() {
             </p>
           </div>
 
-          <footer className="border-t border-[var(--border)] bg-[var(--surface)] px-5 py-4 sm:px-7">
+          <div className="border-t border-[var(--border)] bg-[var(--surface)] px-5 py-4 sm:px-7">
             <Button
               className="w-full sm:ml-auto sm:w-auto"
               onClick={closeTerms}
@@ -218,9 +189,9 @@ export function TermsSection() {
                 en={en.terms.closeLabel}
               />
             </Button>
-          </footer>
+          </div>
         </div>
       </dialog>
-    </section>
+    </>
   );
 }

@@ -78,7 +78,7 @@ test("コピーが拒否された場合は手動コピーの案内を読み続�
 test.describe("モバイルの参加導線", () => {
   test.use({ viewport: { width: 360, height: 800 } });
 
-  test("スクロール位置に応じて参加ボタンを表示し、メニューと最終CTAでは隠す", async ({
+  test("スクロール位置に応じて参加ボタンを表示し、メニューとフッターでは隠す", async ({
     page,
   }) => {
     const bar = page.locator(".mobile-join-bar");
@@ -102,8 +102,6 @@ test.describe("モバイルの参加導線", () => {
     await page.locator('#mobile-navigation a[href="#rules"]').click();
     await expect(page.locator("#rules h2")).toBeFocused();
     await expect(menu).toHaveAttribute("aria-expanded", "false");
-    await page.locator(".join-section").scrollIntoViewIfNeeded();
-    await expect(bar).toHaveCount(0);
     await page.getByRole("contentinfo").scrollIntoViewIfNeeded();
     await expect(bar).toHaveCount(0);
     await page

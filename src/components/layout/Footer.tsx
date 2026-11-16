@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { TermsDialog } from "@/components/ui/TermsDialog";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
 
@@ -80,16 +81,19 @@ export function Footer() {
           <p>
             &copy; {year} {ja.footer.copyrightName}
           </p>
-          <a
-            className="inline-flex w-fit items-center gap-1.5 rounded-sm font-semibold text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
-            href="#top"
-          >
-            <LocalizedText
-              ja={ja.footer.backToTopLabel}
-              en={en.footer.backToTopLabel}
-            />
-            <ArrowUp aria-hidden="true" className="size-3.5" />
-          </a>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <TermsDialog />
+            <a
+              className="inline-flex min-h-11 w-fit items-center gap-1.5 rounded-sm font-semibold text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+              href="#top"
+            >
+              <LocalizedText
+                ja={ja.footer.backToTopLabel}
+                en={en.footer.backToTopLabel}
+              />
+              <ArrowUp aria-hidden="true" className="size-3.5" />
+            </a>
+          </div>
         </div>
       </Container>
     </footer>

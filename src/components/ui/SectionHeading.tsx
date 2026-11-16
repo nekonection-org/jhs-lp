@@ -1,12 +1,16 @@
 import type { ReactNode } from "react";
 
+import { ContentIcon } from "@/components/ui/ContentIcon";
+import type { ContentIcon as ContentIconName } from "@/content/types";
+
 import { cn } from "@/lib/cn";
 
 interface SectionHeadingProps {
   eyebrow: ReactNode;
+  icon?: ContentIconName;
   index?: string;
   title: ReactNode;
-  description: ReactNode;
+  description?: ReactNode;
   align?: "left" | "center";
   layout?: "split" | "stack";
   className?: string;
@@ -14,6 +18,7 @@ interface SectionHeadingProps {
 
 export function SectionHeading({
   eyebrow,
+  icon,
   index,
   title,
   description,
@@ -46,11 +51,16 @@ export function SectionHeading({
         ) : null}
       </p>
       <h2 className="section-title" data-reveal-item data-reveal-kind="heading">
-        {title}
+        {icon ? (
+          <ContentIcon name={icon} className="section-title-icon" />
+        ) : null}
+        <span>{title}</span>
       </h2>
-      <p className="section-description" data-reveal-item>
-        {description}
-      </p>
+      {description ? (
+        <p className="section-description" data-reveal-item>
+          {description}
+        </p>
+      ) : null}
     </header>
   );
 }

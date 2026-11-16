@@ -394,11 +394,23 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   display: none;
 }
 .section-title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: clamp(1.5rem, 2.2vw, 1.875rem);
   font-weight: 550;
   line-height: 1.35;
   letter-spacing: -0.045em;
   text-wrap: balance;
+}
+.section-title > span {
+  min-width: 0;
+}
+.section-title-icon {
+  width: 1.375rem;
+  height: 1.375rem;
+  flex-shrink: 0;
+  color: var(--accent);
 }
 .section-description {
   max-width: 34rem;
@@ -408,18 +420,24 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   line-height: 1.9;
   text-wrap: pretty;
 }
+.section-heading.text-center .section-title {
+  justify-content: center;
+}
 .section-heading.text-center .section-description {
   margin-inline: auto;
 }
-.landing-page .text-sm {
+.landing-page .text-sm,
+.terms-dialog .text-sm {
   font-size: 1.125rem;
   line-height: 1.85;
 }
-.landing-page .text-xs {
+.landing-page .text-xs,
+.terms-dialog .text-xs {
   font-size: 0.875rem;
   line-height: 1.8;
 }
-.landing-page .interactive-button {
+.landing-page .interactive-button,
+.terms-dialog .interactive-button {
   min-height: 3.25rem;
   font-size: 1rem;
 }
@@ -446,40 +464,75 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   padding-block: 3rem 4.5rem;
 }
 .hero-rhythm {
+  --rhythm-cycle-duration: 24s;
+  --rhythm-world-offset: 815px;
+  --hero-content-inset: max(1.25rem, calc((100% - 75rem) / 2 + 1.25rem));
+  --rhythm-right-fade: linear-gradient(
+    90deg,
+    transparent 68%,
+    color-mix(in srgb, var(--background) 65%, transparent) 88%,
+    var(--background)
+  );
   position: absolute;
   z-index: 0;
-  width: 500px;
-  height: 500px;
-  right: -205px;
-  top: 0;
+  inset: 0;
+  right: var(--hero-content-inset);
   pointer-events: none;
-  opacity: 0.5;
   color: var(--text-primary);
-  mask-image: linear-gradient(90deg, transparent, #000 55%);
 }
-.rhythm-entrance,
-.rhythm-entrance svg {
+.hero-rhythm svg {
+  display: block;
   width: 100%;
   height: 100%;
 }
-.rhythm-orbit {
-  stroke: var(--text-secondary);
-  stroke-opacity: 0.4;
+.hero-rhythm::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    var(--rhythm-right-fade),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--background) 70%, transparent),
+      color-mix(in srgb, var(--background) 45%, transparent) 75%,
+      var(--background)
+    );
+}
+.rhythm-world {
+  transform: translateX(var(--rhythm-world-offset));
 }
 .rhythm-sky {
-  fill: color-mix(in srgb, var(--text-primary) 3%, var(--background));
+  fill: var(--background);
+}
+.rhythm-night-sky {
+  fill: color-mix(in srgb, var(--info) 7%, var(--background));
+  opacity: 0;
+  animation-name: rhythm-nightfall;
 }
 .rhythm-sun-disc {
-  fill: var(--text-primary);
-  fill-opacity: 0.14;
+  fill: var(--warning);
+  fill-opacity: 0.28;
 }
-.rhythm-sun-ring {
-  stroke: var(--text-primary);
-  stroke-opacity: 0.15;
+.rhythm-moon-disc {
+  fill: var(--text-primary);
+  fill-opacity: 0.65;
+}
+.rhythm-moon-shade,
+.rhythm-moon-craters {
+  fill: var(--background);
+  fill-opacity: 0.16;
+}
+.rhythm-stars {
+  fill: var(--text-secondary);
+  stroke: var(--text-secondary);
+  stroke-width: 0.8;
+  opacity: 0;
+  animation-name: rhythm-nightfall;
 }
 .rhythm-clouds {
   stroke: var(--text-secondary);
   stroke-opacity: 0.25;
+  animation-name: rhythm-air;
 }
 .rhythm-ridge-far {
   fill: color-mix(in srgb, var(--text-primary) 7%, var(--background));
@@ -491,118 +544,172 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .rhythm-ridge-mid {
   fill: color-mix(in srgb, var(--text-primary) 4%, var(--background));
 }
-.rhythm-ridge-near {
-  fill: var(--background);
+.rhythm-vegetation {
+  fill: var(--surface);
+  stroke: var(--border-strong);
+  stroke-opacity: 0.45;
 }
-.rhythm-trail {
-  stroke: var(--text-secondary);
-  stroke-opacity: 0.25;
+.rhythm-shelter {
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .rhythm-shelter-wall {
-  fill: var(--background);
+  fill: color-mix(in srgb, var(--text-secondary) 9%, var(--background));
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.5;
+}
+.rhythm-shelter-side {
+  fill: var(--surface);
   stroke: var(--text-secondary);
   stroke-opacity: 0.3;
 }
+.rhythm-shelter-foundation {
+  fill: var(--surface-secondary);
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.35;
+}
+.rhythm-stone-joints {
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.18;
+  stroke-width: 0.8;
+}
 .rhythm-shelter-roof {
+  fill: none;
   stroke: var(--text-secondary);
   stroke-opacity: 0.6;
 }
+.rhythm-roof-panel {
+  fill: color-mix(in srgb, var(--danger) 18%, var(--surface-secondary));
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.6;
+}
+.rhythm-roof-side {
+  fill: color-mix(in srgb, var(--danger) 8%, var(--surface));
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.45;
+}
+.rhythm-roof-seams {
+  fill: none;
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.28;
+  stroke-width: 0.8;
+}
+.rhythm-window-frame,
+.rhythm-door-frame {
+  fill: var(--background);
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.5;
+}
 .rhythm-window {
+  fill: var(--warning);
+  opacity: 0.15;
+  animation-name: rhythm-home;
+}
+.rhythm-window-mullion {
+  stroke: var(--background);
+  stroke-width: 2;
+}
+.rhythm-door {
+  fill: var(--surface-secondary);
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.35;
+  stroke-width: 0.8;
+}
+.rhythm-code-lock {
+  fill: var(--surface-elevated);
+  stroke: var(--text-secondary);
+  stroke-opacity: 0.4;
+}
+.rhythm-lock-indicator {
   fill: var(--accent);
 }
-.rhythm-frame {
-  stroke: var(--text-secondary);
-  stroke-opacity: 0.2;
+.rhythm-lamplight {
+  opacity: 0;
+  animation-name: rhythm-home;
 }
-.rhythm-hour {
-  stroke: var(--accent);
-  stroke-opacity: 0.6;
+.rhythm-lamp {
+  fill: var(--warning);
 }
-.rhythm-sun {
-  animation: rhythm-daylight 32s ease-in-out infinite;
+.rhythm-celestial-orbit {
+  --rhythm-orbit-phase: 0deg;
+  transform-box: view-box;
+  transform-origin: 350px 420px;
+  animation-name: rhythm-celestial-orbit;
 }
-.rhythm-clouds {
-  animation: rhythm-air 18s ease-in-out infinite;
+.rhythm-moon-orbit {
+  --rhythm-orbit-phase: 180deg;
+  transform: rotate(var(--rhythm-orbit-phase));
 }
-.rhythm-distant-ridge {
-  animation: rhythm-distance 24s ease-in-out infinite;
+.rhythm-celestial-body {
+  transform-box: view-box;
+  transform-origin: 350px 245px;
+  animation-name: rhythm-celestial-upright;
 }
-.rhythm-window {
-  animation: rhythm-home 8s ease-in-out infinite;
-}
-.hero-rhythm
-  :is(.rhythm-sun, .rhythm-clouds, .rhythm-distant-ridge, .rhythm-window) {
+/* All sky and lighting layers share a clock, including after leaving the viewport. */
+.rhythm-cycle {
+  animation-duration: var(--rhythm-cycle-duration);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
   animation-play-state: paused;
 }
-.hero-rhythm[data-active="true"]
-  :is(.rhythm-sun, .rhythm-clouds, .rhythm-distant-ridge, .rhythm-window) {
+.hero-rhythm[data-active="true"] .rhythm-cycle {
   animation-play-state: running;
 }
-@keyframes rhythm-daylight {
+/* Continuous full turns keep the loop seamless; the terrain occludes each setting body. */
+@keyframes rhythm-celestial-orbit {
+  from {
+    transform: rotate(var(--rhythm-orbit-phase));
+  }
+  to {
+    transform: rotate(calc(var(--rhythm-orbit-phase) + 360deg));
+  }
+}
+@keyframes rhythm-celestial-upright {
+  from {
+    transform: rotate(calc(0deg - var(--rhythm-orbit-phase)));
+  }
+  to {
+    transform: rotate(calc(-360deg - var(--rhythm-orbit-phase)));
+  }
+}
+@keyframes rhythm-nightfall {
   0%,
+  14%,
+  86%,
   100% {
-    transform: translate(0, 0);
+    opacity: 0;
   }
-  25% {
-    transform: translate(32px, -18px);
-  }
-  50% {
-    transform: translate(64px, 0);
-  }
-  75% {
-    transform: translate(32px, 18px);
+  38%,
+  62% {
+    opacity: 1;
   }
 }
 @keyframes rhythm-air {
   0%,
   100% {
     transform: translateX(0);
+    opacity: 1;
   }
-  50% {
+  45% {
+    transform: translateX(-24px);
+    opacity: 0.6;
+  }
+  65% {
     transform: translateX(-36px);
-  }
-}
-@keyframes rhythm-distance {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(12px);
+    opacity: 0.4;
   }
 }
 @keyframes rhythm-home {
   0%,
+  14%,
+  86%,
   100% {
-    opacity: 0.55;
+    opacity: 0.15;
   }
-  50% {
+  34%,
+  66% {
     opacity: 1;
   }
-}
-.hero-motion-control {
-  position: absolute;
-  z-index: 3;
-  right: 0;
-  bottom: 0.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  padding-inline: 0.5rem;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  cursor: pointer;
-}
-.hero-motion-control:hover {
-  color: var(--text-primary);
-}
-.hero-motion-control:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-.hero-motion-control:disabled {
-  cursor: default;
 }
 .server-introduction .section-description {
   max-width: 46rem;
@@ -616,7 +723,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .hero-headline {
   margin-top: 2rem;
   max-width: 60rem;
-  font-size: clamp(2.375rem, 5.4vw, 4.75rem);
+  font-size: clamp(2rem, 4vw, 3.25rem);
   line-height: 1.3;
   font-weight: 500;
   letter-spacing: -0.065em;
@@ -659,21 +766,20 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: center;
   min-height: 4rem;
-  font-size: 1rem;
   color: var(--text-secondary);
 }
 .hero-explore:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 4px;
 }
-.hero-explore svg {
-  transition: transform 180ms ease;
+.hero-scroll-cue {
+  display: inline-flex;
+  color: var(--text-muted);
 }
-.hero-explore:hover svg {
-  transform: translateY(4px);
+.hero-explore:hover .hero-scroll-cue {
+  color: var(--text-primary);
 }
 .connection-strip {
   display: grid;
@@ -812,7 +918,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   min-width: 0;
 }
 .raid-checker-intro h3 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 550;
   line-height: 1.5;
   letter-spacing: -0.025em;
@@ -943,14 +1049,8 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 .rule-feature h3,
 .moderator-feature h3 {
-  font-size: 1.375rem;
+  font-size: 1.125rem;
   font-weight: 550;
-}
-.feature-number {
-  flex-shrink: 0;
-  width: 2rem;
-  font: 1rem var(--font-technical);
-  color: var(--text-muted);
 }
 .feature-row p {
   max-width: 42rem;
@@ -975,11 +1075,20 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .rulebook > summary {
   font-size: 1.125rem;
 }
+.vip-introduction .section-description {
+  max-width: 46rem;
+  text-wrap: balance;
+}
 .vip-details {
-  margin-top: 0;
+  min-width: 0;
 }
 .vip-content {
-  gap: 3rem;
+  gap: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.vip-content > * {
+  min-width: 0;
 }
 .vip-plan,
 .vip-benefits {
@@ -987,6 +1096,9 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 .vip-plan dl > div {
   grid-template-columns: minmax(0, 1fr);
+}
+.vip-plan dd {
+  overflow-wrap: anywhere;
 }
 .vip-benefits {
   padding-top: 2rem;
@@ -1028,39 +1140,14 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .news-feed > div:first-child {
   margin-top: 0;
 }
-.join-section {
-  border-top: 1px solid var(--border);
-}
-.join-panel {
-  display: grid;
-  gap: 2.5rem;
-  padding-block: clamp(5rem, 10vw, 9rem);
-}
-.join-panel .section-eyebrow {
-  display: none;
-}
-.join-panel .section-title {
-  max-width: 50rem;
-  font-size: clamp(2.25rem, 5vw, 4rem);
-}
-.join-description {
-  margin-top: 1.5rem;
-  max-width: 34rem;
-  font-size: 1.125rem;
-  line-height: 1.9;
-  color: var(--text-secondary);
-}
-.join-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 1.5rem;
-}
-.join-actions > :last-child {
-  padding-inline: 0;
-  border-color: transparent;
-}
-
 @media (min-width: 640px) {
+  .vip-plan dl > div {
+    grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.4fr);
+    column-gap: 1.25rem;
+  }
+  .hero-rhythm {
+    --hero-content-inset: max(2rem, calc((100% - 75rem) / 2 + 2rem));
+  }
   .hero-layout {
     padding-block: 4rem 4.5rem;
   }
@@ -1076,24 +1163,27 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .server-specifications {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .faq-item summary {
-    font-size: 1.25rem;
-  }
 }
 @media (min-width: 768px) {
+  .hero-rhythm {
+    --rhythm-world-offset: 620px;
+  }
   .hero-scroll-scene {
     width: 55%;
   }
   .hero-layout {
     padding-block: 5rem 6rem;
   }
-  .hero-rhythm {
-    width: 640px;
-    height: 640px;
-    right: -310px;
-    top: 20px;
-    opacity: 1;
-    mask-image: linear-gradient(90deg, transparent, #000 35%);
+  .hero-rhythm::after {
+    background:
+      var(--rhythm-right-fade),
+      linear-gradient(
+        90deg,
+        var(--background),
+        color-mix(in srgb, var(--background) 90%, transparent) 30%,
+        transparent 75%
+      ),
+      linear-gradient(0deg, var(--background), transparent 25%);
   }
 }
 @media (min-width: 1024px) {
@@ -1103,13 +1193,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .hero-scroll-scene {
     width: 62%;
     max-width: 44rem;
-  }
-  .hero-rhythm {
-    width: 730px;
-    height: 730px;
-    right: -145px;
-    top: -10px;
-    mask-image: linear-gradient(90deg, transparent, #000 15%);
   }
   .hero-headline {
     margin-top: 3rem;
@@ -1169,7 +1252,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     grid-template-columns: 1fr;
   }
   .rule-feature > div:last-child {
-    padding-left: 2.75rem;
+    padding-left: 2rem;
   }
   .rules-additional {
     margin-left: calc(40% + 3.6rem);
@@ -1177,13 +1260,15 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .rules-additional .rule-feature {
     grid-template-columns: 1fr;
   }
-  .vip-layout {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    gap: 6rem;
-    align-items: start;
-  }
   .vip-content {
-    gap: 3rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 4rem;
+    padding-top: 2.5rem;
+  }
+  .vip-benefits {
+    padding-top: 0;
+    border-top: 0;
   }
   .moderator-introduction {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
@@ -1207,6 +1292,11 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .news-layout {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
     gap: 6rem;
+  }
+}
+@media (min-width: 1280px) {
+  .hero-rhythm {
+    --rhythm-world-offset: 650px;
   }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -1238,11 +1328,19 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     clip-path: none !important;
     opacity: 1 !important;
   }
-  .hero-rhythm
-    :is(.rhythm-sun, .rhythm-clouds, .rhythm-distant-ridge, .rhythm-window) {
+  .hero-rhythm .rhythm-cycle {
     animation: none !important;
     transform: none !important;
+  }
+  .hero-rhythm .rhythm-sun,
+  .hero-rhythm .rhythm-clouds {
+    opacity: 0;
+  }
+  .hero-rhythm :is(.rhythm-moon, .rhythm-stars, .rhythm-night-sky) {
     opacity: 1;
+  }
+  .hero-rhythm :is(.rhythm-window, .rhythm-lamplight) {
+    opacity: 0.85;
   }
   html {
     scroll-behavior: auto;
@@ -1257,6 +1355,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   }
   .interactive-button:active,
   .interactive-button [data-action-icon],
+  .hero-scroll-cue,
   .hero-explore svg {
     transform: none !important;
   }

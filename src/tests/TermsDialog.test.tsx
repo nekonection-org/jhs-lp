@@ -3,18 +3,18 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
-import { TermsSection } from "@/components/sections/TermsSection";
+import { TermsDialog } from "@/components/ui/TermsDialog";
 import { ja } from "@/content";
 
-function renderTermsSection() {
+function renderTermsDialog() {
   return render(
     <LanguageProvider>
-      <TermsSection />
+      <TermsDialog />
     </LanguageProvider>,
   );
 }
 
-describe("TermsSection", () => {
+describe("TermsDialog", () => {
   beforeEach(() => {
     Object.defineProperty(HTMLDialogElement.prototype, "showModal", {
       configurable: true,
@@ -35,12 +35,11 @@ describe("TermsSection", () => {
 
   it("opens the terms in a dialog and returns focus after closing", async () => {
     const user = userEvent.setup();
-    renderTermsSection();
+    renderTermsDialog();
 
-    const trigger = screen.getByText(ja.terms.openLabel).closest("button");
-    if (!trigger) {
-      throw new Error("The terms trigger must be a button");
-    }
+    const trigger = screen.getByRole("button", { name: ja.terms.openLabel });
+    expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
     await user.click(trigger);
 
     const dialog = screen.getByRole("dialog");
@@ -49,6 +48,7 @@ describe("TermsSection", () => {
       throw new Error("The terms must include at least one article");
     }
     expect(dialog).toHaveAttribute("open");
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByText(firstArticle.title).closest("h3")).not.toBeNull();
     await waitFor(() => expect(document.body.style.overflow).toBe("hidden"));
 
@@ -62,6 +62,7 @@ describe("TermsSection", () => {
 
     await waitFor(() => expect(dialog).not.toHaveAttribute("open"));
     expect(trigger).toHaveFocus();
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
     await waitFor(() => expect(document.body.style.overflow).toBe(""));
   });
 });

@@ -150,11 +150,6 @@ export interface SectionActionContent {
 
 export interface HeroContent {
   readonly headline: readonly [string, string];
-  readonly backgroundMotion: {
-    readonly pause: string;
-    readonly resume: string;
-    readonly reduced: string;
-  };
   readonly id: "top";
   readonly eyebrow: string;
   readonly title: string;
@@ -391,7 +386,6 @@ export interface FooterContent {
 export interface SiteContent {
   readonly detailLabels: {
     readonly rules: string;
-    readonly vip: string;
     readonly moderator: string;
   };
   readonly locale: Locale;
@@ -407,11 +401,6 @@ export interface SiteContent {
   readonly faq: FaqContent;
   readonly moderator: ModeratorContent;
   readonly news: NewsContent;
-  readonly finalCta: {
-    readonly eyebrow: string;
-    readonly title: string;
-    readonly description: string;
-  };
   readonly terms: TermsContent;
   readonly footer: FooterContent;
 }

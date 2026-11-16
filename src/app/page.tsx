@@ -1,14 +1,12 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { MobileJoinBar } from "@/components/layout/MobileJoinBar";
-import { FinalCtaSection } from "@/components/sections/FinalCtaSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { ModeratorSection } from "@/components/sections/ModeratorSection";
 import { NewsSection } from "@/components/sections/NewsSection";
 import { RulesSection } from "@/components/sections/RulesSection";
 import { ServerSection } from "@/components/sections/ServerSection";
-import { TermsSection } from "@/components/sections/TermsSection";
 import { VipSection } from "@/components/sections/VipSection";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { en, ja } from "@/content";
@@ -41,8 +39,6 @@ export default async function Home({ searchParams }: HomeProps) {
         <FaqSection />
         <ModeratorSection />
         <NewsSection page={newsPage} />
-        <FinalCtaSection />
-        <TermsSection />
       </main>
       <Footer />
       <MobileJoinBar />

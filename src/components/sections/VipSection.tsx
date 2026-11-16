@@ -6,7 +6,6 @@ import { Container } from "@/components/ui/Container";
 import { ContentIcon } from "@/components/ui/ContentIcon";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionDisclosure } from "@/components/ui/SectionDisclosure";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { en, ja } from "@/content";
@@ -28,6 +27,7 @@ export async function VipSection() {
       <Container className="vip-layout">
         <Reveal className="vip-introduction">
           <SectionHeading
+            icon="badge"
             index="03"
             layout="stack"
             description={
@@ -51,10 +51,7 @@ export async function VipSection() {
           />
         </Reveal>
 
-        <SectionDisclosure
-          className="vip-details"
-          label={{ ja: ja.detailLabels.vip, en: en.detailLabels.vip }}
-        >
+        <div className="vip-details">
           <div className="vip-content">
             <Reveal>
               <div className="vip-plan">
@@ -65,7 +62,7 @@ export async function VipSection() {
                     status={japaneseContent.status}
                   />
                 </div>
-                <h3 className="mt-4 text-2xl font-bold tracking-[-0.035em]">
+                <h3 className="mt-4 text-xl font-bold tracking-[-0.035em]">
                   <LocalizedText
                     ja={japaneseContent.statusTitle}
                     en={englishContent.statusTitle}
@@ -86,10 +83,7 @@ export async function VipSection() {
                     );
 
                     return (
-                      <div
-                        className="grid gap-2 py-4 sm:grid-cols-2"
-                        key={detail.id}
-                      >
+                      <div className="grid gap-2 py-4" key={detail.id}>
                         <dt className="text-xs font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">
                           <LocalizedText
                             ja={detail.label}
@@ -215,7 +209,7 @@ export async function VipSection() {
               </div>
             </Reveal>
           </div>
-        </SectionDisclosure>
+        </div>
       </Container>
     </section>
   );

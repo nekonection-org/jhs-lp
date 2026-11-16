@@ -14,23 +14,26 @@ export function MobileJoinBar() {
   const { locale } = useLanguage();
   const reduceMotion = useReducedMotion();
   const [heroPassed, setHeroPassed] = useState(false);
-  const [finalReached, setFinalReached] = useState(false);
+  const [footerReached, setFooterReached] = useState(false);
 
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return;
     const hero = document.getElementById("hero-actions");
-    const final = document.querySelector(".join-section");
-    if (!hero || !final) return;
+    const footer = document.querySelector("footer");
+    if (!hero || !footer) return;
 
     const observer = new IntersectionObserver(
       () => {
         setHeroPassed(hero.getBoundingClientRect().bottom <= 76);
-        setFinalReached(final.getBoundingClientRect().top < window.innerHeight);
+        setFooterReached(
+          footer.getBoundingClientRect().top < window.innerHeight,
+        );
       },
       { rootMargin: "-76px 0px 0px 0px", threshold: 0 },
     );
     observer.observe(hero);
-    // Section transitions also cover anchor jumps that skip the final CTA.
+    observer.observe(footer);
+    // Section transitions also cover anchor jumps to and from the footer.
     document
       .querySelectorAll("main > section")
       .forEach((section) => observer.observe(section));
@@ -39,7 +42,7 @@ export function MobileJoinBar() {
 
   return (
     <AnimatePresence initial={false}>
-      {heroPassed && !finalReached ? (
+      {heroPassed && !footerReached ? (
         <motion.aside
           aria-label={
             locale === "ja"

@@ -63,15 +63,9 @@ export const ja = {
   },
   detailLabels: {
     rules: "その他の重要ルール",
-    vip: "VIPの詳細を見る",
     moderator: "活動内容・応募条件を見る",
   },
   hero: {
-    backgroundMotion: {
-      pause: "背景を停止",
-      resume: "背景を再生",
-      reduced: "背景の動き：オフ",
-    },
     headline: ["暮らしのペースで、", "Rustを楽しもう。"],
     id: "top",
     eyebrow: "Rust Community Server",
@@ -559,12 +553,6 @@ export const ja = {
     translationPendingTitle: "英語版を準備中です",
     translationPendingDescription:
       "英語版が公開されるまで、しばらくお待ちください。",
-  },
-  finalCta: {
-    eyebrow: "Your next hideaway",
-    title: "次のRustを、ここから。",
-    description:
-      "最新のお知らせや参加の案内、運営へのお問い合わせはDiscordへ。あなたのペースで、Japan Hideaway Serverに参加しませんか。",
   },
   terms: {
     eyebrow: "Terms of Service",

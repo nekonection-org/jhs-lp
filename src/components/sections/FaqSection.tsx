@@ -18,6 +18,7 @@ export async function FaqSection() {
         <div className="faq-heading">
           <Reveal>
             <SectionHeading
+              icon="message"
               index="04"
               layout="stack"
               description={

@@ -1,31 +1,19 @@
 "use client";
 
-import { Pause, Play } from "lucide-react";
 import { motion, useTransform, type MotionValue } from "motion/react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef } from "react";
 
-import { useLanguage } from "@/components/providers/LanguageProvider";
-import { Reveal } from "@/components/ui/Reveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { en, ja } from "@/content";
 
 export function HeroRhythm({ progress }: { progress: MotionValue<number> }) {
-  const { locale } = useLanguage();
-  const copy = (locale === "ja" ? ja : en).hero.backgroundMotion;
   const reduceMotion = useReducedMotion();
-  const [paused, setPaused] = useState(false);
   const scene = useRef<HTMLDivElement>(null);
-  const clipId = useId();
+  const lightId = useId();
   const y = useTransform(progress, [0, 1], [0, 24]);
 
   useEffect(() => {
     const element = scene.current;
-    if (
-      !element ||
-      reduceMotion ||
-      paused ||
-      typeof IntersectionObserver === "undefined"
-    )
+    if (!element || reduceMotion || typeof IntersectionObserver === "undefined")
       return;
     let inView = false;
     const sync = () => {
@@ -45,105 +33,152 @@ export function HeroRhythm({ progress }: { progress: MotionValue<number> }) {
       document.removeEventListener("visibilitychange", sync);
       element.dataset.active = "false";
     };
-  }, [paused, reduceMotion]);
+  }, [reduceMotion]);
 
   return (
-    <>
-      <div
-        className="hero-rhythm"
-        ref={scene}
-        aria-hidden="true"
-        data-active="false"
+    <div
+      className="hero-rhythm"
+      ref={scene}
+      aria-hidden="true"
+      data-active="false"
+    >
+      <svg
+        viewBox="0 0 1440 560"
+        preserveAspectRatio="xMaxYMid slice"
+        fill="none"
+        focusable="false"
       >
-        <Reveal className="rhythm-entrance" variant="aperture">
-          <svg viewBox="0 0 720 720" fill="none" focusable="false">
-            <defs>
-              <clipPath id={clipId}>
-                <circle cx="360" cy="350" r="280" />
-              </clipPath>
-            </defs>
-            <circle
-              className="rhythm-orbit"
-              cx="360"
-              cy="350"
-              r="300"
-              strokeDasharray="1 12"
-            />
-            <g clipPath={`url(#${clipId})`}>
-              <circle className="rhythm-sky" cx="360" cy="350" r="280" />
-              <g className="rhythm-sun">
-                <circle cx="355" cy="233" r="57" className="rhythm-sun-disc" />
-                <circle cx="355" cy="233" r="69" className="rhythm-sun-ring" />
-              </g>
-              <g className="rhythm-clouds">
-                <path d="M410 190h170M453 205h80M135 292h115M158 307h140" />
-              </g>
-              <motion.g
-                className="rhythm-landscape"
-                style={{ y: reduceMotion || paused ? 0 : y }}
-              >
-                <path
-                  className="rhythm-ridge-far"
-                  d="M0 449C104 440 151 349 233 358S349 292 401 326 568 422 720 336V750H0Z"
-                />
-                <path
-                  className="rhythm-ridge-line"
-                  d="M0 449C104 440 151 349 233 358S349 292 401 326 568 422 720 336"
-                />
-                <g className="rhythm-distant-ridge">
-                  <path
-                    className="rhythm-ridge-mid"
-                    d="M0 499C112 408 191 466 278 436S407 387 498 426 634 399 720 410V740H0Z"
-                  />
-                </g>
-                <path
-                  className="rhythm-ridge-near"
-                  d="M0 555c130-76 209-90 323-58s239 36 397-32v255H0Z"
-                />
-                <path
-                  className="rhythm-trail"
-                  d="M408 467c-61 33-132 33-97 70s143 22 113 78-149 63-146 105"
-                />
-                <g className="rhythm-shelter">
-                  <path
-                    d="M390 437h62v40h-62z"
-                    className="rhythm-shelter-wall"
-                  />
-                  <path
-                    d="M383 438h76m-69-1v-9h62v9"
-                    className="rhythm-shelter-roof"
-                  />
-                  <path d="M414 451h13v26h-13z" className="rhythm-window" />
-                </g>
-              </motion.g>
+        <defs>
+          <radialGradient id={lightId}>
+            <stop stopColor="var(--warning)" stopOpacity="0.16" />
+            <stop offset="1" stopColor="var(--warning)" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <rect className="rhythm-sky" width="1440" height="560" />
+        <rect
+          className="rhythm-night-sky rhythm-cycle"
+          width="1440"
+          height="560"
+        />
+        <g className="rhythm-world">
+          <g className="rhythm-stars rhythm-cycle">
+            <path d="M259 155v8m-4-4h8M513 269v8m-4-4h8M376 123v6m-3-3h6" />
+            <circle cx="313" cy="198" r="1.4" />
+            <circle cx="419" cy="155" r="1.3" />
+            <circle cx="539" cy="219" r="1.5" />
+            <circle cx="218" cy="256" r="1.2" />
+            <circle cx="358" cy="277" r="1.2" />
+            <circle cx="482" cy="127" r="1.2" />
+            <circle cx="562" cy="316" r="1.2" />
+          </g>
+          {/* Opposite phases share one circular path; counter-rotation keeps the discs upright. */}
+          <g className="rhythm-sun-orbit rhythm-celestial-orbit rhythm-cycle">
+            <g className="rhythm-sun rhythm-celestial-body rhythm-cycle">
+              <circle cx="350" cy="245" r="44" className="rhythm-sun-disc" />
             </g>
-            <circle className="rhythm-frame" cx="360" cy="350" r="280" />
+          </g>
+          <g className="rhythm-moon-orbit rhythm-celestial-orbit rhythm-cycle">
+            <g className="rhythm-moon rhythm-celestial-body rhythm-cycle">
+              <circle cx="350" cy="245" r="27" className="rhythm-moon-disc" />
+              <path
+                d="M360 224a23 23 0 0 1-25 35 27 27 0 0 0 25-35Z"
+                className="rhythm-moon-shade"
+              />
+              <g className="rhythm-moon-craters">
+                <circle cx="342" cy="238" r="4" />
+                <circle cx="356" cy="255" r="5" />
+                <circle cx="337" cy="252" r="2" />
+              </g>
+            </g>
+          </g>
+          <g className="rhythm-clouds rhythm-cycle">
+            <path d="M410 190h170M453 205h80M135 292h115M158 307h140" />
+          </g>
+          <motion.g
+            className="rhythm-landscape"
+            style={{ y: reduceMotion ? 0 : y }}
+          >
             <path
-              className="rhythm-hour"
-              d="M360 38v12M360 650v12M48 350h12M660 350h12"
+              className="rhythm-ridge-far"
+              d="M-1000 449C-780 422-625 351-420 385S-180 472 0 449C104 440 151 349 233 358S349 292 401 326 568 422 720 336S1200 392 1600 348V750H-1000Z"
             />
-          </svg>
-        </Reveal>
-      </div>
-      <button
-        className="hero-motion-control"
-        type="button"
-        disabled={reduceMotion}
-        aria-pressed={paused || reduceMotion}
-        aria-label={
-          reduceMotion ? copy.reduced : paused ? copy.resume : copy.pause
-        }
-        onClick={() => setPaused(!paused)}
-      >
-        {paused || reduceMotion ? (
-          <Play aria-hidden="true" className="size-3.5" />
-        ) : (
-          <Pause aria-hidden="true" className="size-3.5" />
-        )}
-        <span>
-          {reduceMotion ? copy.reduced : paused ? copy.resume : copy.pause}
-        </span>
-      </button>
-    </>
+            <path
+              className="rhythm-ridge-line"
+              d="M-1000 449C-780 422-625 351-420 385S-180 472 0 449C104 440 151 349 233 358S349 292 401 326 568 422 720 336S1200 392 1600 348"
+            />
+            <g className="rhythm-distant-ridge">
+              <path
+                className="rhythm-ridge-mid"
+                d="M-1000 499C-780 468-625 518-420 481S-180 475 0 499C112 408 191 466 278 436S407 387 498 426 634 399 720 410S1240 474 1600 430V740H-1000Z"
+              />
+            </g>
+            <g className="rhythm-vegetation">
+              <path d="m207 424 15-27 15 27h-8l14 22h-16v20h-10v-20h-16l14-22Zm338 15 12-24 12 24h-6l11 19h-13v18h-8v-18h-13l11-19Z" />
+              <path d="m248 481 11-10 18 3 10 12m240 17 14-9 17 4 7 8M339 511l-14-4-12 7" />
+            </g>
+            <g className="rhythm-shelter">
+              {/* A compact stone starter base with one metal roof and a code-locked door. */}
+              <path
+                d="M365 484h119l35-17v8l-35 17H365Z"
+                className="rhythm-shelter-foundation"
+              />
+              <path d="M369 426h111v58H369Z" className="rhythm-shelter-wall" />
+              <path
+                d="m480 426 35-17v58l-35 17Z"
+                className="rhythm-shelter-side"
+              />
+              <path
+                d="M369 445h111m-111 20h111m-85-39v19m43-19v19m-22 0v20m-21 0v19m85-39 35-17m-31 56v8"
+                className="rhythm-stone-joints"
+              />
+              <g className="rhythm-shelter-roofs">
+                <path d="M363 426l61-41 62 41Z" className="rhythm-roof-panel" />
+                <path
+                  d="m424 385 35-17 62 41-35 17Z"
+                  className="rhythm-roof-side"
+                />
+                <path
+                  d="m436 379 62 41m-50-47 62 41"
+                  className="rhythm-roof-seams"
+                />
+                <path d="M363 426h123l35-17" className="rhythm-shelter-roof" />
+              </g>
+              <path d="M380 439h24v20h-24Z" className="rhythm-window-frame" />
+              <path
+                d="M383 442h18v14h-18Z"
+                className="rhythm-window rhythm-cycle"
+              />
+              <path d="M392 442v14" className="rhythm-window-mullion" />
+              <path d="M422 439h31v45h-31Z" className="rhythm-door-frame" />
+              <path
+                d="M426 443h23v41h-23Zm0 0 23 41m0-41-23 41"
+                className="rhythm-door"
+              />
+              <path d="M456 454h6v10h-6Z" className="rhythm-code-lock" />
+              <circle
+                cx="459"
+                cy="457"
+                r="1"
+                className="rhythm-lock-indicator"
+              />
+              <path
+                d="M417 484h42v6h-42Z"
+                className="rhythm-shelter-foundation"
+              />
+              <g className="rhythm-lamplight rhythm-cycle">
+                <ellipse
+                  cx="437"
+                  cy="491"
+                  rx="40"
+                  ry="14"
+                  fill={`url(#${lightId})`}
+                />
+                <path d="M433 434h9v4h-9Z" className="rhythm-lamp" />
+              </g>
+            </g>
+          </motion.g>
+        </g>
+      </svg>
+    </div>
   );
 }

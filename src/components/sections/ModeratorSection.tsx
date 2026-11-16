@@ -38,6 +38,7 @@ export async function ModeratorSection() {
         <div className="moderator-introduction">
           <Reveal>
             <SectionHeading
+              icon="user-check"
               index="05"
               layout="stack"
               description={
@@ -108,7 +109,6 @@ export async function ModeratorSection() {
               return (
                 <Reveal delay={index * 0.05} key={item.id}>
                   <FeatureCard
-                    number={String(index + 1).padStart(2, "0")}
                     className="moderator-feature md:grid-cols-1"
                     description={
                       <LocalizedText

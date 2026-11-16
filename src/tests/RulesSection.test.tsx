@@ -19,6 +19,13 @@ describe("RulesSection", () => {
       item: { version: 1, translations: { ja: ja.rules, en: en.rules } },
     });
     const { container } = render(await RulesSection());
+    const notice = within(container).getByText(ja.rules.notice, {
+      exact: true,
+    });
+    expect(notice.closest("details")).toBeNull();
+    expect(container.querySelector(".rules-introduction")).toContainElement(
+      notice,
+    );
     const rulebook = container.querySelector<HTMLDetailsElement>(
       "#rules details.rulebook",
     );

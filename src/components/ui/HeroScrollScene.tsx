@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, type ReactNode } from "react";
 
+import { Container } from "@/components/ui/Container";
 import { HeroRhythm } from "@/components/ui/HeroRhythm";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -17,12 +18,14 @@ export function HeroScrollScene({ children }: { children: ReactNode }) {
 
   return (
     <div className="hero-stage" ref={target}>
-      <motion.div
-        className="hero-scroll-scene"
-        style={{ y: reduceMotion ? 0 : y }}
-      >
-        {children}
-      </motion.div>
+      <Container>
+        <motion.div
+          className="hero-scroll-scene"
+          style={{ y: reduceMotion ? 0 : y }}
+        >
+          {children}
+        </motion.div>
+      </Container>
       <HeroRhythm progress={scrollYProgress} />
     </div>
   );

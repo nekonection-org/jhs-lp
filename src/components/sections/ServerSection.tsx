@@ -15,6 +15,7 @@ export function ServerSection() {
         <div className="server-overview">
           <Reveal className="server-introduction">
             <SectionHeading
+              icon="settings"
               index="01"
               layout="stack"
               description={

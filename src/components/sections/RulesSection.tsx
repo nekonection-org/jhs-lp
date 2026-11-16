@@ -24,7 +24,6 @@ export async function RulesSection() {
     return (
       <Reveal variant="wipe" delay={index * 0.035} key={item.id}>
         <FeatureCard
-          number={String(index + 1).padStart(2, "0")}
           className="rule-feature"
           description={
             <LocalizedText ja={item.description} en={englishItem.description} />
@@ -49,6 +48,7 @@ export async function RulesSection() {
           <div className="rules-introduction">
             <Reveal>
               <SectionHeading
+                icon="shield"
                 index="02"
                 layout="stack"
                 description={
@@ -71,6 +71,23 @@ export async function RulesSection() {
                 }
               />
             </Reveal>
+            <aside
+              aria-labelledby="rules-notice-title"
+              className="rules-notice mt-8 border-l-2 border-[var(--border-strong)] pl-5"
+            >
+              <h3 id="rules-notice-title" className="text-lg font-semibold">
+                <LocalizedText
+                  ja={japaneseContent.noticeTitle}
+                  en={englishContent.noticeTitle}
+                />
+              </h3>
+              <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                <LocalizedText
+                  ja={japaneseContent.notice}
+                  en={englishContent.notice}
+                />
+              </p>
+            </aside>
           </div>
           <div className="rules-grid">
             {japaneseContent.items.slice(0, 3).map(renderRule)}
@@ -80,20 +97,6 @@ export async function RulesSection() {
           className="rules-additional"
           label={{ ja: ja.detailLabels.rules, en: en.detailLabels.rules }}
         >
-          <aside className="mb-8 border-l-2 border-[var(--border-strong)] pl-5">
-            <h3 className="text-lg font-semibold">
-              <LocalizedText
-                ja={japaneseContent.noticeTitle}
-                en={englishContent.noticeTitle}
-              />
-            </h3>
-            <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              <LocalizedText
-                ja={japaneseContent.notice}
-                en={englishContent.notice}
-              />
-            </p>
-          </aside>
           <div className="rules-grid">
             {japaneseContent.items
               .slice(3)
@@ -129,7 +132,7 @@ export async function RulesSection() {
             <div className="border-t border-[var(--border)] px-5 py-7 sm:px-7 sm:py-9">
               <div className="max-w-3xl">
                 <p className="section-eyebrow">Server Rulebook</p>
-                <h3 className="mt-2 text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
+                <h3 className="mt-2 text-xl font-bold tracking-[-0.03em] sm:text-2xl">
                   <LocalizedText
                     ja={japaneseContent.rulebook.title}
                     en={englishContent.rulebook.title}
