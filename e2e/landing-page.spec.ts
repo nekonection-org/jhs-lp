@@ -22,7 +22,7 @@ test("トップページに必須セクションと単一の見出しが表示�
   page,
 }) => {
   await expect(
-    page.getByRole("heading", { level: 1, name: ja.hero.headline.join(" ") }),
+    page.getByRole("heading", { level: 1, name: ja.hero.wordmark.join(" ") }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   await expect(page.locator('header img[src*="icon.png"]')).toBeVisible();
@@ -62,7 +62,7 @@ test("初期言語は日本語で、英語の選択が再読み込み後も保�
   await expect(root).toHaveAttribute("lang", "en");
   await expect(page).toHaveTitle(en.metadata.title);
   await expect(
-    page.getByRole("heading", { level: 1, name: en.hero.headline.join(" ") }),
+    page.getByRole("heading", { level: 1, name: en.hero.wordmark.join(" ") }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { level: 2, name: "Server Information" }),
@@ -216,7 +216,7 @@ test("指定された全幅で主要コンテンツを表示し、横スクロ�
     await page.goto(`/?viewport=${width}`);
 
     await expect(
-      page.getByRole("heading", { level: 1, name: ja.hero.headline.join(" ") }),
+      page.getByRole("heading", { level: 1, name: ja.hero.wordmark.join(" ") }),
     ).toBeVisible();
     await expect(
       page.locator(`#top a[href="${e2eEnvironment.discordUrl}"]`).first(),

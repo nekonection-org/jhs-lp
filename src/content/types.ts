@@ -149,6 +149,7 @@ export interface SectionActionContent {
 }
 
 export interface HeroContent {
+  readonly wordmark: readonly [string, string];
   readonly headline: readonly [string, string];
   readonly id: "top";
   readonly eyebrow: string;

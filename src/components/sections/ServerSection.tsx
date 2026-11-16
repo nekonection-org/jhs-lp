@@ -2,8 +2,8 @@ import { Info } from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
-import { RaidTimeChecker } from "@/components/ui/RaidTimeChecker";
 import { RaidSchedule } from "@/components/ui/RaidSchedule";
+import { RaidTimeChecker } from "@/components/ui/RaidTimeChecker";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { en, ja } from "@/content";
@@ -17,7 +17,7 @@ export function ServerSection() {
           <Reveal className="server-introduction">
             <SectionHeading
               index="01"
-              layout="stack"
+              layout="split"
               description={
                 <LocalizedText
                   ja={ja.server.welcomeDescription}
@@ -31,12 +31,6 @@ export function ServerSection() {
                 <LocalizedText ja={ja.server.title} en={en.server.title} />
               }
             />
-            <p className="server-principle">
-              <LocalizedText
-                ja={ja.server.highlights[0].title}
-                en={en.server.highlights[0].title}
-              />
-            </p>
           </Reveal>
           <Reveal className="settings-panel">
             <h3 className="text-lg font-semibold">

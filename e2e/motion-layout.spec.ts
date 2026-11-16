@@ -9,7 +9,7 @@ for (const viewport of [
   { width: 1024, height: 900 },
   { width: 1440, height: 900 },
 ]) {
-  test(`${viewport.width}×${viewport.height}: 導入・風景・レイド時間を画面幅に合わせて配置する`, async ({
+  test(`${viewport.width}×${viewport.height}: 大きなブランド表記と紹介・操作が収まり、風景へ読み進められる`, async ({
     page,
   }) => {
     await page.setViewportSize(viewport);
@@ -28,30 +28,23 @@ for (const viewport of [
           ),
       )
       .toBe(true);
-    const cover = await page.locator(".hero-cover").boundingBox();
-    const media = await page.locator(".hero-media").boundingBox();
-    const window = await page.locator(".hero-window").boundingBox();
-    const copy = await page.locator(".hero-copy").boundingBox();
+    const headline = await page.locator("#hero-title").boundingBox();
+    const first = await page.locator(".hero-wordmark-first").boundingBox();
+    const last = await page.locator(".hero-wordmark-last").boundingBox();
     const intro = await page.locator(".hero-introduction").boundingBox();
     const actions = await page.locator("#hero-actions").boundingBox();
-    const facts = await page.locator(".hero-facts").boundingBox();
-    if (!cover || !media || !window || !copy || !intro || !actions || !facts)
-      throw new Error("All introductory content must have visible bounds");
-    for (const bounds of [copy, intro, actions, media, window, facts]) {
+    const media = await page.locator(".hero-media").boundingBox();
+    if (!headline || !first || !last || !intro || !actions || !media)
+      throw new Error(
+        "Brand, introduction, actions and landscape must be rendered",
+      );
+    for (const bounds of [headline, first, last, intro, actions, media]) {
       expect(bounds.x).toBeGreaterThanOrEqual(20);
       expect(bounds.x + bounds.width).toBeLessThanOrEqual(viewport.width - 19);
     }
     expect(actions.y + actions.height).toBeLessThanOrEqual(viewport.height);
-    expect(cover.y).toBeGreaterThanOrEqual(intro.y + intro.height);
-    if (viewport.width >= 1024) {
-      expect(intro.x).toBeGreaterThan(copy.x + copy.width);
-      expect(window.x).toBeGreaterThanOrEqual(media.x + media.width);
-      expect(window.y).toBeCloseTo(media.y, 0);
-    } else {
-      expect(intro.y).toBeGreaterThanOrEqual(copy.y + copy.height);
-      expect(window.y).toBeGreaterThanOrEqual(media.y + media.height);
-    }
-    expect(facts.y).toBeGreaterThanOrEqual(cover.y + cover.height);
+    expect(intro.y).toBeGreaterThanOrEqual(headline.y + headline.height);
+    expect(media.y).toBeGreaterThanOrEqual(intro.y + intro.height);
     await expect(page.locator(".hero-window-times > div")).toHaveCount(2);
     await expect(page.locator(".hero-window-times")).toContainText("18:00");
     await expect(page.locator(".hero-window-times")).toContainText("12:00");
@@ -88,7 +81,7 @@ test("風景画像の読み込みに失敗しても紹介文・レイド時間�
   );
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { level: 1, name: ja.hero.headline.join(" ") }),
+    page.getByRole("heading", { level: 1, name: ja.hero.wordmark.join(" ") }),
   ).toBeVisible();
   await expect(
     page.locator("#hero-actions").getByRole("link", { name: /Discordに参加/ }),
@@ -98,9 +91,7 @@ test("風景画像の読み込みに失敗しても紹介文・レイド時間�
   await expect(page).toHaveURL(/#rules$/);
 });
 
-test("FAQはデスクトップでは説明と回答を分け、モバイルでは読み順に並ぶ", async ({
-  page,
-}) => {
+test("FAQは中央の導入に続けて質問一覧を縦に配置する", async ({ page }) => {
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
@@ -109,9 +100,7 @@ test("FAQはデスクトップでは説明と回答を分け、モバイルで�
     const answers = await page.locator(".faq-answers").boundingBox();
     if (!heading || !answers)
       throw new Error("FAQ introduction and answers must be rendered");
-    if (width >= 1024)
-      expect(answers.x).toBeGreaterThan(heading.x + heading.width);
-    else expect(answers.y).toBeGreaterThanOrEqual(heading.y + heading.height);
+    expect(answers.y).toBeGreaterThanOrEqual(heading.y + heading.height);
     await expect(
       page.locator(".faq-heading").getByRole("link", { name: /Discordに参加/ }),
     ).toHaveAttribute("href", e2eEnvironment.discordUrl);

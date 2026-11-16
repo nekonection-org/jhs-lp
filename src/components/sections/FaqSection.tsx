@@ -22,6 +22,7 @@ export async function FaqSection() {
             <SectionHeading
               index="04"
               layout="stack"
+              align="center"
               description={
                 <LocalizedText
                   ja={ja.faq.description}

@@ -62,6 +62,7 @@ export const en = {
     },
   },
   hero: {
+    wordmark: ["Japan", "Hideaway"],
     headline: ["Your time.", "Your Rust."],
     id: "top",
     eyebrow: "Rust Community Server",

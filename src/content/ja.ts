@@ -62,6 +62,7 @@ export const ja = {
     },
   },
   hero: {
+    wordmark: ["Japan", "Hideaway"],
     headline: ["暮らしのペースで、", "Rustを楽しもう。"],
     id: "top",
     eyebrow: "Rust Community Server",

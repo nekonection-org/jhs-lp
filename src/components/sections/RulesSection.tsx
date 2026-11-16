@@ -22,7 +22,7 @@ export async function RulesSection() {
             <Reveal>
               <SectionHeading
                 index="02"
-                layout="stack"
+                layout="split"
                 description={
                   <LocalizedText
                     ja={japaneseContent.description}
@@ -77,7 +77,7 @@ export async function RulesSection() {
                 <Reveal delay={index * 0.035} key={item.id}>
                   <FeatureCard
                     number={String(index + 1).padStart(2, "0")}
-                    className="rule-feature md:grid-cols-1 xl:grid-cols-1"
+                    className="rule-feature"
                     description={
                       <LocalizedText
                         ja={item.description}

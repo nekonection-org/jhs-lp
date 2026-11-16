@@ -14,7 +14,7 @@ export function FinalCtaSection() {
       <Container>
         <Reveal>
           <div className="join-panel">
-            <div className="max-w-2xl">
+            <div className="join-copy">
               <p className="section-eyebrow" data-reveal-item>
                 <LocalizedText
                   ja={ja.finalCta.eyebrow}
@@ -35,10 +35,7 @@ export function FinalCtaSection() {
                 />
               </p>
             </div>
-            <div
-              className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-stretch"
-              data-reveal-item
-            >
+            <div className="join-actions" data-reveal-item>
               <LocalizedExternalAction
                 action={{
                   ja: ja.hero.primaryAction,
