@@ -4,7 +4,7 @@
 
 Source: https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx
 
-Adapted in `src/components/ui/FadeContent.tsx`: retain one-shot IntersectionObserver behavior; render readable content before hydration; use the existing Motion dependency; respect reduced motion; remove blur and timer-based delays.
+Adapted in `src/components/ui/FadeContent.tsx`: retain one-shot IntersectionObserver behavior per visible item; add line and heading mask reveals; render readable content before hydration; use the existing Motion dependency; respect reduced motion; remove blur and timer-based delays.
 
 MIT + Commons Clause License Condition v1.0
 
