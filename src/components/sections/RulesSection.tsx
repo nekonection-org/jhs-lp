@@ -15,10 +15,7 @@ export async function RulesSection() {
   const englishContent = result.item?.translations.en ?? en.rules;
 
   return (
-    <section
-      className="section-shell border-y border-[var(--border)] bg-[var(--surface)]"
-      id="rules"
-    >
+    <section className="section-shell chapter-section" id="rules">
       <Container>
         <Reveal>
           <SectionHeading
@@ -77,6 +74,7 @@ export async function RulesSection() {
               return (
                 <Reveal delay={index * 0.035} key={item.id}>
                   <FeatureCard
+                    number={String(index + 1).padStart(2, "0")}
                     className="md:grid-cols-1 xl:grid-cols-1"
                     description={
                       <LocalizedText

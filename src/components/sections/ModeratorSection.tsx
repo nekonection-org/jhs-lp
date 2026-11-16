@@ -32,10 +32,7 @@ export async function ModeratorSection() {
       : null;
 
   return (
-    <section
-      className="section-shell border-y border-[var(--border)] bg-[var(--surface)]"
-      id="moderator"
-    >
+    <section className="section-shell chapter-section" id="moderator">
       <Container>
         <Reveal>
           <SectionHeading

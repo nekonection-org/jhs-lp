@@ -10,6 +10,7 @@ import { cn } from "@/lib/cn";
 
 interface FeatureCardProps {
   icon: ContentIconName;
+  number?: string;
   title: ReactNode;
   description: ReactNode;
   status?: ContentStatus;
@@ -20,6 +21,7 @@ interface FeatureCardProps {
 
 export function FeatureCard({
   icon,
+  number,
   title,
   description,
   status,
@@ -37,10 +39,16 @@ export function FeatureCard({
       data-important={important || undefined}
     >
       <div className="flex items-start gap-3">
-        <ContentIcon
-          className="mt-1 size-5 shrink-0 text-[var(--accent-strong)]"
-          name={icon}
-        />
+        {number ? (
+          <span className="feature-number" aria-hidden="true">
+            {number}
+          </span>
+        ) : (
+          <ContentIcon
+            className="mt-1 size-5 shrink-0 text-[var(--accent-strong)]"
+            name={icon}
+          />
+        )}
         <h3 className="text-lg font-bold tracking-[-0.025em] text-[var(--text-primary)]">
           {title}
         </h3>

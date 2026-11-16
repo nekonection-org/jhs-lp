@@ -42,6 +42,8 @@ export function useActiveSection(sectionIds: readonly NavigableSectionId[]) {
 
         if (mostVisible && isNavigableSectionId(mostVisible[0], sectionIds)) {
           setActiveSection(mostVisible[0]);
+        } else {
+          setActiveSection(null);
         }
       },
       {

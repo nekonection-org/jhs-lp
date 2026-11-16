@@ -105,6 +105,15 @@ test("ナビゲーションは JavaScript に依存しないアンカーリン�
   await page.locator('a[href="#rules"]').first().click();
   await expect(page).toHaveURL(/#rules$/);
   await expect(page.locator("#rules")).toBeVisible();
+  await expect(
+    page.locator('header[data-menu-open] a[href="#rules"]'),
+  ).toHaveAttribute("aria-current", "location");
+
+  await page.locator('header[data-menu-open] a[href="#top"]').click();
+  await expect(page).toHaveURL(/#top$/);
+  await expect(
+    page.locator('header[data-menu-open] a[aria-current="location"]'),
+  ).toHaveCount(0);
 });
 
 test("FAQ はDB状態を明示し、取得時はネイティブ details で開閉できる", async ({

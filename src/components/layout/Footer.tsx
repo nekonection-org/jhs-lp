@@ -12,6 +12,9 @@ export function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--surface)]">
       <Container className="py-10 sm:py-12">
+        <p className="footer-wordmark" aria-hidden="true">
+          HIDEAWAY<span>.</span>
+        </p>
         <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:gap-16">
           <div className="max-w-lg">
             <a
