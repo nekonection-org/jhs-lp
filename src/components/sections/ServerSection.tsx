@@ -1,4 +1,12 @@
-import { Info } from "lucide-react";
+import {
+  CalendarDays,
+  Clock3,
+  Info,
+  Map,
+  RefreshCw,
+  Settings2,
+  Users,
+} from "lucide-react";
 
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
@@ -6,7 +14,17 @@ import { ServerSchedule } from "@/components/ui/ServerSchedule";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { en, ja } from "@/content";
+import type { ServerSettingItems } from "@/content/types";
 import { getMatchingItem } from "@/lib/content";
+
+const settingIcons = {
+  "team-limit": Users,
+  "map-size": Map,
+  "map-bp-wipe": CalendarDays,
+  "daily-restart": RefreshCw,
+  "weekday-raids": Clock3,
+  "weekend-raids": CalendarDays,
+} satisfies Record<ServerSettingItems[number]["id"], typeof Users>;
 
 export function ServerSection() {
   return (
@@ -39,7 +57,8 @@ export function ServerSection() {
         <div className="server-reference">
           <div className="server-reference-grid">
             <Reveal className="settings-panel">
-              <h3 className="text-lg font-semibold">
+              <h3 className="server-icon-label text-lg font-semibold">
+                <Settings2 aria-hidden="true" className="server-info-icon" />
                 <LocalizedText
                   ja={ja.server.settingsTitle}
                   en={en.server.settingsTitle}
@@ -57,6 +76,7 @@ export function ServerSection() {
                     en.server.settings,
                     setting.id,
                   );
+                  const Icon = settingIcons[setting.id];
 
                   return (
                     <div
@@ -64,7 +84,8 @@ export function ServerSection() {
                       key={setting.id}
                       data-reveal-item
                     >
-                      <dt className="text-sm text-[var(--text-secondary)]">
+                      <dt className="server-icon-label text-sm text-[var(--text-secondary)]">
+                        <Icon aria-hidden="true" className="server-info-icon" />
                         <LocalizedText
                           ja={setting.label}
                           en={englishSetting.label}

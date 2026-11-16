@@ -1,6 +1,6 @@
 "use client";
 
-import { Ban, Check, CircleAlert } from "lucide-react";
+import { Ban, CalendarDays, Check, CircleAlert, Clock3 } from "lucide-react";
 import { motion } from "motion/react";
 import { type ReactNode, useId, useMemo, useState } from "react";
 
@@ -49,7 +49,11 @@ export function RaidTimeChecker({
   return (
     <section className="raid-checker" aria-labelledby={`${id}-title`}>
       <div className="raid-checker-intro">
-        <h3 className="text-base font-semibold" id={`${id}-title`}>
+        <h3
+          className="server-icon-label text-base font-semibold"
+          id={`${id}-title`}
+        >
+          <Clock3 aria-hidden="true" className="server-info-icon" />
           <LocalizedText
             ja={ja.server.schedule.checkerTitle}
             en={en.server.schedule.checkerTitle}
@@ -69,7 +73,8 @@ export function RaidTimeChecker({
         {timeZoneControl}
         <div className="raid-date-time-fields">
           <div>
-            <label htmlFor={`${id}-date`}>
+            <label className="server-icon-label" htmlFor={`${id}-date`}>
+              <CalendarDays aria-hidden="true" className="server-info-icon" />
               <LocalizedText
                 ja={ja.server.schedule.dateLabel}
                 en={en.server.schedule.dateLabel}
@@ -85,7 +90,8 @@ export function RaidTimeChecker({
             />
           </div>
           <div>
-            <label htmlFor={`${id}-time`}>
+            <label className="server-icon-label" htmlFor={`${id}-time`}>
+              <Clock3 aria-hidden="true" className="server-info-icon" />
               <LocalizedText
                 ja={ja.server.schedule.timeLabel}
                 en={en.server.schedule.timeLabel}

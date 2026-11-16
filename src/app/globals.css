@@ -861,6 +861,18 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .server-planner-reveal {
   margin-top: 3rem;
 }
+.server-icon-label,
+.server-planner .server-icon-label {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.server-info-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  color: var(--accent-strong);
+}
 .server-planner-panels {
   display: grid;
   gap: 2.5rem;

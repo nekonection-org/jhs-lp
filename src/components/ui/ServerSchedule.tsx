@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
+import { CalendarDays, Globe2 } from "lucide-react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { motionTiming } from "@/lib/motion";
@@ -105,7 +106,10 @@ export function ServerSchedule() {
     <div className="server-planner">
       <div className="server-planner-panels">
         <div className="wipe-countdown-block" data-reveal-item>
-          <h3>{copy.nextWipe}</h3>
+          <h3 className="server-icon-label">
+            <CalendarDays aria-hidden="true" className="server-info-icon" />
+            {copy.nextWipe}
+          </h3>
           <motion.time
             key={`${nextWipe}-${timeZone}`}
             initial={reduceMotion || now === null ? false : { opacity: 0 }}
@@ -143,7 +147,13 @@ export function ServerSchedule() {
               timeZoneControl={
                 <>
                   <div className="server-planner-toolbar">
-                    <label htmlFor="raid-time-zone">{copy.timeZone}</label>
+                    <label
+                      className="server-icon-label"
+                      htmlFor="raid-time-zone"
+                    >
+                      <Globe2 aria-hidden="true" className="server-info-icon" />
+                      {copy.timeZone}
+                    </label>
                     <select
                       id="raid-time-zone"
                       value={timeZone}
