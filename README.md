@@ -37,8 +37,8 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 
 ブランドの緑（ダーク `#8fbd78` / ライト `#527d43`）とグレーの背景は維持します。色は`src/app/globals.css`のCSS変数で管理し、緑は参加ボタンと操作状態を中心に使います。
 
-- Heroは「暮らしのペースで、Rustを楽しもう。」という見出し、参加導線、専用の透過Hazmatイラストを組み合わせます。PC・タブレットでは右側に大きく配置し、スマートフォンでは参加ボタンの下に上半身を見せます。本文18px・主要操作16pxを維持し、360×640pxでも最初の参加ボタンを画面内に収めます。
-- 背景はグレーの単色です。Heroの光線・グローを撤去し、背景画像や背景アニメーションは使用しません。Hazmatは背景とは別の前景画像です。ブランドの緑はボタンと操作状態に絞ります。
+- Heroは「暮らしのペースで、Rustを楽しもう。」という見出しと参加導線を主役にし、右側にオリジナルの建築的なSVGを配置します。キャラクターやHero用のラスター画像は使用しません。本文18px・主要操作16pxを維持し、360×640pxでも最初の参加ボタンが画面内に収まります。
+- 背景色はグレーを維持します。Heroには斜めのフレームを重ねた抽象的な奥行きを付け、アクセント線にだけブランドの緑を使用します。スマートフォンでは図形を右上へ寄せ、本文の後ろでは濃度を抑えます。SVGは装飾として読み上げ・クリック対象から外します。
 - 接続方法、サーバー設定、ワイプ予定、日時確認ツールは常に表示し、展開操作なしで確認できます。7日間のレイド時間表と「レイド時間を、ひと目で。」の図は表示しません。接続コマンドのコピーとSteam接続もそのまま操作できます。追加ルール、VIP詳細、募集条件は、共通の`SectionDisclosure`（ネイティブ`details` / `summary`）で必要なときに展開します。これらのラベルは`src/content/{ja,en}.ts`の`detailLabels`で編集します。
 - サーバー情報では次回マップ・BPワイプと日時確認を最初から表示します。ワイプは日付だけを大きくする表現を外し、一続きの現地日時・タイムゾーン・残り時間を示します。日時確認はタイムゾーン→日付・時刻→判定結果の順に操作できます。サマータイムの重複・存在しない時刻への対応は維持しています。
 - ルールの要約は最初の3項目を表示し、残りの項目と注意事項は「その他の重要ルール」にまとめます。全文は従来どおり別のネイティブ`details`で読めます。VIPは見出しと詳細の入口、モデレーター募集は説明・募集状況・応募導線を先に表示します。事実や提供内容は追加していません。
@@ -46,10 +46,9 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - コンテンツ最大幅は1200pxです。セクション間は80〜144pxの余白を取り、見出しを32〜48pxに揃えます。色や装飾的な番号ではなく、文字の大きさ・余白・読み順で情報の優先順位を示します。
 - アンカー移動時は固定ヘッダーと24pxの余白を確保します。フォーカスリング、44px以上の操作領域、日英とテーマの保存、Reduced Motion対応を維持しています。
 - `src/components/ui/Button.tsx` は [shadcn/ui Button](https://ui.shadcn.com/docs/components/button) のバリアント管理パターンを取り入れ、`class-variance-authority` で既存の `primary` / `secondary` / `quiet` APIを管理します。サイト固有の色とネイティブなbutton / aの意味を維持するローカル実装です。shadcn CLIによるテーマ一括置換は行っていません。
-- `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) の軽量版を基に調整しています。IntersectionObserverで個々の要素が画面に入るタイミングを検知し、一度だけ動かします。本文は16px・400msの移動とフェード、見出しは20px・520msの移動とマスク表示を組み合わせます。通常の遅延は60msずつ、最大120msです。Heroは行単位の見出し→説明→参加導線を90msずつ、最大360msで順に表示します。Hazmatは画像の読み込み完了を待ち、620msの移動・拡大・フェードで登場します。
-- `HeroScrollScene`はMotionの`useScroll` / `useTransform`で通常のスクロールに連動し、Heroの本文全体を最大20px移動し、Hazmatは反対方向へ最大20px移動して奥行きを付けます。スクロール位置・ホイール・タッチ操作を上書きしません。PCではルール・FAQの見出しをセクション内で追従させます。Reduced Motionではスクロール連動の移動・マスクを停止し、本文を表示します。
-- Hazmatには上下8px・拡大1.012倍の呼吸アニメーションを2.4秒×2回（合計4.8秒）付けます。画面外・非表示タブでは停止し、Reduced Motionでは無効にします。常時動き続ける背景やスクロールの上書きは行いません。
-- SSR・JavaScript無効・IntersectionObserver非対応時も本文とHazmatを表示します。Reduced Motion時は切り替えを即時にし、アンカー移動もアニメーションしません。採用コードの出典とライセンスは `THIRD_PARTY_NOTICES.md` に記載しています。
+- `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) を基に調整しています。`Reveal`の`variant`で、本文の`rise`、左右から組み合わさる`split`、横方向に開く`wipe`、背景の拡大・マスク表示`aperture`を選べます。IntersectionObserverで画面に入った項目を一度だけ再生します。Heroは行単位の見出し→説明→参加導線を90msずつ、最大360msの遅延で表示します。
+- `HeroScrollScene`と`HeroArchitecture`はMotionの`useScroll` / `useTransform`を使い、通常のスクロールに合わせてSVGの上下レイヤーを異なる方向へ分離します。上層は最大64px横・32px上、下層は最大48px横・40px下に移動し、本文の移動は最大20pxです。背景の登場は700ms、サーバーの左右移動は450ms、ルールの横マスクは600msです。スクロール位置・ホイール・タッチ操作は上書きしません。
+- SSR・JavaScript無効・IntersectionObserver非対応時も本文とSVGを表示します。Reduced Motionでは移動・拡縮・マスクを停止し、途中で設定を切り替えても情報を表示します。背景にはタイマーや常時再生のループはありません。PCではルール・FAQの見出しがセクション内で追従します。採用コードとフォントの出典・ライセンスは`THIRD_PARTY_NOTICES.md`に記載しています。
 
 ### 操作へのフィードバック
 
@@ -291,10 +290,11 @@ VIP案内はCloudflare Accessで保護された`/admin/vip`から管理します
 
 既存のルールはマイグレーションでDBへ移行されます。公開内容は最大約60秒キャッシュされますが、管理画面からの保存時は即時無効化します。DBへ接続できない場合や保存データが不正な場合は、公開セクションが消えないよう`ja.ts`と`en.ts`の初期内容をフォールバック表示します。
 
-### 画像の差し替え
+### Hero背景と画像の差し替え
+
+Hero背景は`src/components/ui/HeroArchitecture.tsx`の頂点・輪郭と、`globals.css`の`.hero-architecture`関連スタイルで変更します。外部画像の読み込みやCanvasは不要です。色は既存のテーマ変数を参照します。
 
 - `public/icon.png`: ヘッダー、Footerで使用する公式アイコン
-- `public/images/hazmat-operative.webp`: 現在のHero前景。透過WebP（1024×1536、約200KB）を`next/image`で最適化配信します。組み込み`image_gen`で制作した専用イラストです。[生成プロンプトと制作記録](design-assets/hazmat-prompt.md)を参照してください。
 - `public/main-image.png`: 以前のHero画像（現在のLPでは未使用）
 - `public/banner.png`: Discordなどのリンク共有で使用するOG/Twitter画像
 

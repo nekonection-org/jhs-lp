@@ -4,7 +4,7 @@
 
 Source: https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx
 
-Adapted in `src/components/ui/FadeContent.tsx`: retain one-shot IntersectionObserver behavior per visible item; add line and heading mask reveals; render readable content before hydration; use the existing Motion dependency; respect reduced motion; remove blur and timer-based delays.
+Adapted in `src/components/ui/FadeContent.tsx`: retain one-shot IntersectionObserver behavior per visible item; add directional entrances, architectural and heading masks; render readable content before hydration; use the existing Motion dependency; respect reduced motion; remove blur and timer-based delays.
 
 MIT + Commons Clause License Condition v1.0
 
@@ -59,10 +59,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-## Generated Hero illustration
-
-`public/images/hazmat-operative.webp` was generated for this project with the built-in image_gen tool. It is an original illustration, not an extracted game screenshot or official Facepunch asset. The final prompt and encoding details are recorded in `design-assets/hazmat-prompt.md`.
 
 ## Noto Sans JP
 
