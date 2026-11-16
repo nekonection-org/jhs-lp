@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { type ReactNode, useId, useMemo, useState } from "react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { motionTiming } from "@/lib/motion";
 
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { en, ja } from "@/content";
@@ -135,9 +136,12 @@ export function RaidTimeChecker({
         >
           <motion.span
             key={allowed === null ? "unknown" : String(allowed)}
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: reduceMotion ? 0 : 0.2 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              ...motionTiming.interaction,
+              duration: reduceMotion ? 0 : motionTiming.interaction.duration,
+            }}
           >
             <ResultIcon aria-hidden="true" className="size-5 shrink-0" />
           </motion.span>
@@ -181,9 +185,12 @@ export function RaidTimeChecker({
           <motion.p
             className="raid-japan-equivalent"
             key={`${instant}-${timeZone}`}
-            initial={reduceMotion ? false : { opacity: 0.4, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.24 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              ...motionTiming.interaction,
+              duration: reduceMotion ? 0 : motionTiming.interaction.duration,
+            }}
           >
             <LocalizedText
               ja={ja.server.schedule.japanEquivalent}

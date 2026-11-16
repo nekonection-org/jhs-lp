@@ -3,6 +3,7 @@
 import { useState, useSyncExternalStore } from "react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { motionTiming } from "@/lib/motion";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { motion } from "motion/react";
@@ -103,19 +104,16 @@ export function ServerSchedule() {
   return (
     <div className="server-planner">
       <div className="server-planner-panels">
-        <div
-          className="wipe-countdown-block"
-          data-reveal-item
-          data-reveal-kind="left"
-        >
+        <div className="wipe-countdown-block" data-reveal-item>
           <h3>{copy.nextWipe}</h3>
           <motion.time
             key={`${nextWipe}-${timeZone}`}
-            initial={
-              reduceMotion || now === null ? false : { opacity: 0.4, y: 8 }
-            }
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.24 }}
+            initial={reduceMotion || now === null ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              ...motionTiming.interaction,
+              duration: reduceMotion ? 0 : motionTiming.interaction.duration,
+            }}
             dateTime={
               nextWipe === null ? undefined : new Date(nextWipe).toISOString()
             }
@@ -137,11 +135,7 @@ export function ServerSchedule() {
           </p>
           <p className="wipe-reference">{wipeReference}</p>
         </div>
-        <div
-          className="server-planner-tools"
-          data-reveal-item
-          data-reveal-kind="right"
-        >
+        <div className="server-planner-tools" data-reveal-item>
           <div className="server-planner-checker">
             <RaidTimeChecker
               timeZone={timeZone}

@@ -31,6 +31,18 @@
 
 専用ページの追加確認: `/tmp/jhs-news-page-1440.png`、`/tmp/jhs-news-page-mobile-final.png`。既存サイトのヘッダー・フッターを使い、日付・カテゴリ・見出し・Markdown本文を読みやすい幅で表示。公開済みのお知らせのみを取得し、存在しないIDは404を表示する。
 
+## モーション刷新の確認
+
+- 登場を360ms（Heroは440ms）のフェードと8〜12pxの上下移動へ統一。横移動・見出しの切り抜き・拡縮を撤去。
+- メニューはパネル全体で240ms、テーマ・言語・日時の操作は180msの共通テンポ。Heroと風景のスクロールによるずれを撤去。
+- 太陽・月の24秒の円軌道は維持し、昼夜の明るさと雲の変化を緩やかにつないだ。
+- 途中でReduced Motionを有効・無効に切り替えても、最終位置・不透明度を維持し、再登場しないことをブラウザーで確認。
+- 700msの連続フレームで、上下移動が12px以下・横移動なし・拡縮なし・切り抜きなしを確認。
+- マップサイズは日本語・英語とも3750。設定欄の実表示も確認。
+- 実画面キャプチャ: `/tmp/jhs-motion-refresh-hero-1440.png`、`/tmp/jhs-motion-refresh-settings-1440.png`、`/tmp/jhs-motion-refresh-hero-360.png`、`/tmp/jhs-motion-refresh-menu-360.png`。
+- 360pxでの横方向のはみ出し0px、ブラウザーのpageerror・console errorは0件。
+- 型チェック・Lint・フォーマット・単体テスト176件・Production Build・E2E43件が通過。
+
 ## Findings / comparison history
 
 対応が必要なP0 / P1 / P2の差異なし。初回の描画確認で修正を要する差異はなかった。フォント・配色・公開件数の差異は既存サイトと実データを優先するための意図的な調整。

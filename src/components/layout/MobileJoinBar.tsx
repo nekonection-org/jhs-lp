@@ -9,6 +9,7 @@ import { useLanguage } from "@/components/providers/LanguageProvider";
 import { LocalizedExternalAction } from "@/components/ui/ActionLink";
 import { en, ja } from "@/content";
 import { externalUrls } from "@/lib/constants";
+import { motionTiming } from "@/lib/motion";
 
 export function MobileJoinBar() {
   const { locale } = useLanguage();
@@ -50,10 +51,13 @@ export function MobileJoinBar() {
               : en.hero.primaryAction.label
           }
           className="mobile-join-bar xl:hidden"
-          initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={reduceMotion ? undefined : { opacity: 0, y: 8 }}
-          transition={{ duration: reduceMotion ? 0 : 0.18 }}
+          exit={reduceMotion ? undefined : { opacity: 0, y: 6 }}
+          transition={{
+            ...motionTiming.interaction,
+            duration: reduceMotion ? 0 : motionTiming.interaction.duration,
+          }}
         >
           <span className="text-xs font-semibold leading-5">
             Japan Hideaway

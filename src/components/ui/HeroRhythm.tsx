@@ -1,15 +1,13 @@
 "use client";
 
-import { motion, useTransform, type MotionValue } from "motion/react";
 import { useEffect, useId, useRef } from "react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-export function HeroRhythm({ progress }: { progress: MotionValue<number> }) {
+export function HeroRhythm() {
   const reduceMotion = useReducedMotion();
   const scene = useRef<HTMLDivElement>(null);
   const lightId = useId();
-  const y = useTransform(progress, [0, 1], [0, 24]);
 
   useEffect(() => {
     const element = scene.current;
@@ -94,10 +92,7 @@ export function HeroRhythm({ progress }: { progress: MotionValue<number> }) {
           <g className="rhythm-clouds rhythm-cycle">
             <path d="M410 190h170M453 205h80M135 292h115M158 307h140" />
           </g>
-          <motion.g
-            className="rhythm-landscape"
-            style={{ y: reduceMotion ? 0 : y }}
-          >
+          <g className="rhythm-landscape">
             <path
               className="rhythm-ridge-far"
               d="M-1000 449C-780 422-625 351-420 385S-180 472 0 449C104 440 151 349 233 358S349 292 401 326 568 422 720 336S1200 392 1600 348V750H-1000Z"
@@ -176,7 +171,7 @@ export function HeroRhythm({ progress }: { progress: MotionValue<number> }) {
                 <path d="M433 434h9v4h-9Z" className="rhythm-lamp" />
               </g>
             </g>
-          </motion.g>
+          </g>
         </g>
       </svg>
     </div>

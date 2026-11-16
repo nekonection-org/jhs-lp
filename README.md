@@ -46,8 +46,9 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - コンテンツ最大幅は1200pxです。セクション間は80〜144pxの余白を取り、セクション見出しを24〜30px、Heroの見出しを32〜52pxに揃え、見出しとルール項目には補助アイコンを添えます。色や装飾的な番号ではなく、文字の大きさ・余白・読み順で情報の優先順位を示します。
 - アンカー移動時は固定ヘッダーと24pxの余白を確保します。フォーカスリング、44px以上の操作領域、日英とテーマの保存、Reduced Motion対応を維持しています。
 - `src/components/ui/Button.tsx` は [shadcn/ui Button](https://ui.shadcn.com/docs/components/button) のバリアント管理パターンを取り入れ、`class-variance-authority` で既存の `primary` / `secondary` / `quiet` APIを管理します。サイト固有の色とネイティブなbutton / aの意味を維持するローカル実装です。shadcn CLIによるテーマ一括置換は行っていません。
-- `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) を基に調整しています。`Reveal`の`variant`で、本文の`rise`、左右から組み合わさる`split`、横方向に開く`wipe`、背景の拡大・マスク表示`aperture`を選べます。IntersectionObserverで画面に入った項目を一度だけ再生します。Heroは行単位の見出し→説明→参加導線を90msずつ、最大360msの遅延で表示します。
-- `HeroRhythm`の背景は24秒の共通周期で、太陽と月が半周ずれた円軌道を一定の速さで回ります。両方とも左から昇って右の稜線へ沈み、地形の背後を通って次の周回へつながります。天体の見た目は逆回転で正立させ、途中の位置リセットやフェードは使いません。星・空の色・拠点の灯りは昼夜の周期に同期し、スクロールしなくても動きます。背景の停止・再生ボタンは設けていません。IntersectionObserverとPage Visibilityで画面外・非表示タブでは停止します。SVGの表示やスクロール連動はMotionを使用し、ホイール・タッチ操作は上書きしません。サーバーパネルの左右移動とルールの横マスクなど、セクション別の登場演出も維持します。
+- `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) を基に調整しています。登場はすべてフェード＋8〜12pxの上下移動に統一し、横移動・マスク・拡縮を使いません。通常は360ms、Heroは440ms、項目間の遅延は最大200msです。IntersectionObserverで一度だけ再生し、完了時と中断時にはインラインの透明度・変形を解除します。言語切替や開閉操作で登場演出を繰り返しません。時間とイージングは`src/lib/motion.ts`で管理します。
+- `HeroRhythm`の背景は24秒の共通周期で、太陽と月が半周ずれた円軌道を一定の速さで回ります。両方とも左から昇って右の稜線へ沈み、地形の背後を通って次の周回へつながります。天体の見た目は逆回転で正立させ、途中の位置リセットやフェードは使いません。星・空の色・拠点の灯りは同じ周期を緩やかにつなぎます。画面外・非表示タブでは自動停止し、停止・再生ボタンは設けません。Heroの本文と風景はスクロールで別々に移動させず、ホイール・タッチ操作を上書きしません。
+- メニューはパネル全体を240msで表示し、項目ごとの飛び込みは行いません。テーマ・言語・日時・レイド判定の切替は180msの共通テンポです。ボタンの押下は1pxだけとし、ホバーでカードの見出しやボタン全体を動かしません。スクロール案内は2.6秒周期の小さな上下移動に抑えます。
 - SSR・JavaScript無効・IntersectionObserver非対応時も本文とSVGを静止表示します。Reduced Motionでは背景ループ・移動・拡縮・マスクを停止します。PCではルール・FAQの見出しがセクション内で追従します。採用コードとフォントの出典・ライセンスは`THIRD_PARTY_NOTICES.md`に記載しています。
 
 ### 操作へのフィードバック
@@ -60,7 +61,7 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - セクションの段階表示、設定行の時間差表示、ワイプ日時・換算結果の短い切替、判定アイコンの反応を使います。進捗ラインとパネル全体のホバー移動は使用しません。Reduced Motionでは移動・拡縮を抑え、本文と操作結果を表示します。時計の毎秒更新にはアニメーションを付けません。
 - モバイルの`MobileJoinBar`はHeroの参加ボタンがヘッダーより上へ移動してから表示し、フッターが見えている間とメニュー表示中は隠れます。IntersectionObserverで位置の変化を検知し、セーフエリアと画面下部のスクロール余白を確保しています。
 - ボタンは150〜180msの色・矢印の変化と短い押下反応を使います。言語選択の背景は位置を移して切り替え、テーマのアイコンは短い回転とフェードで応答します。モバイルメニューの項目は25msずつずらして表示します。日時の確認結果とモバイルの参加バーも短い時間で切り替えます。
-- FAQはネイティブ`details`の操作を維持し、対応ブラウザーではCSSで高さと濃度を220ms以内に切り替えます。[`interpolate-size`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/interpolate-size)は対応状況が異なるため、`@supports`で拡張し、未対応時は通常の開閉に戻します。
+- FAQはネイティブ`details`の操作を維持し、対応ブラウザーではCSSで高さと濃度を240ms以内に切り替えます。[`interpolate-size`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/interpolate-size)は対応状況が異なるため、`@supports`で拡張し、未対応時は通常の開閉に戻します。
 - コピー成功時はチェックアイコン・完了文言・コマンド枠で応答します。クリップボードへのアクセスが拒否された場合は、再試行するまで手動コピーの案内を残します。
 - モバイルメニューからの移動後は見出しへフォーカスを移し、Escで閉じた場合はメニューボタンへ戻します。Reduced Motion時は移動・拡縮を抑え、操作結果を即時に伝えます。表示アニメーション中に設定を変更した場合も、進行中の処理を止めて濃度・位置を戻します。一度表示した要素はスクロールや設定変更で再生し直しません。
 - JavaScriptが使えなくてもサーバー設定・基準のレイド時間と本文は表示されます。時刻確認の操作はハイドレーション後に有効になり、追従バーは拡張機能として追加されます。

@@ -71,7 +71,6 @@ export function HeroSection() {
                     className="hero-headline-line"
                     key={line}
                     data-reveal-item
-                    data-reveal-kind="heading"
                   >
                     {line}{" "}
                   </span>
@@ -224,12 +223,12 @@ export function HeroSection() {
               animate={
                 reduceMotion
                   ? { y: 0, opacity: 1 }
-                  : { y: [-3, 3, -3], opacity: [0.5, 1, 0.5] }
+                  : { y: [0, 4, 0], opacity: [0.65, 1, 0.65] }
               }
               transition={{
-                duration: reduceMotion ? 0 : 1.8,
+                duration: reduceMotion ? 0 : 2.6,
                 repeat: reduceMotion ? 0 : Infinity,
-                ease: "easeInOut",
+                ease: [0.45, 0, 0.55, 1],
               }}
             >
               <ArrowDown className="size-5" />

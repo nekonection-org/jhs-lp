@@ -51,10 +51,8 @@ export function ThemeToggle({ content, showLabel = false }: ThemeToggleProps) {
         aria-hidden="true"
         className="inline-flex"
         key={isDark ? "dark" : "light"}
-        initial={
-          reduceMotion ? false : { opacity: 0, rotate: -20, scale: 0.85 }
-        }
-        animate={{ opacity: 1, rotate: 0, scale: 1 }}
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{
           ...motionTiming.interaction,
           duration: reduceMotion ? 0 : motionTiming.interaction.duration,

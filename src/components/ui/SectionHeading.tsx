@@ -50,7 +50,7 @@ export function SectionHeading({
           />
         ) : null}
       </p>
-      <h2 className="section-title" data-reveal-item data-reveal-kind="heading">
+      <h2 className="section-title" data-reveal-item>
         {icon ? (
           <ContentIcon name={icon} className="section-title-icon" />
         ) : null}

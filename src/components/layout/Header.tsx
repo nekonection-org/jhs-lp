@@ -179,7 +179,12 @@ export function Header({ homePath = "" }: HeaderProps) {
                 <motion.span
                   className="absolute inset-x-2 bottom-0 h-px bg-[var(--accent)]"
                   layoutId="active-navigation"
-                  transition={{ duration: reduceMotion ? 0 : 0.18 }}
+                  transition={{
+                    ...motionTiming.interaction,
+                    duration: reduceMotion
+                      ? 0
+                      : motionTiming.interaction.duration,
+                  }}
                 />
               ) : null}
             </a>
@@ -227,10 +232,13 @@ export function Header({ homePath = "" }: HeaderProps) {
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             className="absolute inset-x-0 top-full h-[calc(100dvh-4.75rem)] border-t border-[var(--border)] bg-[var(--background)] xl:hidden"
-            exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
-            initial={reduceMotion ? false : { opacity: 0, y: -8 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: -6 }}
+            initial={reduceMotion ? false : { opacity: 0, y: -6 }}
             ref={mobileMenuRef}
-            transition={{ duration: reduceMotion ? 0 : 0.18 }}
+            transition={{
+              ...motionTiming.menu,
+              duration: reduceMotion ? 0 : motionTiming.menu.duration,
+            }}
           >
             <Container className="flex h-full flex-col overflow-y-auto py-6">
               <nav
@@ -238,19 +246,8 @@ export function Header({ homePath = "" }: HeaderProps) {
                 id="mobile-navigation"
               >
                 <ul className="grid gap-1">
-                  {content.navigation.items.map((item, index) => (
-                    <motion.li
-                      key={item.id}
-                      initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        ...motionTiming.interaction,
-                        duration: reduceMotion
-                          ? 0
-                          : motionTiming.interaction.duration,
-                        delay: reduceMotion ? 0 : Math.min(index * 0.025, 0.1),
-                      }}
-                    >
+                  {content.navigation.items.map((item) => (
+                    <li key={item.id}>
                       <a
                         aria-current={
                           activeSection === item.id ? "location" : undefined
@@ -271,7 +268,7 @@ export function Header({ homePath = "" }: HeaderProps) {
                           #{item.id}
                         </span>
                       </a>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
               </nav>

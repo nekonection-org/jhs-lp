@@ -33,12 +33,12 @@ export function ServerSection() {
             />
           </Reveal>
         </div>
-        <Reveal className="server-planner-reveal" variant="split">
+        <Reveal className="server-planner-reveal">
           <ServerSchedule />
         </Reveal>
         <div className="server-reference">
           <div className="server-reference-grid">
-            <Reveal className="settings-panel" variant="wipe">
+            <Reveal className="settings-panel">
               <h3 className="text-lg font-semibold">
                 <LocalizedText
                   ja={ja.server.settingsTitle}

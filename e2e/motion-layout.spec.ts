@@ -306,7 +306,7 @@ test("参加前の注意書きとVIP詳細は、日英・PC・モバイルで展
   }
 });
 
-test("通常のスクロールにHeroが反応し、項目は見えたときに表示、Reduced Motionで停止する", async ({
+test("Heroと背景はスクロールでずれず、項目は一度だけ表示される", async ({
   page,
 }) => {
   await page.goto("/");
@@ -316,22 +316,22 @@ test("通常のスクロールにHeroが反応し、項目は見えたときに�
   );
   const scene = page.locator(".hero-scroll-scene");
   await page.evaluate(() => window.scrollTo({ top: 240, behavior: "instant" }));
-  await expect
-    .poll(() =>
-      scene.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m42),
-    )
-    .toBeLessThan(0);
+  await expect(scene).toHaveCSS("transform", "none");
+  await expect(page.locator(".rhythm-landscape")).toHaveCSS(
+    "transform",
+    "none",
+  );
   expect(await page.evaluate(() => window.scrollY)).toBe(240);
-  await expect
-    .poll(() =>
-      scene.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m42),
-    )
-    .toBeGreaterThanOrEqual(-20);
   const setting = page.locator(".server-specification").last();
   await expect(setting).not.toHaveAttribute("data-reveal-state", "entered");
   await setting.scrollIntoViewIfNeeded();
   await expect(setting).toHaveAttribute("data-reveal-state", "entered");
   await expect(setting).toHaveCSS("opacity", "1");
+  await expect(setting).toHaveCSS("transform", "none");
+  await page.locator("#hero-title").scrollIntoViewIfNeeded();
+  await setting.scrollIntoViewIfNeeded();
+  await expect(setting).toHaveCSS("opacity", "1");
+  await expect(setting).toHaveCSS("transform", "none");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(scene).toHaveCSS("transform", "none");
   await expect(setting).toHaveCSS("transform", "none");
@@ -551,45 +551,52 @@ test("サーバー情報の紹介文が見出しの直下に揃い、日英と�
   }
 });
 
-test("サーバー情報は左右から登場し、ルールのマスクとは異なる動きになる", async ({
+test("情報は小さな上下移動とフェードで現れ、横移動や切り抜きで欠けない", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  await expect(page.locator("#raid-time-zone")).toBeEnabled();
-  await page
-    .locator("#server h2")
-    .evaluate((el) =>
-      el.scrollIntoView({ block: "start", behavior: "instant" }),
-    );
-  await expect
-    .poll(
-      () =>
-        page.locator(".server-planner-panels").evaluate((el) => {
-          const left = el.querySelector(".wipe-countdown-block");
-          const right = el.querySelector(".server-planner-tools");
-          if (!left || !right) return false;
-          return (
-            new DOMMatrix(getComputedStyle(left).transform).m41 < 0 &&
-            new DOMMatrix(getComputedStyle(right).transform).m41 > 0
-          );
-        }),
-      { intervals: [16, 16, 32] },
-    )
-    .toBe(true);
-  await expect(page.locator(".wipe-countdown-block")).toHaveCSS(
-    "transform",
-    "none",
-  );
-  await expect(page.locator(".server-planner-tools")).toHaveCSS(
-    "transform",
-    "none",
-  );
-  const rule = page.locator(".rules-grid > [data-motion-profile=wipe]").first();
-  await rule.evaluate((el) =>
-    el.scrollIntoView({ block: "center", behavior: "instant" }),
-  );
-  await expect(rule).toHaveAttribute("data-reveal-state", "entered");
-  await expect(rule).toHaveCSS("clip-path", "inset(0%)");
-  await expect(rule.getByRole("heading")).toBeVisible();
+  const setting = page.locator(".server-specification").first();
+  await expect(setting).not.toHaveAttribute("data-reveal-state", "entered");
+  const frames = await setting.evaluate(async (element) => {
+    element.scrollIntoView({ block: "center", behavior: "instant" });
+    const frames: {
+      x: number;
+      y: number;
+      opacity: number;
+      clip: string;
+      scale: number;
+    }[] = [];
+    const start = performance.now();
+    await new Promise<void>((resolve) => {
+      function sample() {
+        const style = getComputedStyle(element);
+        const matrix = new DOMMatrix(style.transform);
+        frames.push({
+          x: matrix.m41,
+          y: matrix.m42,
+          opacity: Number(style.opacity),
+          clip: style.clipPath,
+          scale: matrix.m11,
+        });
+        if (performance.now() - start < 700) requestAnimationFrame(sample);
+        else resolve();
+      }
+      requestAnimationFrame(sample);
+    });
+    return frames;
+  });
+  expect(frames.some((frame) => frame.y > 0 && frame.opacity < 1)).toBe(true);
+  for (const frame of frames) {
+    expect(Math.abs(frame.x)).toBeLessThan(0.01);
+    expect(frame.y).toBeGreaterThanOrEqual(-0.01);
+    expect(frame.y).toBeLessThanOrEqual(12.01);
+    expect(frame.scale).toBeCloseTo(1, 3);
+    expect(frame.clip).toBe("none");
+  }
+  await expect(setting).toHaveCSS("transform", "none");
+  await expect(setting).toHaveCSS("opacity", "1");
+  await expect(
+    page.locator('[data-motion-profile="wipe"], [data-motion-profile="split"]'),
+  ).toHaveCount(0);
 });
