@@ -162,7 +162,7 @@ export function Header({
       data-menu-open={menuOpen}
       className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--header)] backdrop-blur-sm"
     >
-      <Container className="flex min-h-[4.75rem] max-w-none items-center gap-3 xl:px-10">
+      <Container className="flex min-h-[4.75rem] max-w-[80rem] items-center gap-3 xl:px-10">
         <a
           className="group mr-auto inline-flex min-h-11 items-center gap-3 rounded-lg pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
           href={`${homePath}#top`}
