@@ -8,11 +8,13 @@ import { useAnimate } from "motion/react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { motionTiming } from "@/lib/motion";
 
+export type RevealVariant = "rise" | "slide" | "split" | "wipe" | "aperture";
+
 interface FadeContentProps {
   children: ReactNode;
   className?: string;
   delay?: number;
-  ready?: boolean;
+  variant?: RevealVariant;
   sequence?: "default" | "hero";
 }
 
@@ -20,7 +22,7 @@ export function FadeContent({
   children,
   className,
   delay = 0,
-  ready = true,
+  variant = "rise",
   sequence = "default",
 }: FadeContentProps) {
   const [scope, animate] = useAnimate<HTMLDivElement>();
@@ -28,7 +30,7 @@ export function FadeContent({
 
   useEffect(() => {
     const element = scope.current;
-    if (!element || !ready) return;
+    if (!element) return;
     const items = [
       ...element.querySelectorAll<HTMLElement>("[data-reveal-item]"),
     ];
@@ -69,7 +71,20 @@ export function FadeContent({
           target.dataset.revealState = "entered";
           element.dataset.revealState = "entered";
           const heading = target.dataset.revealKind === "heading";
-          const character = target.dataset.revealKind === "character";
+          const profile =
+            target.dataset.revealKind === "left"
+              ? "left"
+              : target.dataset.revealKind === "right"
+                ? "right"
+                : variant;
+          const direction =
+            profile === "left"
+              ? -1
+              : profile === "right"
+                ? 1
+                : targets.indexOf(target) % 2 === 0
+                  ? -1
+                  : 1;
           const visibleItems = targets.filter(
             (item) => item.getClientRects().length > 0,
           );
@@ -80,18 +95,40 @@ export function FadeContent({
           animations.push(
             animate(
               target,
-              character
-                ? { opacity: [0.1, 1], x: [20, 0], y: [0, 0], scale: [0.96, 1] }
-                : heading
+              profile === "aperture"
+                ? {
+                    scale: [0.9, 1],
+                    clipPath: ["inset(0% 0% 100% 0%)", "inset(0% 0% 0% 0%)"],
+                  }
+                : profile === "wipe"
                   ? {
-                      opacity: [0.15, 1],
-                      y: [20, 0],
-                      clipPath: ["inset(0% 0% 100% 0%)", "inset(0% 0% 0% 0%)"],
+                      x: [24, 0],
+                      clipPath: ["inset(0% 100% 0% 0%)", "inset(0% 0% 0% 0%)"],
                     }
-                  : { opacity: [0.15, 1], y: [16, 0] },
+                  : profile === "slide" ||
+                      profile === "split" ||
+                      profile === "left" ||
+                      profile === "right"
+                    ? { opacity: [0.3, 1], x: [direction * 40, 0], y: [0, 0] }
+                    : heading
+                      ? {
+                          y: [24, 0],
+                          clipPath: [
+                            "inset(0% 0% 100% 0%)",
+                            "inset(0% 0% 0% 0%)",
+                          ],
+                        }
+                      : { opacity: [0.2, 1], y: [16, 0] },
               {
                 ...motionTiming.entrance,
-                duration: character ? 0.62 : heading ? 0.52 : 0.4,
+                duration:
+                  profile === "aperture"
+                    ? 0.7
+                    : profile === "wipe"
+                      ? 0.6
+                      : heading
+                        ? 0.52
+                        : 0.45,
                 delay: Math.min(delay, 0.08) + itemDelay,
               },
             ),
@@ -108,10 +145,10 @@ export function FadeContent({
       observer.disconnect();
       animations.forEach((animation) => animation.stop());
     };
-  }, [animate, delay, ready, reduceMotion, scope, sequence]);
+  }, [animate, delay, reduceMotion, scope, sequence, variant]);
 
   return (
-    <div ref={scope} className={className}>
+    <div ref={scope} className={className} data-motion-profile={variant}>
       {children}
     </div>
   );

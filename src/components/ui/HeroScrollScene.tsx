@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, type ReactNode } from "react";
 
-import { HeroHazmat } from "@/components/ui/HeroHazmat";
+import { HeroArchitecture } from "@/components/ui/HeroArchitecture";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export function HeroScrollScene({ children }: { children: ReactNode }) {
@@ -23,7 +23,7 @@ export function HeroScrollScene({ children }: { children: ReactNode }) {
       >
         {children}
       </motion.div>
-      <HeroHazmat progress={scrollYProgress} />
+      <HeroArchitecture progress={scrollYProgress} />
     </div>
   );
 }

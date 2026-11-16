@@ -445,41 +445,45 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   min-width: 0;
   padding-block: 3rem 1.5rem;
 }
-.hero-hazmat {
-  position: relative;
-  z-index: 1;
-  height: 320px;
-  overflow: clip;
+.hero-architecture {
+  position: absolute;
+  z-index: 0;
+  width: 530px;
+  height: 530px;
+  right: -330px;
+  top: -80px;
   pointer-events: none;
-  mask-image: linear-gradient(#000 85%, transparent);
+  opacity: 0.35;
+  color: var(--text-primary);
+  mask-image: linear-gradient(90deg, transparent, #000 45%);
 }
-.hero-character-scroll {
-  width: 400px;
-  margin-left: calc(50% - 200px);
-}
-.hero-character-image {
-  display: block;
+.architecture-entrance,
+.architecture-entrance svg {
   width: 100%;
-  height: auto;
+  height: 100%;
 }
-.hazmat-idle {
-  transform-origin: 50% 70%;
+.architecture-plane {
+  fill: color-mix(in srgb, var(--text-primary) 4%, var(--background));
 }
-.hero-character-reveal[data-reveal-state="entered"] .hazmat-idle {
-  animation: hazmat-breathe 2.4s ease-in-out 2;
-  animation-play-state: paused;
+.architecture-plane-lower {
+  fill: color-mix(in srgb, var(--text-primary) 2%, var(--background));
 }
-.hero-hazmat[data-active="true"] .hazmat-idle {
-  animation-play-state: running;
+.architecture-contour {
+  stroke: currentColor;
+  stroke-opacity: 0.2;
+  stroke-width: 0.8;
+  vector-effect: non-scaling-stroke;
 }
-@keyframes hazmat-breathe {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-8px) scale(1.012);
-  }
+.architecture-edge {
+  stroke: currentColor;
+  stroke-opacity: 0.55;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.architecture-accent {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
 }
 .hero-brand {
   font-size: 0.9375rem;
@@ -960,17 +964,13 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .hero-layout {
     padding-block: 5rem 6rem;
   }
-  .hero-hazmat {
-    position: absolute;
-    width: 560px;
-    height: 100%;
-    top: 0;
-    right: -125px;
-    mask-image: linear-gradient(#000 83%, transparent);
-  }
-  .hero-character-scroll {
-    width: 100%;
-    margin-left: 0;
+  .hero-architecture {
+    width: 720px;
+    height: 720px;
+    right: -325px;
+    top: -30px;
+    opacity: 1;
+    mask-image: linear-gradient(90deg, transparent, #000 28%);
   }
 }
 @media (min-width: 1024px) {
@@ -981,9 +981,11 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     width: 62%;
     max-width: 44rem;
   }
-  .hero-hazmat {
-    width: 660px;
-    right: -120px;
+  .hero-architecture {
+    width: 850px;
+    height: 850px;
+    right: -290px;
+    top: -95px;
   }
   .hero-headline {
     margin-top: 3rem;
@@ -1104,9 +1106,14 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hazmat-idle {
-    animation: none !important;
+  .hero-scroll-scene,
+  .architecture-upper,
+  .architecture-lower,
+  [data-motion-profile] [data-reveal-item],
+  [data-motion-profile="aperture"] {
     transform: none !important;
+    clip-path: none !important;
+    opacity: 1 !important;
   }
   html {
     scroll-behavior: auto;

@@ -232,65 +232,82 @@ test("通常のスクロールにHeroが反応し、項目は見えたときに�
   await expect(setting).toHaveCSS("transform", "none");
 });
 
-test("Hazmatは表示中に動き、画面外とReduced Motionで停止する", async ({
+test("画像を使わない背景の層がスクロールで開き、Reduced Motionでは静止する", async ({
   page,
 }) => {
-  let releaseImage!: () => void;
-  const imageGate = new Promise<void>((resolve) => {
-    releaseImage = resolve;
-  });
-  await page.route("**/_next/image?*", async (route) => {
-    if (route.request().url().includes("hazmat-operative")) await imageGate;
-    await route.continue();
-  });
-  await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.locator("#raid-time-zone")).toBeEnabled();
-  const visual = page.locator(".hero-hazmat");
-  const image = visual.locator("img");
-  const idle = visual.locator(".hazmat-idle");
-  try {
-    await expect(image).toBeVisible();
-    await expect(visual.locator(".hero-character-reveal")).not.toHaveAttribute(
-      "data-reveal-state",
-      "entered",
-    );
-  } finally {
-    releaseImage();
-  }
-  await expect
-    .poll(() =>
-      image.evaluate(
-        (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
-      ),
-    )
-    .toBe(true);
-  await expect(visual.locator(".hero-character-reveal")).toHaveAttribute(
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const art = page.locator(".hero-architecture");
+  await expect(art).toHaveAttribute("aria-hidden", "true");
+  await expect(art.locator("svg")).toBeVisible();
+  await expect(page.locator(".hero-stage img, .hero-hazmat")).toHaveCount(0);
+  await expect(art.locator(".architecture-entrance")).toHaveAttribute(
     "data-reveal-state",
     "entered",
   );
-  await expect(visual).toHaveAttribute("data-active", "true");
-  await expect(idle).toHaveCSS("animation-play-state", "running");
-  const firstFrame = await idle.evaluate(
-    (el) => getComputedStyle(el).transform,
-  );
+  const upper = art.locator(".architecture-upper");
+  const lower = art.locator(".architecture-lower");
+  await page.evaluate(() => window.scrollTo({ top: 240, behavior: "instant" }));
   await expect
-    .poll(() => idle.evaluate((el) => getComputedStyle(el).transform))
-    .not.toBe(firstFrame);
+    .poll(() =>
+      upper.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41),
+    )
+    .toBeGreaterThan(0);
+  await expect
+    .poll(() =>
+      lower.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41),
+    )
+    .toBeLessThan(0);
+  expect(await page.evaluate(() => window.scrollY)).toBe(240);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(upper).toHaveCSS("transform", "none");
+  await expect(lower).toHaveCSS("transform", "none");
+  await expect(art.locator(".architecture-entrance")).toHaveCSS(
+    "clip-path",
+    "none",
+  );
+  await expect(art.locator("svg")).toBeVisible();
+});
+
+test("サーバー情報は左右から登場し、ルールのマスクとは異なる動きになる", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  await expect(page.locator("#raid-time-zone")).toBeEnabled();
   await page
     .locator("#server h2")
     .evaluate((el) =>
       el.scrollIntoView({ block: "start", behavior: "instant" }),
     );
-  await expect(visual).toHaveAttribute("data-active", "false");
-  await expect(idle).toHaveCSS("animation-play-state", "paused");
-  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-  await expect(visual).toHaveAttribute("data-active", "true");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(idle).toHaveCSS("animation-name", "none");
-  await expect(idle).toHaveCSS("transform", "none");
-  await expect(visual.locator(".hero-character-scroll")).toHaveCSS(
+  await expect
+    .poll(
+      () =>
+        page.locator(".server-planner-panels").evaluate((el) => {
+          const left = el.querySelector(".wipe-countdown-block");
+          const right = el.querySelector(".server-planner-tools");
+          if (!left || !right) return false;
+          return (
+            new DOMMatrix(getComputedStyle(left).transform).m41 < 0 &&
+            new DOMMatrix(getComputedStyle(right).transform).m41 > 0
+          );
+        }),
+      { intervals: [16, 16, 32] },
+    )
+    .toBe(true);
+  await expect(page.locator(".wipe-countdown-block")).toHaveCSS(
     "transform",
     "none",
   );
-  await expect(image).toBeVisible();
+  await expect(page.locator(".server-planner-tools")).toHaveCSS(
+    "transform",
+    "none",
+  );
+  const rule = page.locator(".rules-grid > [data-motion-profile=wipe]").first();
+  await rule.evaluate((el) =>
+    el.scrollIntoView({ block: "center", behavior: "instant" }),
+  );
+  await expect(rule).toHaveAttribute("data-reveal-state", "entered");
+  await expect(rule).toHaveCSS("clip-path", "inset(0%)");
+  await expect(rule.getByRole("heading")).toBeVisible();
 });

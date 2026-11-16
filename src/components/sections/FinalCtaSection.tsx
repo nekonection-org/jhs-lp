@@ -12,7 +12,7 @@ export function FinalCtaSection() {
   return (
     <section aria-labelledby="join-title" className="join-section">
       <Container>
-        <Reveal>
+        <Reveal variant="split">
           <div className="join-panel">
             <div className="join-copy">
               <p className="section-eyebrow" data-reveal-item>

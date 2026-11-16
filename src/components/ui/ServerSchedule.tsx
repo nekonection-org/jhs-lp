@@ -103,7 +103,11 @@ export function ServerSchedule() {
   return (
     <div className="server-planner">
       <div className="server-planner-panels">
-        <div className="wipe-countdown-block" data-reveal-item>
+        <div
+          className="wipe-countdown-block"
+          data-reveal-item
+          data-reveal-kind="left"
+        >
           <h3>{copy.nextWipe}</h3>
           <motion.time
             key={`${nextWipe}-${timeZone}`}
@@ -133,7 +137,11 @@ export function ServerSchedule() {
           </p>
           <p className="wipe-reference">{wipeReference}</p>
         </div>
-        <div className="server-planner-tools" data-reveal-item>
+        <div
+          className="server-planner-tools"
+          data-reveal-item
+          data-reveal-kind="right"
+        >
           <div className="server-planner-checker">
             <RaidTimeChecker
               timeZone={timeZone}

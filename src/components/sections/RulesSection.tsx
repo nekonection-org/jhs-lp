@@ -22,7 +22,7 @@ export async function RulesSection() {
     const englishItem = getMatchingItem(englishContent.items, item.id);
 
     return (
-      <Reveal delay={index * 0.035} key={item.id}>
+      <Reveal variant="wipe" delay={index * 0.035} key={item.id}>
         <FeatureCard
           number={String(index + 1).padStart(2, "0")}
           className="rule-feature"
