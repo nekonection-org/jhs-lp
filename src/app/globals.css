@@ -432,12 +432,54 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   isolation: isolate;
   overflow: clip;
 }
+.hero-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
 .hero-scroll-scene {
   position: relative;
+  z-index: 2;
 }
 .hero-layout {
   min-width: 0;
-  padding-block: 4rem 4.5rem;
+  padding-block: 3rem 1.5rem;
+}
+.hero-hazmat {
+  position: relative;
+  z-index: 1;
+  height: 320px;
+  overflow: clip;
+  pointer-events: none;
+  mask-image: linear-gradient(#000 85%, transparent);
+}
+.hero-character-scroll {
+  width: 400px;
+  margin-left: calc(50% - 200px);
+}
+.hero-character-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hazmat-idle {
+  transform-origin: 50% 70%;
+}
+.hero-character-reveal[data-reveal-state="entered"] .hazmat-idle {
+  animation: hazmat-breathe 2.4s ease-in-out 2;
+  animation-play-state: paused;
+}
+.hero-hazmat[data-active="true"] .hazmat-idle {
+  animation-play-state: running;
+}
+@keyframes hazmat-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.012);
+  }
 }
 .hero-brand {
   font-size: 0.9375rem;
@@ -447,13 +489,14 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .hero-headline {
   margin-top: 2rem;
   max-width: 60rem;
-  font-size: clamp(2.375rem, 6.1vw, 5.5rem);
+  font-size: clamp(2.375rem, 5.4vw, 4.75rem);
   line-height: 1.3;
   font-weight: 500;
   letter-spacing: -0.065em;
 }
 .hero-headline-line {
   display: block;
+  white-space: nowrap;
 }
 .hero-introduction {
   margin-top: 1.75rem;
@@ -468,7 +511,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem 1.5rem;
+  gap: 1rem;
   align-items: center;
   margin-top: 2rem;
 }
@@ -892,7 +935,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 
 @media (min-width: 640px) {
   .hero-layout {
-    padding-block: 5rem 6rem;
+    padding-block: 4rem 1.5rem;
   }
   .hero-headline {
     margin-top: 2.5rem;
@@ -910,9 +953,37 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     font-size: 1.25rem;
   }
 }
+@media (min-width: 768px) {
+  .hero-scroll-scene {
+    width: 55%;
+  }
+  .hero-layout {
+    padding-block: 5rem 6rem;
+  }
+  .hero-hazmat {
+    position: absolute;
+    width: 560px;
+    height: 100%;
+    top: 0;
+    right: -125px;
+    mask-image: linear-gradient(#000 83%, transparent);
+  }
+  .hero-character-scroll {
+    width: 100%;
+    margin-left: 0;
+  }
+}
 @media (min-width: 1024px) {
   .hero-layout {
     padding-block: 6.5rem 7rem;
+  }
+  .hero-scroll-scene {
+    width: 62%;
+    max-width: 44rem;
+  }
+  .hero-hazmat {
+    width: 660px;
+    right: -120px;
   }
   .hero-headline {
     margin-top: 3rem;
@@ -1033,6 +1104,10 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .hazmat-idle {
+    animation: none !important;
+    transform: none !important;
+  }
   html {
     scroll-behavior: auto;
   }

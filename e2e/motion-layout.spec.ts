@@ -231,3 +231,66 @@ test("通常のスクロールにHeroが反応し、項目は見えたときに�
   await expect(scene).toHaveCSS("transform", "none");
   await expect(setting).toHaveCSS("transform", "none");
 });
+
+test("Hazmatは表示中に動き、画面外とReduced Motionで停止する", async ({
+  page,
+}) => {
+  let releaseImage!: () => void;
+  const imageGate = new Promise<void>((resolve) => {
+    releaseImage = resolve;
+  });
+  await page.route("**/_next/image?*", async (route) => {
+    if (route.request().url().includes("hazmat-operative")) await imageGate;
+    await route.continue();
+  });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("#raid-time-zone")).toBeEnabled();
+  const visual = page.locator(".hero-hazmat");
+  const image = visual.locator("img");
+  const idle = visual.locator(".hazmat-idle");
+  try {
+    await expect(image).toBeVisible();
+    await expect(visual.locator(".hero-character-reveal")).not.toHaveAttribute(
+      "data-reveal-state",
+      "entered",
+    );
+  } finally {
+    releaseImage();
+  }
+  await expect
+    .poll(() =>
+      image.evaluate(
+        (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
+      ),
+    )
+    .toBe(true);
+  await expect(visual.locator(".hero-character-reveal")).toHaveAttribute(
+    "data-reveal-state",
+    "entered",
+  );
+  await expect(visual).toHaveAttribute("data-active", "true");
+  await expect(idle).toHaveCSS("animation-play-state", "running");
+  const firstFrame = await idle.evaluate(
+    (el) => getComputedStyle(el).transform,
+  );
+  await expect
+    .poll(() => idle.evaluate((el) => getComputedStyle(el).transform))
+    .not.toBe(firstFrame);
+  await page
+    .locator("#server h2")
+    .evaluate((el) =>
+      el.scrollIntoView({ block: "start", behavior: "instant" }),
+    );
+  await expect(visual).toHaveAttribute("data-active", "false");
+  await expect(idle).toHaveCSS("animation-play-state", "paused");
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await expect(visual).toHaveAttribute("data-active", "true");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(idle).toHaveCSS("animation-name", "none");
+  await expect(idle).toHaveCSS("transform", "none");
+  await expect(visual.locator(".hero-character-scroll")).toHaveCSS(
+    "transform",
+    "none",
+  );
+  await expect(image).toBeVisible();
+});

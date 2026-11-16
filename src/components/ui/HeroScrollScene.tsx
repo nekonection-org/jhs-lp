@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, type ReactNode } from "react";
 
+import { HeroHazmat } from "@/components/ui/HeroHazmat";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export function HeroScrollScene({ children }: { children: ReactNode }) {
@@ -15,12 +16,14 @@ export function HeroScrollScene({ children }: { children: ReactNode }) {
   const y = useTransform(scrollYProgress, [0, 1], [0, -20]);
 
   return (
-    <motion.div
-      className="hero-scroll-scene"
-      ref={target}
-      style={{ y: reduceMotion ? 0 : y }}
-    >
-      {children}
-    </motion.div>
+    <div className="hero-stage" ref={target}>
+      <motion.div
+        className="hero-scroll-scene"
+        style={{ y: reduceMotion ? 0 : y }}
+      >
+        {children}
+      </motion.div>
+      <HeroHazmat progress={scrollYProgress} />
+    </div>
   );
 }

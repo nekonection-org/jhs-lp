@@ -57,7 +57,7 @@ export function HeroSection() {
     <section aria-labelledby="hero-title" className="hero-section" id="top">
       <Container>
         <HeroScrollScene>
-          <Reveal className="hero-layout">
+          <Reveal className="hero-layout" sequence="hero">
             <p className="hero-brand" data-reveal-item>
               {ja.hero.title}
             </p>
@@ -77,14 +77,14 @@ export function HeroSection() {
                 </span>
               ))}
             </h1>
-            <div className="hero-introduction" data-reveal-item>
-              <p className="hero-description">
+            <div className="hero-introduction">
+              <p className="hero-description" data-reveal-item>
                 <LocalizedText
                   ja={ja.hero.description}
                   en={en.hero.description}
                 />
               </p>
-              <div className="hero-actions" id="hero-actions">
+              <div className="hero-actions" id="hero-actions" data-reveal-item>
                 <LocalizedExternalAction
                   action={{
                     ja: ja.hero.primaryAction,
