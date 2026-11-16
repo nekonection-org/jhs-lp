@@ -1,7 +1,8 @@
 "use client";
 
-import { Newspaper, X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { useAnimate } from "motion/react";
+import Image from "next/image";
 import {
   useEffect,
   useId,
@@ -44,6 +45,7 @@ export function NewsDialog({
   const triggerRef = useRef<HTMLAnchorElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const pageScrollRef = useRef({ left: 0, top: 0 });
+  const navigationRef = useRef<string | null>(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -71,6 +73,17 @@ export function NewsDialog({
       const previousScrollBehavior = root.style.scrollBehavior;
       root.style.scrollBehavior = "auto";
       window.scrollTo(pageScrollRef.current.left, pageScrollRef.current.top);
+      const sectionId = navigationRef.current;
+      if (sectionId) {
+        const section = document.getElementById(sectionId);
+        section?.scrollIntoView({ behavior: "auto", block: "start" });
+        const heading = section?.querySelector<HTMLElement>("h1, h2");
+        if (heading) {
+          heading.tabIndex = -1;
+          heading.focus({ preventScroll: true });
+        }
+        navigationRef.current = null;
+      }
       root.style.scrollBehavior = previousScrollBehavior;
     };
   }, [open]);
@@ -90,6 +103,7 @@ export function NewsDialog({
     event.preventDefault();
     if (dialog.open) return;
     closingRef.current = false;
+    navigationRef.current = null;
     pageScrollRef.current = { left: window.scrollX, top: window.scrollY };
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
     dialog.dataset.closing = "false";
@@ -127,7 +141,17 @@ export function NewsDialog({
     if (dialogRef.current?.open) return;
     closingRef.current = false;
     setOpen(false);
-    triggerRef.current?.focus({ preventScroll: true });
+    if (!navigationRef.current)
+      triggerRef.current?.focus({ preventScroll: true });
+  }
+
+  function navigateToSection(event: MouseEvent<HTMLAnchorElement>, id: string) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return;
+    event.preventDefault();
+    if (closingRef.current) return;
+    navigationRef.current = id;
+    void closeNews();
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLDialogElement>) {
@@ -181,10 +205,32 @@ export function NewsDialog({
       >
         <div className="news-dialog-panel">
           <div className="news-dialog-bar">
-            <div className="news-dialog-label">
-              <Newspaper aria-hidden="true" className="size-5 shrink-0" />
-              <LocalizedText ja={ja.news.title} en={en.news.title} />
-            </div>
+            <a
+              className="news-dialog-brand"
+              href="#top"
+              onClick={(event) => navigateToSection(event, "top")}
+            >
+              <Image alt="" width={36} height={36} src="/icon.png" />
+              <span>
+                <strong>Japan Hideaway</strong>
+                <small>Rust Community Server</small>
+              </span>
+            </a>
+            <nav
+              aria-label={content.navigation.ariaLabel}
+              className="news-dialog-navigation"
+            >
+              {content.navigation.items.map((item) => (
+                <a
+                  aria-current={item.id === "news" ? "location" : undefined}
+                  href={`#${item.id}`}
+                  key={item.id}
+                  onClick={(event) => navigateToSection(event, item.id)}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
             <div className="news-dialog-controls">
               <LanguageToggle compact content={content.language} />
               <ThemeToggle content={content.theme} />
@@ -201,7 +247,22 @@ export function NewsDialog({
             </div>
           </div>
           <div className="news-dialog-scroll" ref={scrollRef}>
-            {children}
+            <div className="news-dialog-content">
+              <button
+                className="news-back-link news-dialog-back"
+                onClick={() => {
+                  void closeNews();
+                }}
+                type="button"
+              >
+                <ArrowLeft aria-hidden="true" className="size-4 shrink-0" />
+                <LocalizedText
+                  ja={ja.news.backToList}
+                  en={en.news.backToList}
+                />
+              </button>
+              {children}
+            </div>
           </div>
         </div>
       </dialog>

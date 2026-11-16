@@ -58,12 +58,16 @@ export function NewsArticle({
         </>
       ) : null}
       <header className="news-article-header">
-        <p className="news-article-eyebrow">
-          <LocalizedText ja={ja.news.eyebrow} en={en.news.eyebrow} />
-        </p>
+        {!inDialog ? (
+          <p className="news-article-eyebrow">
+            <LocalizedText ja={ja.news.eyebrow} en={en.news.eyebrow} />
+          </p>
+        ) : null}
         <div className="news-article-meta">
           <span className="inline-flex items-center gap-2">
-            <CalendarDays aria-hidden="true" className="size-4 shrink-0" />
+            {!inDialog ? (
+              <CalendarDays aria-hidden="true" className="size-4 shrink-0" />
+            ) : null}
             <time dateTime={announcement.publishedAt}>
               <LocalizedText
                 ja={formatAnnouncementDate(
@@ -77,12 +81,14 @@ export function NewsArticle({
               />
             </time>
           </span>
-          <span className="news-category">
-            <LocalizedText
-              ja={ja.news.categoryLabels[announcement.category]}
-              en={en.news.categoryLabels[announcement.category]}
-            />
-          </span>
+          {!inDialog ? (
+            <span className="news-category">
+              <LocalizedText
+                ja={ja.news.categoryLabels[announcement.category]}
+                en={en.news.categoryLabels[announcement.category]}
+              />
+            </span>
+          ) : null}
         </div>
         <Heading
           className="news-article-title"

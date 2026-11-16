@@ -127,3 +127,27 @@ test("keeps keyboard focus inside and supports language and theme controls", asy
   await dialog.getByRole("button", { name: en.news.closeLabel }).click();
   await expect(trigger).toBeFocused();
 });
+
+test("returns to the list and navigates to a section from the article header", async ({
+  page,
+}) => {
+  const trigger = page.locator("#news .news-summary").first();
+  const url = page.url();
+  await trigger.click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("button", { name: ja.news.backToList }).click();
+  await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await dialog
+    .getByRole("navigation")
+    .getByRole("link", {
+      name: "ルール",
+      exact: true,
+    })
+    .click();
+  await expect(dialog).not.toBeVisible();
+  await expect(page.locator("#rules h2").first()).toBeFocused();
+  await expect(page.locator("#rules h2").first()).toBeInViewport();
+  await expect(page).toHaveURL(url);
+});

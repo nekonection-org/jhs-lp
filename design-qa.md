@@ -1,5 +1,34 @@
 # お知らせセクションのデザイン確認
 
+## 最新の詳細画面の参考画像に合わせた調整
+
+- Source visual truth: 今回の会話に添付された詳細画面の参考画像（1458 × 902px）。中央の枠付き本文、上部ヘッダー、その間の一覧へ戻るリンクを参照。
+- Implementation screenshot: `/tmp/jhs-news-reference-desktop.png`（1458 × 902px）、`/tmp/jhs-news-reference-mobile.png`（360 × 800px）、`/tmp/jhs-news-reference-light-mobile.png`（360 × 800px）。
+- Viewport / density: 上記と同じCSSピクセル、deviceScaleFactor 1。デスクトップは参考画像と同寸で比較し、拡大縮小なし。
+- State: 公開済みのお知らせを日本語・ダークテーマの全画面ダイアログで表示。実際の公開本文を使うため、記事の長さは参考画像と異なる。
+
+### Findings
+
+- 対応が必要なP0 / P1 / P2の差異なし。添付の参考画像とデスクトップ・モバイルの実装キャプチャを比較した。
+- Fonts / typography: 既存のGeist・Noto Sans JPを継続。参考画像の明朝体とは意図的に異なる。タイトルは最大28px、本文14px・行高2、本文内の見出し20px。日付を小さくし、不要な英語のラベルとカテゴリ表示を詳細画面から除いた。
+- Spacing / layout rhythm: 記事パネルは900px幅で中央寄せ（1458px幅で左279px）。本文の左右余白は最大44px。一覧へのリンクを枠の上に配置。狭い画面では外側・内側の余白を縮小する。
+- Colors / tokens: 既存のグレーと緑のCSS変数を使用。参考画像の紺と金へは変更していない。背景のガラス表現を控えめな透過色とぼかしに整理し、本文は背景より一段明るい面に載せた。ライトテーマでも文字とパネルの境界を確認。
+- Image quality / assets: サイト既存のロゴ画像とlucide-reactの矢印・閉じるアイコンを使用。参考画像の別サイトのロゴは転用していない。
+- Copy / content: 既存のサイト名、公開日、公開済み本文、日本語・英語を維持。参考画像の記事内容は追加していない。
+- Focused comparison: 全体キャプチャでヘッダー、戻るリンク、日付、タイトル、本文を判読できるため、追加の拡大画像は不要。
+
+### Comparison history / verification
+
+- 変更前は本文が背景上に直接置かれ、一覧への戻るリンクと枠付きパネルがなかった。中央パネル・戻るリンク・サイトヘッダーを追加し、実装画像を再撮影して比較。
+- 360 / 375 / 390 / 768 / 1024 / 1280 / 1440px幅で横方向のはみ出し0px。
+- 一覧への復帰、ヘッダーからルールへの移動とフォーカス、Esc、Tab、テーマ・言語切替、通信遮断後の連続開閉を検証。
+- 型チェック・Lint・単体テスト184件・Production Build・E2E48件が通過。公開画面のブラウザー例外なし。
+- 実装チェック: 中央の枠付きパネル、控えめな見出し、日付、本文内の余白、一覧へ戻る操作、レスポンシブ表示を確認済み。
+
+final result: passed
+
+## 過去の一覧画面とモーションの確認履歴
+
 - Source visual truth: この会話でユーザーが添付したお知らせ一覧の参考画像（1245 × 297px）。参考として扱い、サイト既存のフォント・テーマ・公開データを優先する指定。
 - Implementation: `/tmp/jhs-news-reference-1245.png`（1245px幅のブラウザーで、お知らせのコンテンツ領域を撮影）。追加確認: `/tmp/jhs-news-reference-360.png`、`/tmp/jhs-news-reference-390.png`、`/tmp/jhs-news-reference-768.png`、`/tmp/jhs-news-reference-1440.png`、`/tmp/jhs-news-reference-open-1440.png`。
 - Viewport: 1245 × 800 CSS px。レスポンシブ確認は360 / 390 / 768 / 1440px幅、900px高。
