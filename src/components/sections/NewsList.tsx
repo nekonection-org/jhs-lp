@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { LocalizedMarkdown } from "@/components/ui/MarkdownContent";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
@@ -133,19 +134,19 @@ export function NewsList({ result }: NewsListProps) {
                     />
                   </p>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h3 className="text-lg font-bold tracking-[-0.02em]">
                     <LocalizedText
                       ja={item.translations.ja.title}
                       en={english.title}
                     />
                   </h3>
-                  <p className="mt-1.5 text-sm leading-6 text-[var(--text-secondary)]">
-                    <LocalizedText
-                      ja={item.translations.ja.description}
-                      en={english.description}
-                    />
-                  </p>
+                  <LocalizedMarkdown
+                    className="mt-1.5"
+                    headingLevel={4}
+                    ja={item.translations.ja.description}
+                    en={english.description}
+                  />
                 </div>
                 {href ? (
                   <a

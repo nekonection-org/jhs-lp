@@ -216,6 +216,9 @@ export interface ServerContent extends SectionIntroduction<"server"> {
       readonly ends: string;
       readonly note: string;
       readonly japanDate: string;
+      readonly nextWipe: string;
+      readonly untilWipe: string;
+      readonly days: string;
     };
     readonly title: string;
     readonly description: string;

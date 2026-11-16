@@ -1,3 +1,4 @@
+import { MarkdownContent } from "@/components/ui/MarkdownContent";
 import { ArrowUpRight, Eye } from "lucide-react";
 
 import { AnnouncementStatusBadge } from "@/components/admin/AnnouncementStatusBadge";
@@ -129,9 +130,13 @@ export function AnnouncementPreview({
                     <h3 className="text-xl font-bold tracking-[-0.025em]">
                       {translation.title}
                     </h3>
-                    <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-[var(--text-secondary)]">
+                    <MarkdownContent
+                      className="mt-2"
+                      headingLevel={4}
+                      locale={locale}
+                    >
                       {translation.description}
-                    </p>
+                    </MarkdownContent>
                   </div>
                 ) : (
                   <p className="rounded-lg border border-dashed border-[var(--border-strong)] bg-[var(--background)] px-4 py-5 text-sm leading-6 text-[var(--text-muted)]">

@@ -62,7 +62,7 @@ test.describe("FAQ administration", () => {
     await page.getByLabel("質問").fill(marker);
     await page
       .getByLabel("回答")
-      .fill("管理画面のE2Eテストで作成した回答です。");
+      .fill("管理画面のE2Eテストで作成した回答です。\n**重要**");
     await page.getByRole("button", { name: "FAQを保存" }).click();
 
     await expect(page).toHaveURL(/\/admin\/faqs\/[^/]+\/edit\?saved=created$/);
@@ -72,7 +72,7 @@ test.describe("FAQ administration", () => {
     await page.getByLabel("Question").fill(`${marker} English`);
     await page
       .getByLabel("Answer")
-      .fill("Created by the FAQ administration test.");
+      .fill("Created by the FAQ administration test.\n**Important**");
     await page.getByRole("button", { name: "変更を保存" }).click();
 
     await expect(page).toHaveURL(/\?saved=updated$/);
@@ -89,6 +89,17 @@ test.describe("FAQ administration", () => {
         .locator("..")
         .getByText("管理画面のE2Eテストで作成した回答です。"),
     ).toBeVisible();
+
+    await expect(
+      summary
+        .locator("..")
+        .locator('[data-locale-content="ja"] .markdown-content strong'),
+    ).toHaveText("重要");
+    await expect(
+      summary
+        .locator("..")
+        .locator('[data-locale-content="ja"] .markdown-content br'),
+    ).toHaveCount(1);
 
     await page.goto("/admin/audit");
     await expect(page.getByText("e2e-admin@example.com").first()).toBeVisible();

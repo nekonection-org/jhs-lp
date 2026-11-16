@@ -178,4 +178,29 @@ describe("public announcements", () => {
     expect(parsePublicAnnouncementsPage("2.5")).toBe(1);
     expect(parsePublicAnnouncementsPage("invalid")).toBe(1);
   });
+  it("renders Markdown and line breaks in the published announcement body", () => {
+    const item = toPublicAnnouncement({
+      ...announcement,
+      translations: [
+        {
+          locale: "ja",
+          title: "更新",
+          description: "最初の行\n**重要**\n\n- 手順",
+        },
+        {
+          locale: "en",
+          title: "Update",
+          description: "First line\n**Important**",
+        },
+      ],
+    });
+    const { container } = render(
+      <NewsList result={readyResult(item ? [item] : [])} />,
+    );
+    expect(container.querySelectorAll(".markdown-content br")).toHaveLength(2);
+    expect(container.querySelectorAll(".markdown-content strong")).toHaveLength(
+      2,
+    );
+    expect(container.querySelectorAll(".markdown-content li")).toHaveLength(1);
+  });
 });

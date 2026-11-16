@@ -85,4 +85,29 @@ describe("database-backed FAQ", () => {
     rerender(<FaqList result={{ status: "unavailable", items: [] }} />);
     expect(screen.getByText("FAQを取得できません")).toBeInTheDocument();
   });
+  it("renders stored Markdown and Enter line breaks in both FAQ translations", () => {
+    const item = toPublicFaq({
+      ...faq,
+      translations: [
+        {
+          locale: "ja",
+          question: "参加方法",
+          answer: "最初の行\n**重要**\n\n- 手順1\n- 手順2",
+        },
+        {
+          locale: "en",
+          question: "How to join",
+          answer: "First line\n**Important**",
+        },
+      ],
+    });
+    const { container } = render(
+      <FaqList result={{ status: "ready", items: item ? [item] : [] }} />,
+    );
+    expect(container.querySelectorAll(".markdown-content br")).toHaveLength(2);
+    expect(container.querySelectorAll(".markdown-content strong")).toHaveLength(
+      2,
+    );
+    expect(container.querySelectorAll(".markdown-content li")).toHaveLength(2);
+  });
 });

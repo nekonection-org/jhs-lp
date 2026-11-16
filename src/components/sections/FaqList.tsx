@@ -1,5 +1,6 @@
 import { CircleHelp, Plus, WifiOff } from "lucide-react";
 
+import { LocalizedMarkdown } from "@/components/ui/MarkdownContent";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -56,12 +57,10 @@ export function FaqList({ result }: FaqListProps) {
               </span>
             </summary>
             <div className="px-1 pb-6 sm:px-2">
-              <p className="text-sm leading-7 text-[var(--text-secondary)]">
-                <LocalizedText
-                  en={item.translations.en.answer}
-                  ja={item.translations.ja.answer}
-                />
-              </p>
+              <LocalizedMarkdown
+                en={item.translations.en.answer}
+                ja={item.translations.ja.answer}
+              />
               <StatusBadge
                 className="mt-4"
                 en={en.common.statusLabels[item.contentStatus]}

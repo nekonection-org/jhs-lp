@@ -143,3 +143,30 @@ test("不正な保存値は日本時間に戻し、タブ復帰時には現在�
     "2026-11-16T15:00:00.000Z",
   );
 });
+
+test("次回ワイプまでの残り時間を表示し、金曜18時に翌週へ更新する", async ({
+  page,
+}) => {
+  const beforeWipe = new Date("2026-11-20T08:59:59Z");
+  await page.clock.install({ time: beforeWipe });
+  await page.clock.pauseAt(beforeWipe);
+  await page.goto("/");
+  const wipe = page.locator(".wipe-countdown-block");
+  await expect(wipe.locator("time")).toHaveAttribute(
+    "datetime",
+    "2026-11-20T09:00:00.000Z",
+  );
+  await expect(wipe.locator(".wipe-countdown")).toContainText("0日 00:00:01");
+  await page.getByLabel("表示タイムゾーン").selectOption("America/Los_Angeles");
+  await expect(wipe.locator("time")).toContainText("01:00");
+  await expect(wipe.locator(".wipe-reference")).toContainText("18:00 JST");
+  await page.clock.runFor(1_000);
+  await expect(wipe.locator("time")).toHaveAttribute(
+    "datetime",
+    "2026-11-27T09:00:00.000Z",
+  );
+  await expect(wipe.locator(".wipe-countdown")).toContainText("7日 00:00:00");
+  await page.getByRole("button", { name: /English|英語/, exact: true }).click();
+  await expect(wipe.locator("h3")).toHaveText("Next map & BP wipe (scheduled)");
+  await expect(wipe.locator(".wipe-countdown")).toContainText("7d 00:00:00");
+});

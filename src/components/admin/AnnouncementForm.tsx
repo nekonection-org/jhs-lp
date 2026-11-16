@@ -7,6 +7,7 @@ import {
   initialAnnouncementActionState,
   type AnnouncementActionState,
 } from "@/app/admin/news/action-state";
+import { MarkdownHelp } from "@/components/admin/MarkdownHelp";
 import { Button } from "@/components/ui/Button";
 import { announcementCategories } from "@/lib/announcements/types";
 import type { AnnouncementFieldName } from "@/lib/announcements/validation";
@@ -254,7 +255,11 @@ export function AnnouncementForm({
             <div className="grid gap-2 text-sm font-semibold">
               <label htmlFor="announcement-description-ja">概要</label>
               <textarea
-                aria-describedby={fieldDescriptionId("descriptionJa", state)}
+                aria-describedby={fieldDescriptionId(
+                  "descriptionJa",
+                  state,
+                  "announcement-description-ja-help",
+                )}
                 aria-invalid={Boolean(state.fieldErrors.descriptionJa)}
                 className={cn(fieldClassName, "min-h-32 resize-y")}
                 defaultValue={values.descriptionJa}
@@ -262,6 +267,7 @@ export function AnnouncementForm({
                 maxLength={600}
                 name="descriptionJa"
               />
+              <MarkdownHelp id="announcement-description-ja-help" locale="ja" />
               <FieldError field="descriptionJa" state={state} />
             </div>
           </section>
@@ -294,7 +300,11 @@ export function AnnouncementForm({
             <div className="grid gap-2 text-sm font-semibold">
               <label htmlFor="announcement-description-en">Description</label>
               <textarea
-                aria-describedby={fieldDescriptionId("descriptionEn", state)}
+                aria-describedby={fieldDescriptionId(
+                  "descriptionEn",
+                  state,
+                  "announcement-description-en-help",
+                )}
                 aria-invalid={Boolean(state.fieldErrors.descriptionEn)}
                 className={cn(fieldClassName, "min-h-32 resize-y")}
                 defaultValue={values.descriptionEn}
@@ -302,6 +312,7 @@ export function AnnouncementForm({
                 maxLength={600}
                 name="descriptionEn"
               />
+              <MarkdownHelp id="announcement-description-en-help" locale="en" />
               <FieldError field="descriptionEn" state={state} />
             </div>
           </section>

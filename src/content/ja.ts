@@ -1,4 +1,4 @@
-import { formatRaidHour, raidWindows } from "./server";
+import { formatRaidHour, raidWindows, wipeSchedule } from "./server";
 import type { SiteContent } from "./types";
 
 export const ja = {
@@ -116,6 +116,9 @@ export const ja = {
         ends: "終了",
         note: "平日・土日の区分は日本時間が基準です。日時は選択したタイムゾーンに変換されます。可否は端末の時計と時間帯ルールに基づく目安です。臨時変更はDiscordをご確認ください。",
         japanDate: "日本での日付",
+        nextWipe: "次回マップ・BPワイプ（予定）",
+        untilWipe: "ワイプまで",
+        days: "日",
       },
       title: "レイド時間を、ひと目で。",
       description:
@@ -169,7 +172,7 @@ export const ja = {
       {
         id: "map-bp-wipe",
         label: "マップ・BPワイプ",
-        value: "毎週金曜日 18:00 JST",
+        value: `毎週金曜日 ${formatRaidHour(wipeSchedule.hour)} JST`,
       },
       {
         id: "daily-restart",

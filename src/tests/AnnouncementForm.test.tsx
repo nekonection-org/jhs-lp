@@ -46,6 +46,12 @@ describe("AnnouncementForm", () => {
       "メンテナンスのお知らせ",
     );
     expect(screen.getByLabelText("Title")).toHaveValue("Maintenance notice");
+    expect(screen.getByLabelText("概要")).toHaveAccessibleDescription(
+      /Markdown対応/,
+    );
+    expect(screen.getByLabelText("Description")).toHaveAccessibleDescription(
+      /Markdown supported/,
+    );
     expect(screen.getByRole("button", { name: "変更を保存" })).toBeEnabled();
   });
 });

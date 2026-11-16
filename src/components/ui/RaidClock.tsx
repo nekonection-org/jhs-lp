@@ -5,6 +5,8 @@ import { useState, useSyncExternalStore } from "react";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { getMatchingItem } from "@/lib/content";
+import { getNextWipe, getWipeCountdown } from "@/lib/wipe-schedule";
 import { en, ja } from "@/content";
 import { formatRaidHour, raidWindows } from "@/content/server";
 import {
@@ -88,6 +90,13 @@ export function RaidClock() {
     () => initialSnapshot,
   );
   const state = now === null ? null : getRaidState(now);
+  const nextWipe = now === null ? null : getNextWipe(now);
+  const wipeCountdown =
+    now !== null && nextWipe !== null ? getWipeCountdown(nextWipe - now) : null;
+  const wipeReference = getMatchingItem(
+    locale === "ja" ? ja.server.settings : en.server.settings,
+    "map-bp-wipe",
+  ).value;
   const zones = [...new Set([...raidTimeZones, deviceZone, timeZone])];
   const dateTime = (time: number) =>
     formatRaidDateTime(time, timeZone, locale === "ja" ? "ja-JP" : "en-GB");
@@ -135,6 +144,25 @@ export function RaidClock() {
                 : "—"}
             </span>
           </p>
+          <div className="wipe-countdown-block">
+            <h3>{copy.nextWipe}</h3>
+            <time
+              dateTime={
+                nextWipe === null ? undefined : new Date(nextWipe).toISOString()
+              }
+            >
+              {nextWipe === null ? "—" : dateTime(nextWipe)}
+            </time>
+            <p className="wipe-countdown" aria-hidden="true">
+              <span>{copy.untilWipe}</span>
+              <span>
+                {wipeCountdown
+                  ? `${wipeCountdown.days}${copy.days} ${wipeCountdown.time}`
+                  : "—"}
+              </span>
+            </p>
+            <p className="wipe-reference">{wipeReference}</p>
+          </div>
         </div>
         <div className="raid-clock-controls">
           <label htmlFor="raid-time-zone">{copy.timeZone}</label>

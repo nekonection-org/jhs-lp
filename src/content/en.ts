@@ -1,4 +1,4 @@
-import { formatRaidHour, raidWindows } from "./server";
+import { formatRaidHour, raidWindows, wipeSchedule } from "./server";
 import type { SiteContent } from "./types";
 
 export const en = {
@@ -116,6 +116,9 @@ export const en = {
         ends: "Ends",
         note: "Weekdays and weekends follow Japan time. Dates and times are converted to your selected zone. Availability is a guide based on your device clock and the time rules. Check Discord for temporary changes.",
         japanDate: "Date in Japan",
+        nextWipe: "Next map & BP wipe (scheduled)",
+        untilWipe: "Time remaining",
+        days: "d",
       },
       title: "Know your raiding hours.",
       description:
@@ -169,7 +172,7 @@ export const en = {
       {
         id: "map-bp-wipe",
         label: "Map / BP wipe",
-        value: "Every Friday at 18:00 JST",
+        value: `Every Friday at ${formatRaidHour(wipeSchedule.hour)} JST`,
       },
       {
         id: "daily-restart",

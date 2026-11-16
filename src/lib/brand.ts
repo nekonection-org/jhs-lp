@@ -1,9 +1,10 @@
 export const brandColors = {
   accent: "#8fbd78",
   accentStrong: "#527d43",
-  background: "#08090b",
-  border: "#293029",
-  muted: "#a7afa8",
-  surface: "#101411",
-  text: "#f3f5f3",
+  background: "#0c0d0f",
+  lightBackground: "#f5f5f6",
+  border: "#303238",
+  muted: "#b0b3ba",
+  surface: "#141518",
+  text: "#f3f4f6",
 } as const;

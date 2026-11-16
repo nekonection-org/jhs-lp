@@ -34,6 +34,12 @@ describe("FaqForm", () => {
     expect(screen.getByLabelText("Question")).toHaveValue(
       "Where can I purchase VIP?",
     );
+    expect(screen.getByLabelText("回答")).toHaveAccessibleDescription(
+      /Markdown対応/,
+    );
+    expect(screen.getByLabelText("Answer")).toHaveAccessibleDescription(
+      /Markdown supported/,
+    );
     expect(screen.getByRole("button", { name: "変更を保存" })).toBeEnabled();
   });
 });

@@ -86,4 +86,24 @@ describe("AnnouncementPreview", () => {
     ).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
+  it("uses the same Markdown rendering for preview and public content", () => {
+    const { container } = render(
+      <AnnouncementPreview
+        announcement={createAnnouncement({
+          translations: [
+            { locale: "ja", title: "更新", description: "最初の行\n**重要**" },
+            {
+              locale: "en",
+              title: "Update",
+              description: "First line\n**Important**",
+            },
+          ],
+        })}
+      />,
+    );
+    expect(container.querySelectorAll(".markdown-content br")).toHaveLength(2);
+    expect(container.querySelectorAll(".markdown-content strong")).toHaveLength(
+      2,
+    );
+  });
 });

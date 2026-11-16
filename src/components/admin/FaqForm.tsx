@@ -7,6 +7,7 @@ import {
   initialFaqActionState,
   type FaqActionState,
 } from "@/app/admin/faqs/action-state";
+import { MarkdownHelp } from "@/components/admin/MarkdownHelp";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import type { FaqFieldName } from "@/lib/faqs/validation";
@@ -117,7 +118,11 @@ function TranslationFields({
           {japanese ? "回答" : "Answer"}
         </label>
         <textarea
-          aria-describedby={fieldDescriptionId(answerField, state)}
+          aria-describedby={fieldDescriptionId(
+            answerField,
+            state,
+            `faq-answer-${locale}-help`,
+          )}
           aria-invalid={Boolean(state.fieldErrors[answerField])}
           className={cn(fieldClassName, "min-h-44 resize-y")}
           defaultValue={answer}
@@ -125,6 +130,7 @@ function TranslationFields({
           maxLength={4000}
           name={answerField}
         />
+        <MarkdownHelp id={`faq-answer-${locale}-help`} locale={locale} />
         <FieldError field={answerField} state={state} />
       </div>
     </section>

@@ -6,8 +6,8 @@ import { useEffect } from "react";
 import { brandColors } from "@/lib/brand";
 
 const themeColors = {
-  dark: brandColors.accent,
-  light: brandColors.accentStrong,
+  dark: brandColors.background,
+  light: brandColors.lightBackground,
 } as const;
 
 export function ThemeColorSync() {

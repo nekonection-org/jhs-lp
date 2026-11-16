@@ -67,7 +67,7 @@ test.describe("news administration", () => {
     await page.getByLabel("タイトル").fill(marker);
     await page
       .getByLabel("概要")
-      .fill("管理画面のE2Eテストで作成した下書きです。");
+      .fill("管理画面のE2Eテストで作成した下書きです。\n**重要**");
     await page.getByRole("button", { name: "お知らせを保存" }).click();
 
     await expect(page).toHaveURL(/\/admin\/news\/[^/]+\/edit\?saved=created$/);
@@ -76,6 +76,13 @@ test.describe("news administration", () => {
     await expect(
       page.getByText("English content has not been entered yet."),
     ).toBeVisible();
+
+    await expect(
+      page.locator('[lang="ja"] .markdown-content strong'),
+    ).toHaveText("重要");
+    await expect(page.locator('[lang="ja"] .markdown-content br')).toHaveCount(
+      1,
+    );
 
     await page.getByRole("link", { name: "編集する" }).click();
     await page.getByLabel("公開状態").selectOption("published");

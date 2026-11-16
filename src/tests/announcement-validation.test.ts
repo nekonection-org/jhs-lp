@@ -118,4 +118,13 @@ describe("announcement form validation", () => {
       },
     });
   });
+  it("preserves Markdown and line breaks for storage", () => {
+    const data = createValidFormData();
+    const markdown = "最初の行\n**重要**\n\n- 手順1\n- 手順2";
+    data.set("descriptionJa", markdown);
+    const result = validateAnnouncementForm(data);
+    expect(result.success).toBe(true);
+    if (result.success)
+      expect(result.data.translations.ja.description).toBe(markdown);
+  });
 });
