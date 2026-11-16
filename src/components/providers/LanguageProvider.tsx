@@ -9,7 +9,6 @@ import {
   useSyncExternalStore,
 } from "react";
 
-import { getContent } from "@/content";
 import { locales, type Locale } from "@/content/types";
 
 const storageKey = "jhs-locale";
@@ -102,26 +101,6 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   useEffect(() => {
     applyDocumentLocale(locale);
-    const expectedTitle = getContent(locale).metadata.title;
-
-    function syncTitle() {
-      if (document.title !== expectedTitle) {
-        document.title = expectedTitle;
-      }
-    }
-
-    syncTitle();
-
-    const observer = new MutationObserver(syncTitle);
-    observer.observe(document.head, {
-      childList: true,
-      characterData: true,
-      subtree: true,
-    });
-
-    return () => {
-      observer.disconnect();
-    };
   }, [locale]);
 
   return (

@@ -524,8 +524,14 @@ export const ja = {
     applicationAction: null,
   },
   news: {
+    backToList: "お知らせ一覧へ戻る",
+    notFoundTitle: "お知らせが見つかりません",
+    notFoundDescription:
+      "このお知らせは公開されていないか、掲載が終了しています。お知らせ一覧から最新の情報をご確認ください。",
+    retryLabel: "もう一度読み込む",
+    relatedLinkLabel: "関連リンク",
     id: "news",
-    eyebrow: "News",
+    eyebrow: "News & Updates",
     title: "お知らせ",
     description:
       "メンテナンス、アップデート、イベントなどの最新情報を掲載します。",

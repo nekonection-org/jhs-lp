@@ -4,11 +4,13 @@ import { describe, expect, it, vi } from "vitest";
 
 import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { LocalizedPageTitle } from "@/components/ui/LocalizedPageTitle";
 import { en, ja } from "@/content";
 
 function renderLanguageToggle() {
   return render(
     <LanguageProvider>
+      <LocalizedPageTitle ja={ja.metadata.title} en={en.metadata.title} />
       <LanguageToggle content={ja.language} />
     </LanguageProvider>,
   );

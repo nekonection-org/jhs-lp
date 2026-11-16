@@ -7,7 +7,11 @@ import { TermsDialog } from "@/components/ui/TermsDialog";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
 
-export function Footer() {
+interface FooterProps {
+  homePath?: "" | "/";
+}
+
+export function Footer({ homePath = "" }: FooterProps) {
   const year = new Date().getFullYear();
 
   return (
@@ -17,7 +21,7 @@ export function Footer() {
           <div className="max-w-lg">
             <a
               className="inline-flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
-              href="#top"
+              href={`${homePath}#top`}
             >
               <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface-secondary)]">
                 <Image
@@ -65,7 +69,7 @@ export function Footer() {
                     <li key={item.id}>
                       <a
                         className="rounded-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
-                        href={`#${item.id}`}
+                        href={`${homePath}#${item.id}`}
                       >
                         <LocalizedText ja={item.label} en={englishItem.label} />
                       </a>
@@ -85,7 +89,7 @@ export function Footer() {
             <TermsDialog />
             <a
               className="inline-flex min-h-11 w-fit items-center gap-1.5 rounded-sm font-semibold text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
-              href="#top"
+              href={`${homePath}#top`}
             >
               <LocalizedText
                 ja={ja.footer.backToTopLabel}

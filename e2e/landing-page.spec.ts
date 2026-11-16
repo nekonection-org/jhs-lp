@@ -155,24 +155,44 @@ test("サーバールール全文をWebサイト上で開閉して確認でき�
   await expect(rulebook).not.toHaveAttribute("open", "");
 });
 
-test("利用規約はモーダルで表示され、Escキーで閉じられる", async ({ page }) => {
-  const trigger = page.getByRole("button", { name: "利用規約を表示" });
-  await trigger.click();
-
-  const dialog = page.getByRole("dialog", {
-    name: "Japan Hideaway Server 利用規約",
-  });
-  await expect(dialog).toBeVisible();
-  await expect(
-    dialog.getByRole("heading", { name: "第1条（適用範囲）" }),
-  ).toBeVisible();
-  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
-
-  await page.keyboard.press("Escape");
-
-  await expect(dialog).not.toBeVisible();
-  await expect(trigger).toBeFocused();
-  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+test("利用規約はフッターから開き、日英・PC・モバイルで閉じた後にフォーカスが戻る", async ({
+  page,
+}) => {
+  for (const locale of ["ja", "en"] as const) {
+    const content = locale === "ja" ? ja : en;
+    await page.evaluate(
+      (value) => localStorage.setItem("jhs-locale", value),
+      locale,
+    );
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("lang", locale);
+    for (const width of [360, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      const trigger = page
+        .getByRole("contentinfo")
+        .getByRole("button", { name: content.terms.openLabel });
+      await expect(
+        page.getByRole("button", { name: content.terms.openLabel }),
+      ).toHaveCount(1);
+      await trigger.click();
+      const dialog = page.getByRole("dialog", {
+        name: content.terms.dialogLabel,
+      });
+      await expect(dialog).toBeVisible();
+      const article = content.terms.articles[0];
+      if (!article) throw new Error("The first terms article must be present");
+      await expect(
+        dialog.getByRole("heading", { name: article.title }),
+      ).toBeVisible();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+      await page.keyboard.press("Escape");
+      await expect(dialog).not.toBeVisible();
+      await expect(trigger).toBeFocused();
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+      await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+    }
+  }
 });
 
 test("Discord の外部リンクは安全な属性と設定 URL を使う", async ({ page }) => {
@@ -264,22 +284,96 @@ test.describe("360px のモバイル表示", () => {
   });
 });
 
-test("最終CTAから同じDiscordとルールへ移動でき、英語にも切り替わる", async ({
+test("お知らせを専用ページで表示し、一覧へ戻れる", async ({ page }) => {
+  const link = page.locator("#news .news-item .news-summary").first();
+  if (await link.count()) {
+    const title = await link.locator(".news-title").innerText();
+    const href = await link.getAttribute("href");
+    expect(href).toMatch(/^\/news\//);
+    await link.focus();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(href ?? "");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(title, {
+      useInnerText: true,
+    });
+    await expect(page).toHaveTitle(`${title} | ${ja.common.siteName}`);
+    await expect(page.locator(".news-article-body")).toBeVisible();
+    await expect(page.locator(".news-article-meta time")).toBeVisible();
+    await expect(page.locator(".news-detail-page")).toBeVisible();
+    await expect(page.locator('header nav a[href="/#rules"]')).toHaveCount(1);
+    await expect(page.locator('footer nav a[href="/#rules"]')).toHaveCount(1);
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      new URL(href ?? "", e2eEnvironment.siteUrl).toString(),
+    );
+    await page.getByRole("button", { name: ja.language.english }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    const englishTitle = await page
+      .getByRole("heading", { level: 1 })
+      .innerText();
+    await expect(page).toHaveTitle(`${englishTitle} | ${en.common.siteName}`);
+    await page.getByRole("button", { name: en.theme.switchToLight }).click();
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.locator("html")).toHaveClass(/\blight\b/);
+    await expect(page.locator(".news-article-body")).toBeVisible();
+    await page.getByRole("button", { name: en.language.japanese }).click();
+    for (const width of requiredViewportWidths) {
+      await page.setViewportSize({ width, height: 900 });
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth - innerWidth,
+        ),
+      ).toBeLessThanOrEqual(1);
+    }
+    await page.getByRole("link", { name: ja.news.backToList }).click();
+    await expect(page).toHaveURL(/\/#news$/);
+    await expect(page.locator("#news .news-item").first()).toBeVisible();
+  } else {
+    await expect(
+      page
+        .locator("#news")
+        .getByText(
+          /現在、掲載中のお知らせはありません|お知らせを取得できません/,
+        ),
+    ).toBeVisible();
+  }
+});
+
+test("存在しないお知らせには404と一覧へのリンクを表示する", async ({
   page,
 }) => {
-  const japaneseCta = page.getByRole("region", { name: ja.finalCta.title });
-  await japaneseCta.scrollIntoViewIfNeeded();
+  const response = await page.goto("/news/nonexistent-announcement");
+  expect(response?.status()).toBe(404);
   await expect(
-    japaneseCta.getByRole("link", { name: /Discordに参加/ }),
-  ).toHaveAttribute("href", e2eEnvironment.discordUrl);
+    page.getByRole("heading", { level: 1, name: ja.news.notFoundTitle }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: ja.news.backToList }).click();
+  await expect(page).toHaveURL(/\/#news$/);
+});
+
+test("最終CTAと独立した利用規約セクションを置かず、お知らせの後にフッターを表示する", async ({
+  page,
+}) => {
   await expect(
-    japaneseCta.getByRole("link", { name: /ルールを見る/ }),
-  ).toHaveAttribute("href", "#rules");
-  await page.getByRole("button", { name: /English|英語/i }).click();
-  const englishCta = page.getByRole("region", { name: en.finalCta.title });
+    page.locator(".join-section, #join-title, #terms-section-title"),
+  ).toHaveCount(0);
+  await expect(page.locator("main > section:last-child")).toHaveAttribute(
+    "id",
+    "news",
+  );
   await expect(
-    englishCta.getByRole("link", { name: /Join Discord/ }),
-  ).toHaveAttribute("href", e2eEnvironment.discordUrl);
+    page.locator("main").getByRole("button", { name: ja.terms.openLabel }),
+  ).toHaveCount(0);
+  const footer = page.getByRole("contentinfo");
+  await footer.scrollIntoViewIfNeeded();
+  await expect(
+    footer.getByRole("button", { name: ja.terms.openLabel }),
+  ).toBeVisible();
+  await expect(
+    footer.getByRole("link", { name: ja.footer.backToTopLabel }),
+  ).toHaveAttribute("href", "#top");
 });
 
 test("不要なレイド時間表とHero背景を表示せず、設定と日時確認を残す", async ({

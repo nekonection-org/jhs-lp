@@ -1,8 +1,12 @@
 import "server-only";
 
 import { unstable_cache } from "next/cache";
+import { cache } from "react";
 
-import { listPublishedAnnouncements } from "@/lib/announcements/repository";
+import {
+  findPublishedAnnouncement,
+  listPublishedAnnouncements,
+} from "@/lib/announcements/repository";
 import {
   type PublicAnnouncement,
   type PublicAnnouncementsResult,
@@ -56,3 +60,12 @@ export async function getPublicAnnouncements(
 ): Promise<PublicAnnouncementsResult> {
   return getCachedPublishedAnnouncements(page);
 }
+
+// Share the lookup between metadata and the page within the current request.
+// Check publication on each request so archived or scheduled items stay private.
+export const getPublicAnnouncement = cache(
+  async (id: string): Promise<PublicAnnouncement | null> => {
+    const announcement = await findPublishedAnnouncement(id);
+    return announcement ? toPublicAnnouncement(announcement) : null;
+  },
+);

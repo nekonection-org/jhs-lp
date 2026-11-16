@@ -7,7 +7,7 @@ import { cn } from "@/lib/cn";
 interface MarkdownContentProps {
   children: string;
   className?: string;
-  headingLevel?: 3 | 4;
+  headingLevel?: 2 | 3 | 4;
   locale?: "ja" | "en";
 }
 
@@ -42,7 +42,13 @@ export function MarkdownContent({
   headingLevel = 3,
   locale = "ja",
 }: MarkdownContentProps) {
-  const Heading = headingLevel === 3 ? "h3" : "h4";
+  const [Heading, Heading2, Heading3, Heading4] = (
+    {
+      2: ["h2", "h3", "h4", "h5"],
+      3: ["h3", "h4", "h5", "h6"],
+      4: ["h4", "h5", "h6", "h6"],
+    } as const
+  )[headingLevel];
   return (
     <div className={cn("markdown-content", className)}>
       <Markdown
@@ -50,9 +56,9 @@ export function MarkdownContent({
         urlTransform={safeMarkdownUrl}
         components={{
           h1: Heading,
-          h2: headingLevel === 3 ? "h4" : "h5",
-          h3: headingLevel === 3 ? "h5" : "h6",
-          h4: "h6",
+          h2: Heading2,
+          h3: Heading3,
+          h4: Heading4,
           h5: "h6",
           h6: "h6",
           a: ({ href, children, title }) => {
@@ -109,7 +115,7 @@ interface LocalizedMarkdownProps {
   ja: string;
   en: string;
   className?: string;
-  headingLevel?: 3 | 4;
+  headingLevel?: 2 | 3 | 4;
 }
 
 export function LocalizedMarkdown({

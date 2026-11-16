@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { MobileJoinBar } from "@/components/layout/MobileJoinBar";
@@ -9,10 +11,15 @@ import { RulesSection } from "@/components/sections/RulesSection";
 import { ServerSection } from "@/components/sections/ServerSection";
 import { VipSection } from "@/components/sections/VipSection";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { LocalizedPageTitle } from "@/components/ui/LocalizedPageTitle";
 import { en, ja } from "@/content";
 import { parsePublicAnnouncementsPage } from "@/lib/announcements/public-types";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 interface HomeProps {
   searchParams: Promise<{ newsPage?: string | string[] }>;
@@ -24,6 +31,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
   return (
     <>
+      <LocalizedPageTitle ja={ja.metadata.title} en={en.metadata.title} />
       <a className="skip-link" href="#main-content">
         <LocalizedText
           ja={ja.common.skipToContent}

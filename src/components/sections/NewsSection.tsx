@@ -1,4 +1,4 @@
-import { NewsList } from "@/components/sections/NewsList";
+import { NewsArchiveLink, NewsList } from "@/components/sections/NewsList";
 import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
@@ -18,19 +18,15 @@ export async function NewsSection({ page = 1 }: NewsSectionProps) {
       <Container className="news-layout">
         <Reveal className="news-introduction">
           <SectionHeading
-            index="06"
+            className="news-heading"
+            icon="clipboard"
             layout="stack"
-            description={
-              <LocalizedText
-                ja={ja.news.description}
-                en={en.news.description}
-              />
-            }
             eyebrow={
               <LocalizedText ja={ja.news.eyebrow} en={en.news.eyebrow} />
             }
             title={<LocalizedText ja={ja.news.title} en={en.news.title} />}
           />
+          <NewsArchiveLink result={result} />
         </Reveal>
 
         <div className="news-feed">

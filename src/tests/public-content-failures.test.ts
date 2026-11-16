@@ -19,6 +19,7 @@ vi.mock("next/cache", () => ({
 }));
 
 vi.mock("@/lib/announcements/repository", () => ({
+  findPublishedAnnouncement: vi.fn(),
   listPublishedAnnouncements,
 }));
 

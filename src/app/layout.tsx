@@ -32,9 +32,6 @@ export const metadata: Metadata = {
   metadataBase: siteUrl,
   title: ja.metadata.title,
   description: ja.metadata.description,
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "ja_JP",

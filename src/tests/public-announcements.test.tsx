@@ -1,7 +1,10 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { NewsList } from "@/components/sections/NewsList";
+import { NewsArticle } from "@/components/news/NewsArticle";
+import { LanguageProvider } from "@/components/providers/LanguageProvider";
+
+import { NewsArchiveLink, NewsList } from "@/components/sections/NewsList";
 import type { AnnouncementRecord } from "@/lib/announcements/types";
 import type { PublicAnnouncement } from "@/lib/announcements/public-types";
 import {
@@ -76,20 +79,55 @@ describe("public announcements", () => {
     ).toBeNull();
   });
 
-  it("renders the announcement and safe external link", () => {
+  it("links each title to its own page without embedding the body in the list", () => {
     const item = toPublicAnnouncement(announcement);
-    expect(item).not.toBeNull();
-
-    render(<NewsList result={readyResult(item ? [item] : [])} />);
-
+    if (!item) throw new Error("Expected a published announcement");
+    render(<NewsList result={readyResult([item])} />);
     const heading = screen.getByRole("heading", { level: 3 });
     expect(within(heading).getByText("公開のお知らせ")).toBeInTheDocument();
     expect(within(heading).getByText("Published notice")).toBeInTheDocument();
-    expect(screen.getByRole("link")).toHaveAttribute(
+    expect(heading.closest("a")).toHaveAttribute(
       "href",
-      "https://example.com/news",
+      "/news/announcement-1",
     );
+    expect(screen.queryByText("日本語の概要")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /関連リンク/ }),
+    ).not.toBeInTheDocument();
   });
+
+  it("renders the full article and a safe related link with external attributes", () => {
+    const item = toPublicAnnouncement(announcement);
+    if (!item) throw new Error("Expected a published announcement");
+    render(<NewsArticle announcement={item} backHref="/#news" />, {
+      wrapper: LanguageProvider,
+    });
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "公開のお知らせ",
+    );
+    expect(screen.getByText("日本語の概要")).toBeVisible();
+    const relatedLink = screen.getByRole("link", { name: /関連リンク/ });
+    expect(relatedLink).toHaveAttribute("href", "https://example.com/news");
+    expect(relatedLink).toHaveAttribute("target", "_blank");
+    expect(relatedLink).toHaveAttribute("rel", "noopener noreferrer");
+    expect(
+      screen.getByRole("link", { name: /お知らせ一覧へ戻る/ }),
+    ).toHaveAttribute("href", "/#news");
+  });
+
+  it.each(["javascript:alert(1)", "data:text/html,example", "not-a-url"])(
+    "does not render an unsafe related URL: %s",
+    (externalUrl) => {
+      const item = toPublicAnnouncement({ ...announcement, externalUrl });
+      if (!item) throw new Error("Expected a published announcement");
+      render(<NewsArticle announcement={item} backHref="/#news" />, {
+        wrapper: LanguageProvider,
+      });
+      expect(
+        screen.queryByRole("link", { name: /関連リンク/ }),
+      ).not.toBeInTheDocument();
+    },
+  );
 
   it("uses an explicit English pending message instead of Japanese fallback", () => {
     const item = toPublicAnnouncement({
@@ -123,7 +161,7 @@ describe("public announcements", () => {
     expect(item).not.toBeNull();
 
     const { rerender } = render(
-      <NewsList
+      <NewsArchiveLink
         result={readyResult(item ? [item] : [], {
           totalItems: 6,
           totalPages: 2,
@@ -135,7 +173,7 @@ describe("public announcements", () => {
       screen.getByRole("link", { name: /過去のお知らせを見る/ }),
     ).toHaveAttribute("href", "/?newsPage=2#news");
 
-    rerender(<NewsList result={readyResult(item ? [item] : [])} />);
+    rerender(<NewsArchiveLink result={readyResult(item ? [item] : [])} />);
     expect(
       screen.queryByRole("link", { name: /過去のお知らせを見る/ }),
     ).not.toBeInTheDocument();
@@ -178,7 +216,7 @@ describe("public announcements", () => {
     expect(parsePublicAnnouncementsPage("2.5")).toBe(1);
     expect(parsePublicAnnouncementsPage("invalid")).toBe(1);
   });
-  it("renders Markdown and line breaks in the published announcement body", () => {
+  it("preserves Markdown and line breaks on the full article page", () => {
     const item = toPublicAnnouncement({
       ...announcement,
       translations: [
@@ -194,9 +232,12 @@ describe("public announcements", () => {
         },
       ],
     });
+    if (!item) throw new Error("Expected a published announcement");
     const { container } = render(
-      <NewsList result={readyResult(item ? [item] : [])} />,
+      <NewsArticle announcement={item} backHref="/#news" />,
+      { wrapper: LanguageProvider },
     );
+    expect(container.querySelector(".markdown-content")).toBeVisible();
     expect(container.querySelectorAll(".markdown-content br")).toHaveLength(2);
     expect(container.querySelectorAll(".markdown-content strong")).toHaveLength(
       2,

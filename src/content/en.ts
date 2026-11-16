@@ -528,8 +528,14 @@ export const en = {
     applicationAction: null,
   },
   news: {
+    backToList: "Back to announcements",
+    notFoundTitle: "Announcement not found",
+    notFoundDescription:
+      "This announcement is not published or is no longer available. Please check the announcement list for the latest information.",
+    retryLabel: "Try again",
+    relatedLinkLabel: "Related link",
     id: "news",
-    eyebrow: "News",
+    eyebrow: "News & Updates",
     title: "News",
     description:
       "The latest maintenance, update, event, and other server announcements will appear here.",

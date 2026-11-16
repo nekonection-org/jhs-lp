@@ -25,7 +25,11 @@ const focusableSelector = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(",");
 
-export function Header() {
+interface HeaderProps {
+  homePath?: "" | "/";
+}
+
+export function Header({ homePath = "" }: HeaderProps) {
   const { locale } = useLanguage();
   const content = getContent(locale);
   const japaneseContent = getContent("ja");
@@ -51,7 +55,9 @@ export function Header() {
       setMenuOpen(false);
 
       if (focusWasInsideMenu) {
-        document.querySelector<HTMLElement>('header a[href="#top"]')?.focus();
+        document
+          .querySelector<HTMLElement>(`header a[href="${homePath}#top"]`)
+          ?.focus();
       }
     }
 
@@ -60,7 +66,7 @@ export function Header() {
     return () => {
       desktopQuery.removeEventListener("change", handleDesktopChange);
     };
-  }, []);
+  }, [homePath]);
 
   useEffect(() => {
     if (!menuOpen) {
@@ -133,7 +139,7 @@ export function Header() {
       <Container className="flex min-h-[4.75rem] items-center gap-3">
         <a
           className="group mr-auto inline-flex min-h-11 items-center gap-3 rounded-lg pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
-          href="#top"
+          href={`${homePath}#top`}
         >
           <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface)] transition-colors duration-200 group-hover:border-[var(--accent)]">
             <Image
@@ -165,7 +171,7 @@ export function Header() {
                 "header-navigation-link relative rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
                 activeSection === item.id && "text-[var(--accent-strong)]",
               )}
-              href={`#${item.id}`}
+              href={`${homePath}#${item.id}`}
               key={item.id}
             >
               {item.label}
@@ -254,7 +260,7 @@ export function Header() {
                           activeSection === item.id &&
                             "border-[var(--border)] bg-[var(--surface)] text-[var(--accent-strong)]",
                         )}
-                        href={`#${item.id}`}
+                        href={`${homePath}#${item.id}`}
                         onClick={() => closeMenu(item.id)}
                       >
                         {item.label}

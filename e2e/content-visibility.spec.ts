@@ -46,6 +46,15 @@ for (const width of [360, 1440]) {
       await expectReadableContent(page);
       await page.locator('#hero-actions a[href="#rules"]').click();
       await expect(page).toHaveURL(/#rules$/);
+      const newsLink = page.locator("#news .news-summary").first();
+      if (await newsLink.count()) {
+        await newsLink.focus();
+        await page.keyboard.press("Enter");
+        await expect(page).toHaveURL(/\/news\/[^/?#]+$/);
+        await expect(page.locator(".news-article-body")).toBeVisible();
+        await page.locator('a.news-back-link[href="/#news"]').click();
+        await expect(page).toHaveURL(/\/#news$/);
+      }
     });
   });
 }
