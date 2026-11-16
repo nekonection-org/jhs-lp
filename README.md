@@ -9,11 +9,13 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - 同一ページ内のアンカーナビゲーションとモバイルメニュー
 - Hero・ページ末尾・モバイルの追従バーからのDiscord参加導線
 - 現在のレイド可否、次の開始・終了時刻、秒単位のカウントダウン
+- 次回マップ・BPワイプの予定日時と残り日数・時間（選択タイムゾーンに連動）
 - タイムゾーンを選べる7日間のレイド時間表（日付・夏時間対応、選択を保存）
 - 曜日・時刻を選んでレイド可否を確認する日本時間のシミュレーター
 - F1接続コマンドのコピー、完了・失敗時のフィードバック、Steam経由のRust起動
 - Discord、Tebex、モデレーター応募先への外部リンク
 - ネイティブ`details`を使用したFAQ
+- FAQの回答・お知らせの本文と管理者プレビューのMarkdown表示（Enter改行に対応）
 - ボタンから開く利用規約モーダル
 - TypeScriptコンテンツによる静的案内とDB障害時のフォールバック
 - MySQLと管理画面によるお知らせ・FAQ・VIP・モデレーター募集・サーバールールの管理
@@ -28,6 +30,7 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - Cloudflare Access / Cloudflare Tunnel
 - Tailwind CSS v4
 - Motion for React
+- react-markdown / remark-breaks / remark-gfm（FAQ・お知らせのサーバー側描画）
 - next-themes
 - Vitest / React Testing Library / Playwright
 - Docker / Docker Compose / GitHub Actions
@@ -43,7 +46,7 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 - 本文は固定の左見出しをやめ、横に開いた見出しと説明、その下の表・一覧で構成します。設定表とルールは細い罫線で区切り、ルールの要約は縦に読める番号付き一覧にしています。
 - VIPは制度の詳細と特典を一つの領域に配置します。モデレーター募集は活動内容を大きく、条件と人物像をその隣に配置し、均等なカードの反復を避けます。お知らせは横幅を使った日付付きの一覧です。DBで管理する本文・公開状態・外部リンクの扱いは維持しています。
 - FAQは中央の導入と、その下の質問一覧で構成します。ネイティブ `details` によるキーボード操作を維持します。最終CTAも中央に配置し、大きな見出しと参加ボタンで締めています。
-- 背景は黒に近い色／明るい中立色、文字は白／濃色を使います。緑はロゴ、ピリオド、操作と重要な情報に絞り、Glow・背景グリッド・装飾的な画面パネル・大きな角丸は追加していません。
+- 背景・パネル・罫線・本文色は緑の色味を外したグレー系です。ダークは`#0c0d0f`／`#141518`、ライトは`#f5f5f6`／白を使い、ブラウザーのテーマ色もテーマごとの背景に揃えます。緑はロゴ、ピリオド、操作と重要な情報に絞り、Glow・背景グリッド・装飾的な画面パネル・大きな角丸は追加していません。
 - アンカー移動時は固定ヘッダーと24pxの余白を確保します。フォーカスリング、44px以上の操作領域、日英とテーマの保存、Reduced Motion対応を維持しています。
 - `src/components/ui/Button.tsx` は [shadcn/ui Button](https://ui.shadcn.com/docs/components/button) のバリアント管理パターンを取り入れ、`class-variance-authority` で既存の `primary` / `secondary` / `quiet` APIを管理します。サイト固有の色とネイティブなbutton / aの意味を維持するローカル実装です。shadcn CLIによるテーマ一括置換は行っていません。
 - `src/components/ui/FadeContent.tsx` は [React Bits FadeContent](https://github.com/DavidHDev/react-bits/blob/c83b5e7e026f003af33ff9ebc3d93afb5c86ad22/src/ts-tailwind/Animations/FadeContent/FadeContent.tsx) の軽量版を基に調整しています。既存の `Reveal` から利用し、IntersectionObserverで一度だけ検知し、Motionで16pxの移動と420msのフェードを付けます。`data-reveal-item` のある要素は45msずつずらし、開始の遅延は200msで止めます。共通の時間とイージングは `src/lib/motion.ts` で管理します。GSAPやぼかしは導入していません。
@@ -51,6 +54,7 @@ Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用�
 
 ### 操作へのフィードバック
 
+- 次回マップ・BPワイプは既存の毎週金曜日18:00 JSTを基準に計算し、日時・残り日数・時分秒を毎秒更新します。レイド時間と同じタイムゾーン・時計・復帰時の同期を使います。予定時刻ちょうどに翌週へ切り替わり、実際のワイプ完了を示すものではありません。SSR・JavaScript無効時も基準の曜日・時刻は表示します。
 - `RaidClock`は端末の時計から現在のレイド可否・次の開始または終了・カウントダウンを毎秒更新します。タブの復帰・ウィンドウへのフォーカス・ページ復帰時にも再計算します。読み上げのライブ通知は可否の変更に限定し、秒ごとの通知は行いません。
 - 表示タイムゾーンの初期値は日本時間です。UTC・アジア・オセアニア・欧州・米州の主要IANAタイムゾーンに加え、端末で検出した地域も選べます。選択は`jhs-raid-time-zone`に保存し、保存が禁止されていてもその場で切り替えられます。不正な保存値は無視します。言語切替では選択を維持します。
 - 7日間の時間表はネイティブ`details`で展開します。日本での日付を基準に、開始と終了を選択した地域の日付・曜日・24時間表記へ個別に変換するため、日付またぎと夏時間の切替にも対応します。可否は時間帯ルールと端末の時計に基づく目安です。サーバーへの状態問い合わせ・RCON接続は行わず、臨時変更はDiscordで確認する案内を併記します。
@@ -198,6 +202,8 @@ Heroの大きなブランド見出しは`hero.wordmark`の2行、紹介文は`he
 
 レイド時間の数値は`src/content/server.ts`の`raidWindows`で管理します。日本語・英語の設定一覧と時間帯の図が同じデータを使います。時刻を変更する場合は、管理画面のルール本文やFAQの案内も合わせて更新してください。現在の可否・確認ツールの判定もこのデータを使います（開始時刻を含み、終了時刻を含みません）。現在の可否の計算とタイムゾーン変換は`src/lib/raid-schedule.ts`、図の見出し・凡例は日英それぞれの`server.schedule`、ライブ表示の文言は`server.schedule.live`で管理します。時間帯の変更時は0時・週末・夏時間の境界を含むテストも確認してください。
 
+ワイプの予定は同じ`src/content/server.ts`の`wipeSchedule`（`weekday: 5`は金曜、`hour: 18`はJST）で管理し、`src/lib/wipe-schedule.ts`で次回時刻と残り時間を計算します。曜日を変える場合は日英の`server.settings`のワイプ曜日と規約も合わせて更新してください。ライブ表示のラベルは`server.schedule.live`から編集できます。
+
 静的な項目を追加・削除する場合は両言語で同じ`id`を使用し、必要に応じて`src/content/types.ts`のID一覧と型も更新してください。日英でIDが一致しない場合、表示時に`Localized content item is missing`エラーになります。お知らせ、FAQ、VIP、モデレーター募集、サーバールールの本文はTypeScriptではなく管理画面から更新します。
 
 ### お知らせの追加
@@ -222,6 +228,32 @@ FAQはCloudflare Accessで保護された`/admin/faqs`から管理します。�
 - `アーカイブ`: 公開対象から外します。FAQと操作ログは削除しません。
 
 既存のFAQはマイグレーションでDBへ移行されます。公開FAQは最大約60秒キャッシュされますが、管理画面からの保存時はFAQキャッシュを即時無効化します。
+
+### FAQ・お知らせのMarkdown
+
+管理画面のFAQ「回答 / Answer」とお知らせ「概要 / Description」はMarkdownで編集できます。入力したEnterはそのまま改行され、空行で段落が分かれます。既存の文章も再保存せずに改行が反映されます。日本語・英語の両方に対応し、お知らせの管理者プレビューも公開サイトと同じ描画を使います。質問・タイトルは通常のテキストです。
+
+```md
+# 参加前の確認
+
+1行目の案内です。
+次の行にも案内を書けます。
+
+**重要な案内**と*補足*、~~古い案内~~、`client.connect`。
+
+- Discordでルールを確認
+- チーム人数を確認
+
+[ルールへ移動](#rules)
+
+> 補足の案内
+```
+
+番号付きリスト、コードブロック、Markdownの表も使えます。表とコードブロックは本文の幅に収め、必要な場合は中だけを横スクロールできます。見出しはFAQ・お知らせの見出し階層に合わせるため、本文に`#`を書いてもページのH1は増えません。
+
+共通の`src/components/ui/MarkdownContent.tsx`が[react-markdown](https://github.com/remarkjs/react-markdown)、[remark-breaks](https://github.com/remarkjs/remark-breaks)、[remark-gfm](https://github.com/remarkjs/remark-gfm)を使ってReact要素へ変換します。HTMLは文字として扱い、実行しません。リンクはHTTP・HTTPS・メール・同一ページのアンカー・サイト内絶対パスに対応し、危険なスキームはリンクにしません。外部リンクは新しいタブで開きます。画像記法は代替テキストを表示します。
+
+保存先のDB構造と文字数制限は従来どおりです（FAQ回答4000文字、お知らせ概要600文字。Markdownの記号も含みます）。追加のマイグレーションは不要です。
 
 ### VIPの更新
 
@@ -262,7 +294,7 @@ VIP案内はCloudflare Accessで保護された`/admin/vip`から管理します
 ### 画像の差し替え
 
 - `public/icon.png`: ヘッダー、Footerで使用する公式アイコン
-- `public/main-image.png`: Heroのメイン画像
+- `public/main-image.png`: 以前のHero画像（現在のLPでは未使用）
 - `public/banner.png`: Discordなどのリンク共有で使用するOG/Twitter画像
 
 ファイル名を維持して差し替えると、コンポーネント側の変更は不要です。
@@ -423,7 +455,7 @@ src/
 └── tests/        # Unit / Component Test
 prisma/           # MySQLスキーマとマイグレーション
 e2e/              # Playwright E2E Test
-public/           # 公式アイコンとHero画像
+public/           # 公式アイコンと共有用バナーなど
 ```
 
 ## フォントライセンス
