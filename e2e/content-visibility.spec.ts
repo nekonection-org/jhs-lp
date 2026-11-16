@@ -34,7 +34,7 @@ async function expectReadableContent(page: Page) {
       .toBe(1);
   }
 
-  await expect(page.locator('#top a[href="#rules"]')).toBeVisible();
+  await expect(page.locator('#hero-actions a[href="#rules"]')).toBeVisible();
 }
 
 for (const width of [360, 1440]) {
@@ -44,7 +44,7 @@ for (const width of [360, 1440]) {
     test("本文とアンカーリンクが初期HTMLだけで表示される", async ({ page }) => {
       await page.goto("/");
       await expectReadableContent(page);
-      await page.locator('#top a[href="#rules"]').click();
+      await page.locator('#hero-actions a[href="#rules"]').click();
       await expect(page).toHaveURL(/#rules$/);
     });
   });

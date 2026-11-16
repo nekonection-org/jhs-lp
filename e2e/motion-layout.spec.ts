@@ -9,12 +9,16 @@ for (const viewport of [
   { width: 1024, height: 900 },
   { width: 1440, height: 900 },
 ]) {
-  test(`${viewport.width}×${viewport.height}: カバー画像と文章・操作領域が収まり、設定はカバーの後に並ぶ`, async ({
+  test(`${viewport.width}×${viewport.height}: 導入・風景・レイド時間を画面幅に合わせて配置する`, async ({
     page,
   }) => {
     await page.setViewportSize(viewport);
     await page.goto("/");
     await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator(".hero-layout")).toHaveAttribute(
+      "data-reveal-state",
+      "entered",
+    );
     await expect
       .poll(() =>
         page
@@ -26,30 +30,31 @@ for (const viewport of [
       .toBe(true);
     const cover = await page.locator(".hero-cover").boundingBox();
     const media = await page.locator(".hero-media").boundingBox();
+    const window = await page.locator(".hero-window").boundingBox();
     const copy = await page.locator(".hero-copy").boundingBox();
     const intro = await page.locator(".hero-introduction").boundingBox();
     const actions = await page.locator("#hero-actions").boundingBox();
     const facts = await page.locator(".hero-facts").boundingBox();
-    if (!cover || !media || !copy || !intro || !actions || !facts)
-      throw new Error(
-        "The cover and all essential content must have visible bounds",
-      );
-    expect(media.width).toBeCloseTo(viewport.width, 0);
-    expect(media.height).toBeCloseTo(cover.height, 0);
-    for (const bounds of [copy, intro, actions]) {
-      expect(bounds.x).toBeGreaterThanOrEqual(cover.x);
-      expect(bounds.x + bounds.width).toBeLessThanOrEqual(
-        cover.x + cover.width + 1,
-      );
-      expect(bounds.y).toBeGreaterThanOrEqual(cover.y);
-      expect(bounds.y + bounds.height).toBeLessThanOrEqual(
-        cover.y + cover.height + 1,
-      );
+    if (!cover || !media || !window || !copy || !intro || !actions || !facts)
+      throw new Error("All introductory content must have visible bounds");
+    for (const bounds of [copy, intro, actions, media, window, facts]) {
+      expect(bounds.x).toBeGreaterThanOrEqual(20);
+      expect(bounds.x + bounds.width).toBeLessThanOrEqual(viewport.width - 19);
     }
-    if (viewport.width >= 1024)
+    expect(actions.y + actions.height).toBeLessThanOrEqual(viewport.height);
+    expect(cover.y).toBeGreaterThanOrEqual(intro.y + intro.height);
+    if (viewport.width >= 1024) {
       expect(intro.x).toBeGreaterThan(copy.x + copy.width);
-    else expect(intro.y).toBeGreaterThanOrEqual(copy.y + copy.height);
+      expect(window.x).toBeGreaterThanOrEqual(media.x + media.width);
+      expect(window.y).toBeCloseTo(media.y, 0);
+    } else {
+      expect(intro.y).toBeGreaterThanOrEqual(copy.y + copy.height);
+      expect(window.y).toBeGreaterThanOrEqual(media.y + media.height);
+    }
     expect(facts.y).toBeGreaterThanOrEqual(cover.y + cover.height);
+    await expect(page.locator(".hero-window-times > div")).toHaveCount(2);
+    await expect(page.locator(".hero-window-times")).toContainText("18:00");
+    await expect(page.locator(".hero-window-times")).toContainText("12:00");
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth - innerWidth,
@@ -69,7 +74,7 @@ for (const viewport of [
   });
 }
 
-test("背景画像の読み込みに失敗しても紹介文と参加・ルールの導線を利用できる", async ({
+test("風景画像の読み込みに失敗しても紹介文・レイド時間・参加導線を利用できる", async ({
   page,
 }) => {
   await page.route("**/_next/image*", (route) =>
@@ -84,6 +89,7 @@ test("背景画像の読み込みに失敗しても紹介文と参加・ルー�
   await expect(
     page.locator("#hero-actions").getByRole("link", { name: /Discordに参加/ }),
   ).toHaveAttribute("href", e2eEnvironment.discordUrl);
+  await expect(page.locator(".hero-window-times")).toBeVisible();
   await page.locator('#hero-actions a[href="#rules"]').click();
   await expect(page).toHaveURL(/#rules$/);
 });

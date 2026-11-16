@@ -23,11 +23,12 @@ export async function VipSection() {
   const englishBenefits: readonly VipBenefit[] = englishContent.benefits;
 
   return (
-    <section className="section-shell" id="vip">
-      <Container>
-        <Reveal>
+    <section className="section-shell vip-section" id="vip">
+      <Container className="vip-layout">
+        <Reveal className="vip-introduction">
           <SectionHeading
             index="03"
+            layout="stack"
             description={
               <LocalizedText
                 ja={japaneseContent.description}
@@ -49,7 +50,7 @@ export async function VipSection() {
           />
         </Reveal>
 
-        <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-20">
+        <div className="vip-content">
           <Reveal>
             <div className="vip-plan">
               <div className="flex flex-wrap items-start justify-between gap-4">
@@ -130,7 +131,7 @@ export async function VipSection() {
           </Reveal>
 
           <Reveal delay={0.06}>
-            <div className="flex flex-col py-2 lg:py-6">
+            <div className="vip-benefits">
               <div className="flex items-center gap-3">
                 <BadgeCheck
                   aria-hidden="true"

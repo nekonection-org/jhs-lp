@@ -1,7 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { Check, Copy, Gamepad2, ArrowUpRight, ArrowDown } from "lucide-react";
+import {
+  Check,
+  Copy,
+  Gamepad2,
+  ArrowUpRight,
+  ArrowDown,
+  Clock3,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { useLanguage } from "@/components/providers/LanguageProvider";
@@ -15,17 +22,14 @@ import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
 import { getMatchingItem } from "@/lib/content";
+import { formatRaidHour, raidWindows } from "@/content/server";
 import { externalUrls, rustConnection } from "@/lib/constants";
 
 type CopyState = "idle" | "copied" | "error";
 
 export function HeroSection() {
   const { locale } = useLanguage();
-  const featuredSettings = [
-    "team-limit",
-    "map-bp-wipe",
-    "weekday-raids",
-  ] as const;
+  const featuredSettings = ["team-limit", "map-bp-wipe", "map-size"] as const;
   const [copyState, setCopyState] = useState<CopyState>("idle");
   const copyResetTimer = useRef<number | null>(null);
 
@@ -61,100 +65,141 @@ export function HeroSection() {
 
   return (
     <section aria-labelledby="hero-title" className="hero-section" id="top">
-      <div className="hero-cover">
-        <div className="hero-media" aria-hidden="true">
-          <Image
-            alt=""
-            className="hero-cover-image object-cover object-[68%_center] lg:object-[center_46%]"
-            fill
-            priority
-            sizes="100vw"
-            src="/main-image.png"
-          />
-          <div className="hero-scrim" />
-        </div>
-        <Container className="hero-cover-container">
-          <Reveal className="hero-layout">
-            <div className="hero-masthead" data-reveal-item>
-              <p className="hero-brand">
-                <span aria-hidden="true" />
-                {ja.hero.title}
-              </p>
-              <a href="#server" className="hero-audience">
-                <LocalizedText
-                  ja={ja.server.highlights[0].title}
-                  en={en.server.highlights[0].title}
-                />
-                <ArrowUpRight aria-hidden="true" className="size-3.5" />
-              </a>
-            </div>
-            <div className="hero-composition">
-              <div className="hero-copy">
-                <p className="hero-genre" data-reveal-item>
-                  <LocalizedText ja={ja.hero.eyebrow} en={en.hero.eyebrow} />
-                </p>
-                <h1 className="hero-headline" id="hero-title">
-                  <span className="block" data-reveal-item>
-                    <LocalizedText
-                      ja={ja.hero.headline[0]}
-                      en={en.hero.headline[0]}
-                    />
-                  </span>{" "}
-                  <span className="block" data-reveal-item>
-                    <LocalizedText
-                      ja={ja.hero.headline[1]}
-                      en={en.hero.headline[1]}
-                    />
-                  </span>
-                </h1>
-              </div>
-              <div className="hero-introduction">
-                <p className="hero-subtitle" data-reveal-item>
-                  <LocalizedText ja={ja.hero.subtitle} en={en.hero.subtitle} />
-                </p>
-                <p className="hero-description" data-reveal-item>
-                  <LocalizedText
-                    ja={ja.hero.description}
-                    en={en.hero.description}
-                  />
-                </p>
-                <div
-                  className="hero-actions"
-                  id="hero-actions"
-                  data-reveal-item
-                >
-                  <LocalizedExternalAction
-                    action={{
-                      ja: ja.hero.primaryAction,
-                      en: en.hero.primaryAction,
-                    }}
-                    common={{ ja: ja.common, en: en.common }}
-                    href={externalUrls.discord}
-                    className="min-h-12 px-4 sm:px-5"
-                  />
-                  <LocalizedSectionAction
-                    action={{
-                      ja: ja.hero.secondaryAction,
-                      en: en.hero.secondaryAction,
-                    }}
-                    className="min-h-12 px-4 sm:px-5"
-                  />
-                </div>
-              </div>
-            </div>
-            <a className="hero-explore" href="#server" data-reveal-item>
-              <span className="flex items-center gap-4">
-                <span className="hero-explore-index" aria-hidden="true">
-                  01
-                </span>
-                <LocalizedText ja={ja.server.title} en={en.server.title} />
-              </span>
-              <ArrowDown aria-hidden="true" className="size-4" />
-            </a>
-          </Reveal>
-        </Container>
-      </div>
       <Container>
+        <Reveal className="hero-layout">
+          <div className="hero-masthead" data-reveal-item>
+            <p className="hero-brand">
+              <span aria-hidden="true" />
+              <LocalizedText ja={ja.hero.eyebrow} en={en.hero.eyebrow} />
+            </p>
+            <a href="#server" className="hero-audience">
+              <LocalizedText
+                ja={ja.server.highlights[0].title}
+                en={en.server.highlights[0].title}
+              />
+              <ArrowUpRight aria-hidden="true" className="size-3.5" />
+            </a>
+          </div>
+          <div className="hero-composition">
+            <div className="hero-copy">
+              <h1 className="hero-headline" id="hero-title">
+                <span className="block" data-reveal-item>
+                  <LocalizedText
+                    ja={ja.hero.headline[0]}
+                    en={en.hero.headline[0]}
+                  />
+                </span>{" "}
+                <span className="block" data-reveal-item>
+                  <LocalizedText
+                    ja={ja.hero.headline[1]}
+                    en={en.hero.headline[1]}
+                  />
+                </span>
+              </h1>
+            </div>
+            <div className="hero-introduction">
+              <p className="hero-subtitle" data-reveal-item>
+                <LocalizedText ja={ja.hero.subtitle} en={en.hero.subtitle} />
+              </p>
+              <p className="hero-description" data-reveal-item>
+                <LocalizedText
+                  ja={ja.hero.description}
+                  en={en.hero.description}
+                />
+              </p>
+              <div className="hero-actions" id="hero-actions" data-reveal-item>
+                <LocalizedExternalAction
+                  action={{
+                    ja: ja.hero.primaryAction,
+                    en: en.hero.primaryAction,
+                  }}
+                  common={{ ja: ja.common, en: en.common }}
+                  href={externalUrls.discord}
+                  className="min-h-12 px-4 sm:px-5"
+                />
+                <LocalizedSectionAction
+                  action={{
+                    ja: ja.hero.secondaryAction,
+                    en: en.hero.secondaryAction,
+                  }}
+                  className="min-h-12 px-4 sm:px-5"
+                  variant="quiet"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="hero-cover">
+            <div className="hero-media">
+              <Image
+                alt=""
+                className="hero-cover-image object-cover object-[65%_center] lg:object-[center_48%]"
+                fill
+                priority
+                sizes="(min-width: 1200px) 832px, (min-width: 1024px) calc(100vw - 368px), (min-width: 640px) calc(100vw - 64px), calc(100vw - 40px)"
+                src="/main-image.png"
+              />
+              <div className="hero-scrim" aria-hidden="true" />
+              <div className="hero-caption">
+                <p>{ja.hero.title}</p>
+                <a className="hero-explore" href="#server">
+                  <LocalizedText ja={ja.server.title} en={en.server.title} />
+                  <ArrowDown aria-hidden="true" className="size-4" />
+                </a>
+              </div>
+            </div>
+            <aside
+              className="hero-window"
+              data-reveal-item
+              aria-labelledby="hero-window-title"
+            >
+              <p className="hero-window-heading" id="hero-window-title">
+                <Clock3 aria-hidden="true" className="size-4" />
+                <LocalizedText
+                  ja={ja.server.schedule.allowed}
+                  en={en.server.schedule.allowed}
+                />
+                <span>JST</span>
+              </p>
+              <dl className="hero-window-times">
+                {Object.entries(raidWindows).map(([day, window]) => {
+                  const isWeekday = day === "weekdays";
+                  return (
+                    <div key={day}>
+                      <dt>
+                        <LocalizedText
+                          ja={
+                            isWeekday
+                              ? ja.server.schedule.weekdays
+                              : ja.server.schedule.weekends
+                          }
+                          en={
+                            isWeekday
+                              ? en.server.schedule.weekdays
+                              : en.server.schedule.weekends
+                          }
+                        />
+                      </dt>
+                      <dd>
+                        <span>{formatRaidHour(window.start)}</span>
+                        <span className="hero-window-dash" aria-hidden="true">
+                          —
+                        </span>
+                        <span>{formatRaidHour(window.end)}</span>
+                      </dd>
+                    </div>
+                  );
+                })}
+              </dl>
+              <a className="hero-window-link" href="#rules">
+                <LocalizedText
+                  ja={ja.hero.secondaryAction.label}
+                  en={en.hero.secondaryAction.label}
+                />
+                <ArrowUpRight aria-hidden="true" className="size-4" />
+              </a>
+            </aside>
+          </div>
+        </Reveal>
         <Reveal>
           <dl className="hero-facts">
             {featuredSettings.map((id, index) => {
@@ -192,7 +237,7 @@ export function HeroSection() {
             </p>
           </div>
           {rustConnection ? (
-            <div className="min-w-0 lg:col-span-2">
+            <div className="connection-controls">
               <p className="text-xs font-bold tracking-[0.08em] text-[var(--text-muted)] uppercase">
                 <LocalizedText
                   ja={ja.hero.connection.commandLabel}

@@ -28,9 +28,7 @@ describe("ServerSection", () => {
       screen.getByText("レイド可能時間（土・日）").closest("div"),
     ).toHaveTextContent("12:00〜24:00 JST");
     expect(screen.queryByText("前哨基地統合")).not.toBeInTheDocument();
-    expect(
-      screen.getByText("Japan Hideaway Serverへようこそ！").closest("h3"),
-    ).not.toBeNull();
+    expect(screen.getByText("サーバー情報").closest("h2")).not.toBeNull();
     expect(screen.getByText(/初心者から上級者まで/)).toBeInTheDocument();
   });
 

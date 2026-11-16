@@ -32,7 +32,7 @@ export async function ModeratorSection() {
       : null;
 
   return (
-    <section className="section-shell chapter-section" id="moderator">
+    <section className="section-shell moderator-section" id="moderator">
       <Container>
         <Reveal>
           <SectionHeading
@@ -58,7 +58,7 @@ export async function ModeratorSection() {
           />
         </Reveal>
 
-        <Reveal className="mt-12">
+        <Reveal className="moderator-status">
           <div className="flex flex-col gap-5 border-l-2 border-[var(--accent)] pl-5 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex max-w-3xl items-start gap-4">
               <span className="pt-1 text-[var(--accent-strong)]">
@@ -87,13 +87,15 @@ export async function ModeratorSection() {
           </div>
         </Reveal>
 
-        <div className="mt-8 border-b border-[var(--border)]">
+        <div className="moderator-grid">
           {japaneseContent.items.map((item, index) => {
             const englishItem = getMatchingItem(englishContent.items, item.id);
 
             return (
               <Reveal delay={index * 0.05} key={item.id}>
                 <FeatureCard
+                  number={String(index + 1).padStart(2, "0")}
+                  className="moderator-feature md:grid-cols-1"
                   description={
                     <LocalizedText
                       ja={item.description}

@@ -13,39 +13,30 @@ export function ServerSection() {
   return (
     <section className="section-shell" id="server">
       <Container>
-        <Reveal>
-          <SectionHeading
-            index="01"
-            description={
-              <LocalizedText
-                ja={ja.server.description}
-                en={en.server.description}
-              />
-            }
-            eyebrow={
-              <LocalizedText ja={ja.server.eyebrow} en={en.server.eyebrow} />
-            }
-            title={<LocalizedText ja={ja.server.title} en={en.server.title} />}
-          />
-        </Reveal>
-
-        <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-20">
-          <Reveal>
-            <article className="server-welcome">
-              <h3 className="text-xl font-semibold leading-8">
-                <LocalizedText
-                  ja={ja.server.welcomeTitle}
-                  en={en.server.welcomeTitle}
-                />
-              </h3>
-              <p className="mt-5 text-base leading-8 text-[var(--text-secondary)]">
+        <div className="server-overview">
+          <Reveal className="server-introduction">
+            <SectionHeading
+              index="01"
+              layout="stack"
+              description={
                 <LocalizedText
                   ja={ja.server.welcomeDescription}
                   en={en.server.welcomeDescription}
                 />
-              </p>
-            </article>
-            <RaidSchedule />
+              }
+              eyebrow={
+                <LocalizedText ja={ja.server.eyebrow} en={en.server.eyebrow} />
+              }
+              title={
+                <LocalizedText ja={ja.server.title} en={en.server.title} />
+              }
+            />
+            <p className="server-principle">
+              <LocalizedText
+                ja={ja.server.highlights[0].title}
+                en={en.server.highlights[0].title}
+              />
+            </p>
           </Reveal>
           <Reveal className="settings-panel">
             <h3 className="text-lg font-semibold">
@@ -91,9 +82,14 @@ export function ServerSection() {
           </Reveal>
         </div>
 
-        <Reveal>
-          <RaidTimeChecker />
-        </Reveal>
+        <div className="server-schedule">
+          <Reveal>
+            <RaidSchedule />
+          </Reveal>
+          <Reveal>
+            <RaidTimeChecker />
+          </Reveal>
+        </div>
 
         <Reveal className="mt-6">
           <div className="flex items-start gap-3 text-xs leading-6 text-[var(--text-muted)]">

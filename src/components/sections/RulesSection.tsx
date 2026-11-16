@@ -17,54 +17,56 @@ export async function RulesSection() {
   return (
     <section className="section-shell chapter-section" id="rules">
       <Container>
-        <Reveal>
-          <SectionHeading
-            index="02"
-            description={
-              <LocalizedText
-                ja={japaneseContent.description}
-                en={englishContent.description}
-              />
-            }
-            eyebrow={
-              <LocalizedText
-                ja={japaneseContent.eyebrow}
-                en={englishContent.eyebrow}
-              />
-            }
-            title={
-              <LocalizedText
-                ja={japaneseContent.title}
-                en={englishContent.title}
-              />
-            }
-          />
-        </Reveal>
-
-        <div className="mt-12 grid items-start gap-10 lg:mt-16 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,1.35fr)] lg:gap-16">
-          <Reveal className="lg:sticky lg:top-28">
-            <aside className="flex items-start gap-4 border-l-2 border-[var(--danger)] py-1 pl-5">
-              <span className="pt-1 text-[var(--danger)]">
-                <TriangleAlert aria-hidden="true" className="size-5" />
-              </span>
-              <div>
-                <h3 className="font-bold text-[var(--text-primary)]">
+        <div className="rules-layout">
+          <div className="rules-introduction">
+            <Reveal>
+              <SectionHeading
+                index="02"
+                layout="stack"
+                description={
                   <LocalizedText
-                    ja={japaneseContent.noticeTitle}
-                    en={englishContent.noticeTitle}
+                    ja={japaneseContent.description}
+                    en={englishContent.description}
                   />
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                }
+                eyebrow={
                   <LocalizedText
-                    ja={japaneseContent.notice}
-                    en={englishContent.notice}
+                    ja={japaneseContent.eyebrow}
+                    en={englishContent.eyebrow}
                   />
-                </p>
-              </div>
-            </aside>
-          </Reveal>
+                }
+                title={
+                  <LocalizedText
+                    ja={japaneseContent.title}
+                    en={englishContent.title}
+                  />
+                }
+              />
+            </Reveal>
 
-          <div className="border-b border-[var(--border)]">
+            <Reveal className="mt-8">
+              <aside className="flex items-start gap-4 border-l-2 border-[var(--danger)] py-1 pl-5">
+                <span className="pt-1 text-[var(--danger)]">
+                  <TriangleAlert aria-hidden="true" className="size-5" />
+                </span>
+                <div>
+                  <h3 className="font-bold text-[var(--text-primary)]">
+                    <LocalizedText
+                      ja={japaneseContent.noticeTitle}
+                      en={englishContent.noticeTitle}
+                    />
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                    <LocalizedText
+                      ja={japaneseContent.notice}
+                      en={englishContent.notice}
+                    />
+                  </p>
+                </div>
+              </aside>
+            </Reveal>
+          </div>
+          <div className="rules-grid">
             {japaneseContent.items.map((item, index) => {
               const englishItem = getMatchingItem(
                 englishContent.items,
@@ -75,7 +77,7 @@ export async function RulesSection() {
                 <Reveal delay={index * 0.035} key={item.id}>
                   <FeatureCard
                     number={String(index + 1).padStart(2, "0")}
-                    className="md:grid-cols-1 xl:grid-cols-1"
+                    className="rule-feature md:grid-cols-1 xl:grid-cols-1"
                     description={
                       <LocalizedText
                         ja={item.description}

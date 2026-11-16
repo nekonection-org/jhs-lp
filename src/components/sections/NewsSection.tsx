@@ -15,10 +15,11 @@ export async function NewsSection({ page = 1 }: NewsSectionProps) {
 
   return (
     <section className="section-shell" id="news">
-      <Container>
+      <Container className="news-layout">
         <Reveal>
           <SectionHeading
             index="06"
+            layout="stack"
             description={
               <LocalizedText
                 ja={ja.news.description}
@@ -32,7 +33,9 @@ export async function NewsSection({ page = 1 }: NewsSectionProps) {
           />
         </Reveal>
 
-        <NewsList result={result} />
+        <div className="news-feed">
+          <NewsList result={result} />
+        </div>
       </Container>
     </section>
   );

@@ -40,7 +40,7 @@ for (const width of [360, 1440]) {
       if (width === 360) {
         await page.keyboard.press("Escape");
       }
-      await page.locator('#top a[href="#rules"]').click();
+      await page.locator('#hero-actions a[href="#rules"]').click();
       await expect(page).toHaveURL(/#rules$/);
       expect(errors).toEqual([]);
     });
