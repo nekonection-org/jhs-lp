@@ -222,7 +222,6 @@ export interface ServerContent extends SectionIntroduction<"server"> {
     readonly checkerTitle: string;
     readonly checkerDescription: string;
     readonly dateLabel: string;
-    readonly japanEquivalent: string;
     readonly repeatedTime: string;
     readonly invalidTime: string;
     readonly chooseDateTime: string;

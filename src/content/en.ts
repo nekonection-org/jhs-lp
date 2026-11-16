@@ -128,7 +128,6 @@ export const en = {
       checkerDescription:
         "Choose a date and time in the selected time zone to check whether raiding is allowed.",
       dateLabel: "Choose a date",
-      japanEquivalent: "In Japan time",
       repeatedTime: "This time occurs twice. Choose a UTC offset",
       invalidTime: "This date and time does not exist. Choose another time.",
       chooseDateTime: "Choose a date and time",

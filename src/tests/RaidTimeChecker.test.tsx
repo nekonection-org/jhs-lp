@@ -29,9 +29,9 @@ describe("RaidTimeChecker", () => {
       "data-allowed",
       "true",
     );
-    expect(container.querySelector(".raid-japan-equivalent")).toHaveTextContent(
-      "11月21日(土) 12:00",
-    );
+    expect(
+      container.querySelector(".raid-selected-instant time"),
+    ).toHaveAttribute("datetime", "2026-11-21T03:00:00.000Z");
   });
 
   it("rejects midnight and recomputes a preserved wall time when the zone changes", () => {
@@ -45,9 +45,9 @@ describe("RaidTimeChecker", () => {
     rerender(<RaidTimeChecker now={now} timeZone="America/New_York" />);
     expect(screen.getByLabelText(/確認する時刻/)).toHaveValue("18:00");
     expect(screen.getByRole("status")).toHaveAttribute("data-allowed", "false");
-    expect(container.querySelector(".raid-japan-equivalent")).toHaveTextContent(
-      "11月17日(火) 08:00",
-    );
+    expect(
+      container.querySelector(".raid-selected-instant time"),
+    ).toHaveAttribute("datetime", "2026-11-16T23:00:00.000Z");
   });
 
   it("distinguishes missing and repeated wall times during DST changes", () => {
@@ -62,7 +62,7 @@ describe("RaidTimeChecker", () => {
     expect(screen.getByRole("status")).toHaveTextContent(
       "この日時は存在しません",
     );
-    expect(container.querySelector(".raid-japan-equivalent")).toBeNull();
+    expect(container.querySelector(".raid-selected-instant")).toBeNull();
     setSelection("2026-11-01", "01:30");
     const select = screen.getByLabelText(
       /同じ時刻が2回あります。UTCオフセットを選択/,

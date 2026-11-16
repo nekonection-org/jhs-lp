@@ -181,28 +181,6 @@ export function RaidTimeChecker({
             ) : null}
           </div>
         </div>
-        {instant !== undefined ? (
-          <motion.p
-            className="raid-japan-equivalent"
-            key={`${instant}-${timeZone}`}
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{
-              ...motionTiming.interaction,
-              duration: reduceMotion ? 0 : motionTiming.interaction.duration,
-            }}
-          >
-            <LocalizedText
-              ja={ja.server.schedule.japanEquivalent}
-              en={en.server.schedule.japanEquivalent}
-            />{" "}
-            <LocalizedText
-              ja={formatRaidDateTime(instant, "Asia/Tokyo", "ja-JP")}
-              en={formatRaidDateTime(instant, "Asia/Tokyo", "en-GB")}
-            />{" "}
-            JST
-          </motion.p>
-        ) : null}
       </div>
     </section>
   );

@@ -37,9 +37,11 @@ test("選択した現地日時を日本時間へ変換し、週末の境界で�
     "data-allowed",
     "true",
   );
-  await expect(page.locator(".raid-japan-equivalent")).toContainText(
-    "11月21日(土) 12:00",
+  await expect(page.locator(".raid-selected-instant time")).toHaveAttribute(
+    "datetime",
+    "2026-11-21T03:00:00.000Z",
   );
+  await expect(page.getByText("日本時間では", { exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: /English|英語/, exact: true }).click();
   await expect(page.getByLabel("Choose a date")).toHaveValue("2026-11-20");
   await expect(page.getByLabel(/Choose a time/)).toHaveValue("22:00");
@@ -101,7 +103,10 @@ test("保存不可でも端末の45分オフセットの地域で確認できる
     "data-allowed",
     "true",
   );
-  await expect(page.locator(".raid-japan-equivalent")).toContainText("18:00");
+  await expect(page.locator(".raid-selected-instant time")).toHaveAttribute(
+    "datetime",
+    "2026-11-16T09:00:00.000Z",
+  );
   await context.close();
 });
 

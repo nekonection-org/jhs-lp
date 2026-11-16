@@ -996,8 +996,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .raid-check-result[data-allowed="true"] > span {
   color: var(--accent-strong);
 }
-.raid-selected-instant,
-.raid-japan-equivalent {
+.raid-selected-instant {
   font-size: 0.875rem;
   line-height: 1.8;
   color: var(--text-secondary);
@@ -1603,8 +1602,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   }
   .raid-date-time-fields,
   .raid-time-occurrence,
-  .raid-check-result,
-  .raid-japan-equivalent {
+  .raid-check-result {
     grid-column: 1 / -1;
   }
   .rules-layout {
@@ -1711,7 +1709,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     transform: none !important;
   }
   .server-planner [data-reveal-item],
-  .raid-japan-equivalent,
   .wipe-countdown-block > time,
   .raid-check-result > span {
     opacity: 1 !important;

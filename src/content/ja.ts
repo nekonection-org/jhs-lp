@@ -128,7 +128,6 @@ export const ja = {
       checkerDescription:
         "選択したタイムゾーンの日付と時刻を指定して、レイドできるか確認できます。",
       dateLabel: "確認する日付",
-      japanEquivalent: "日本時間では",
       repeatedTime: "同じ時刻が2回あります。UTCオフセットを選択",
       invalidTime: "この日時は存在しません。日付・時刻を変更してください。",
       chooseDateTime: "日付と時刻を選択してください",
