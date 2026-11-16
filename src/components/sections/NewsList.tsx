@@ -1,6 +1,9 @@
 import { ArrowLeft, ArrowRight, Newspaper, WifiOff } from "lucide-react";
 import Link from "next/link";
 
+import { NewsArticle } from "@/components/news/NewsArticle";
+import { NewsDialog } from "@/components/news/NewsDialog";
+
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Reveal } from "@/components/ui/Reveal";
 import { en, ja } from "@/content";
@@ -85,38 +88,46 @@ export function NewsList({ result }: NewsListProps) {
           return (
             <Reveal delay={index * 0.04} key={item.id}>
               <article className="news-item">
-                <a
-                  className="news-summary"
+                <NewsDialog
                   href={`/news/${encodeURIComponent(item.id)}${result.pagination.page > 1 ? `?newsPage=${result.pagination.page}` : ""}`}
+                  titleId={`news-dialog-title-${item.id}`}
+                  trigger={
+                    <h3 className="news-row">
+                      <time className="news-date" dateTime={item.publishedAt}>
+                        <span data-locale-content="ja">
+                          {formatAnnouncementDate(publishedAt, "ja")}
+                        </span>
+                        <span data-locale-content="en">
+                          {formatAnnouncementDate(publishedAt, "en")}
+                        </span>
+                      </time>
+                      <span className="news-category">
+                        <LocalizedText
+                          ja={ja.news.categoryLabels[item.category]}
+                          en={en.news.categoryLabels[item.category]}
+                        />
+                      </span>
+                      <span className="news-title">
+                        <LocalizedText
+                          ja={item.translations.ja.title}
+                          en={english.title}
+                        />
+                      </span>
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="size-4 shrink-0"
+                        data-news-icon
+                      />
+                    </h3>
+                  }
                 >
-                  <h3 className="news-row">
-                    <time className="news-date" dateTime={item.publishedAt}>
-                      <span data-locale-content="ja">
-                        {formatAnnouncementDate(publishedAt, "ja")}
-                      </span>
-                      <span data-locale-content="en">
-                        {formatAnnouncementDate(publishedAt, "en")}
-                      </span>
-                    </time>
-                    <span className="news-category">
-                      <LocalizedText
-                        ja={ja.news.categoryLabels[item.category]}
-                        en={en.news.categoryLabels[item.category]}
-                      />
-                    </span>
-                    <span className="news-title">
-                      <LocalizedText
-                        ja={item.translations.ja.title}
-                        en={english.title}
-                      />
-                    </span>
-                    <ArrowRight
-                      aria-hidden="true"
-                      className="size-4 shrink-0"
-                      data-news-icon
-                    />
-                  </h3>
-                </a>
+                  <NewsArticle
+                    announcement={item}
+                    backHref={newsPageHref(result.pagination.page)}
+                    presentation="dialog"
+                    titleId={`news-dialog-title-${item.id}`}
+                  />
+                </NewsDialog>
               </article>
             </Reveal>
           );

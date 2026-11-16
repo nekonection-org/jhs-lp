@@ -524,6 +524,7 @@ export const ja = {
     applicationAction: null,
   },
   news: {
+    closeLabel: "お知らせを閉じる",
     backToList: "お知らせ一覧へ戻る",
     notFoundTitle: "お知らせが見つかりません",
     notFoundDescription:

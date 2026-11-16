@@ -284,52 +284,33 @@ test.describe("360px のモバイル表示", () => {
   });
 });
 
-test("お知らせを専用ページで表示し、一覧へ戻れる", async ({ page }) => {
+test("お知らせをページ遷移せず全画面で開き、閉じると一覧へ戻れる", async ({
+  page,
+}) => {
   const link = page.locator("#news .news-item .news-summary").first();
   if (await link.count()) {
-    const title = await link.locator(".news-title").innerText();
-    const href = await link.getAttribute("href");
-    expect(href).toMatch(/^\/news\//);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(page.locator("#raid-time-zone")).toBeEnabled();
+    await page.evaluate(() => document.fonts.ready);
     await link.focus();
+    const url = page.url();
+    const title = await link.locator(".news-title").innerText();
+    const scrollY = await page.evaluate(() => window.scrollY);
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(href ?? "");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(title, {
-      useInnerText: true,
-    });
-    await expect(page).toHaveTitle(`${title} | ${ja.common.siteName}`);
-    await expect(page.locator(".news-article-body")).toBeVisible();
-    await expect(page.locator(".news-article-meta time")).toBeVisible();
-    await expect(page.locator(".news-detail-page")).toBeVisible();
-    await expect(page.locator('header nav a[href="/#rules"]')).toHaveCount(1);
-    await expect(page.locator('footer nav a[href="/#rules"]')).toHaveCount(1);
-    await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      new URL(href ?? "", e2eEnvironment.siteUrl).toString(),
-    );
-    await page.getByRole("button", { name: ja.language.english }).click();
-    await expect(page.locator("html")).toHaveAttribute("lang", "en");
-    const englishTitle = await page
-      .getByRole("heading", { level: 1 })
-      .innerText();
-    await expect(page).toHaveTitle(`${englishTitle} | ${en.common.siteName}`);
-    await page.getByRole("button", { name: en.theme.switchToLight }).click();
-    await page.reload();
-    await expect(page.locator("html")).toHaveAttribute("lang", "en");
-    await expect(page.locator("html")).toHaveClass(/\blight\b/);
-    await expect(page.locator(".news-article-body")).toBeVisible();
-    await page.getByRole("button", { name: en.language.japanese }).click();
-    for (const width of requiredViewportWidths) {
-      await page.setViewportSize({ width, height: 900 });
-      expect(
-        await page.evaluate(
-          () => document.documentElement.scrollWidth - innerWidth,
-        ),
-      ).toBeLessThanOrEqual(1);
-    }
-    await page.getByRole("link", { name: ja.news.backToList }).click();
-    await expect(page).toHaveURL(/\/#news$/);
-    await expect(page.locator("#news .news-item").first()).toBeVisible();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveAccessibleName(title);
+    await expect(page).toHaveURL(url);
+    await expect(dialog.locator(".news-article-body")).toBeVisible();
+    await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+    await expect(dialog.getByRole("heading", { level: 1 })).toHaveCount(0);
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await expect(link).toBeFocused();
+    await expect(page).toHaveURL(url);
+    await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+    expect(await page.evaluate(() => window.scrollY)).toBe(scrollY);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   } else {
     await expect(
       page

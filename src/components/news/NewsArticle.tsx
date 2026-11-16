@@ -22,25 +22,41 @@ function safeHttpUrl(value: string | null) {
 interface NewsArticleProps {
   announcement: PublicAnnouncement;
   backHref: string;
+  presentation?: "page" | "dialog";
+  titleId?: string;
 }
 
-export function NewsArticle({ announcement, backHref }: NewsArticleProps) {
+export function NewsArticle({
+  announcement,
+  backHref,
+  presentation = "page",
+  titleId = "news-article-title",
+}: NewsArticleProps) {
   const english = announcement.translations.en ?? {
     title: en.news.translationPendingTitle,
     description: en.news.translationPendingDescription,
   };
   const relatedUrl = safeHttpUrl(announcement.externalUrl);
+  const inDialog = presentation === "dialog";
+  const Heading = inDialog ? "h2" : "h1";
 
   return (
-    <article className="news-article" aria-labelledby="news-article-title">
-      <LocalizedPageTitle
-        ja={`${announcement.translations.ja.title} | ${ja.common.siteName}`}
-        en={`${english.title} | ${en.common.siteName}`}
-      />
-      <a className="news-back-link" href={backHref}>
-        <ArrowLeft aria-hidden="true" className="size-4 shrink-0" />
-        <LocalizedText ja={ja.news.backToList} en={en.news.backToList} />
-      </a>
+    <article
+      className={`news-article${inDialog ? " news-dialog-article" : ""}`}
+      aria-labelledby={titleId}
+    >
+      {!inDialog ? (
+        <>
+          <LocalizedPageTitle
+            ja={`${announcement.translations.ja.title} | ${ja.common.siteName}`}
+            en={`${english.title} | ${en.common.siteName}`}
+          />
+          <a className="news-back-link" href={backHref}>
+            <ArrowLeft aria-hidden="true" className="size-4 shrink-0" />
+            <LocalizedText ja={ja.news.backToList} en={en.news.backToList} />
+          </a>
+        </>
+      ) : null}
       <header className="news-article-header">
         <p className="news-article-eyebrow">
           <LocalizedText ja={ja.news.eyebrow} en={en.news.eyebrow} />
@@ -68,16 +84,20 @@ export function NewsArticle({ announcement, backHref }: NewsArticleProps) {
             />
           </span>
         </div>
-        <h1 id="news-article-title">
+        <Heading
+          className="news-article-title"
+          id={titleId}
+          tabIndex={inDialog ? -1 : undefined}
+        >
           <LocalizedText
             ja={announcement.translations.ja.title}
             en={english.title}
           />
-        </h1>
+        </Heading>
       </header>
       <div className="news-article-body">
         <LocalizedMarkdown
-          headingLevel={2}
+          headingLevel={inDialog ? 3 : 2}
           ja={announcement.translations.ja.description}
           en={english.description}
         />

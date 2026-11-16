@@ -337,6 +337,7 @@ export interface ModeratorContent extends SectionIntroduction<"moderator"> {
 }
 
 export interface NewsContent extends SectionIntroduction<"news"> {
+  readonly closeLabel: string;
   readonly backToList: string;
   readonly notFoundTitle: string;
   readonly notFoundDescription: string;

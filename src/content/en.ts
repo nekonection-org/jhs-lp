@@ -528,6 +528,7 @@ export const en = {
     applicationAction: null,
   },
   news: {
+    closeLabel: "Close announcement",
     backToList: "Back to announcements",
     notFoundTitle: "Announcement not found",
     notFoundDescription:

@@ -1,4 +1,9 @@
-import { render, screen, within } from "@testing-library/react";
+import type { ReactElement } from "react";
+import {
+  render as renderWithDefaults,
+  screen,
+  within,
+} from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { NewsArticle } from "@/components/news/NewsArticle";
@@ -11,6 +16,13 @@ import {
   parsePublicAnnouncementsPage,
   toPublicAnnouncement,
 } from "@/lib/announcements/public-types";
+
+function render(
+  ui: ReactElement,
+  options?: Parameters<typeof renderWithDefaults>[1],
+) {
+  return renderWithDefaults(ui, { wrapper: LanguageProvider, ...options });
+}
 
 const publishedAt = new Date("2026-08-13T09:30:00Z");
 
@@ -79,7 +91,7 @@ describe("public announcements", () => {
     ).toBeNull();
   });
 
-  it("links each title to its own page without embedding the body in the list", () => {
+  it("keeps a fallback link and hides the pre-rendered article until it is opened", () => {
     const item = toPublicAnnouncement(announcement);
     if (!item) throw new Error("Expected a published announcement");
     render(<NewsList result={readyResult([item])} />);
@@ -90,7 +102,7 @@ describe("public announcements", () => {
       "href",
       "/news/announcement-1",
     );
-    expect(screen.queryByText("日本語の概要")).not.toBeInTheDocument();
+    expect(screen.getByText("日本語の概要")).not.toBeVisible();
     expect(
       screen.queryByRole("link", { name: /関連リンク/ }),
     ).not.toBeInTheDocument();
