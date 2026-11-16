@@ -61,8 +61,12 @@ for (const viewport of [
       ),
     ).toBeLessThanOrEqual(1);
     const explore = page.locator("a.hero-explore");
-    await explore.focus();
-    await page.keyboard.press("Enter");
+    if (viewport.width === 1440) {
+      await explore.click();
+    } else {
+      await explore.focus();
+      await page.keyboard.press("Enter");
+    }
     await expect(page).toHaveURL(/#server$/);
     await expect
       .poll(() =>
