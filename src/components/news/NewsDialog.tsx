@@ -1,6 +1,7 @@
 "use client";
 
 import { Newspaper, X } from "lucide-react";
+import { useAnimate } from "motion/react";
 import {
   useEffect,
   useId,
@@ -17,6 +18,8 @@ import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { en, getContent, ja } from "@/content";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { motionTiming } from "@/lib/motion";
 
 interface NewsDialogProps {
   href: string;
@@ -34,22 +37,41 @@ export function NewsDialog({
   const { locale } = useLanguage();
   const content = getContent(locale);
   const dialogId = useId();
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [dialogRef, animate] = useAnimate<HTMLDialogElement>();
+  const animationRef = useRef<ReturnType<typeof animate> | null>(null);
+  const closingRef = useRef(false);
+  const reduceMotion = useReducedMotion();
   const triggerRef = useRef<HTMLAnchorElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const pageScrollRef = useRef({ left: 0, top: 0 });
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    if (reduceMotion) animationRef.current?.complete();
+  }, [reduceMotion]);
+
+  useEffect(() => {
     if (!open) return;
     const previousOverflow = document.body.style.overflow;
-    const previousGutter = document.documentElement.style.scrollbarGutter;
-    document.documentElement.style.scrollbarGutter = "stable";
+    const previousPadding = document.body.style.paddingRight;
+    const gutter = window.innerWidth - document.documentElement.clientWidth;
+    const stableGutter = getComputedStyle(document.documentElement)
+      .getPropertyValue("scrollbar-gutter")
+      .includes("stable");
+    if (gutter > 0 && !stableGutter) {
+      const padding =
+        parseFloat(getComputedStyle(document.body).paddingRight) || 0;
+      document.body.style.paddingRight = `${padding + gutter}px`;
+    }
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.documentElement.style.scrollbarGutter = previousGutter;
-      window.scrollTo({ ...pageScrollRef.current, behavior: "instant" });
+      document.body.style.paddingRight = previousPadding;
+      const root = document.documentElement;
+      const previousScrollBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = "auto";
+      window.scrollTo(pageScrollRef.current.left, pageScrollRef.current.top);
+      root.style.scrollBehavior = previousScrollBehavior;
     };
   }, [open]);
 
@@ -67,18 +89,43 @@ export function NewsDialog({
     if (!dialog || typeof dialog.showModal !== "function") return;
     event.preventDefault();
     if (dialog.open) return;
+    closingRef.current = false;
     pageScrollRef.current = { left: window.scrollX, top: window.scrollY };
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
+    dialog.dataset.closing = "false";
     dialog.showModal();
+    animationRef.current = animate(
+      dialog,
+      { opacity: [0, 1] },
+      {
+        ...motionTiming.menu,
+        duration: reduceMotion ? 0 : motionTiming.menu.duration,
+      },
+    );
     setOpen(true);
     document.getElementById(titleId)?.focus({ preventScroll: true });
   }
 
-  function closeNews() {
-    dialogRef.current?.close();
+  async function closeNews() {
+    const dialog = dialogRef.current;
+    if (!dialog?.open || closingRef.current) return;
+    closingRef.current = true;
+    dialog.dataset.closing = "true";
+    animationRef.current = animate(
+      dialog,
+      { opacity: 0 },
+      {
+        ...motionTiming.interaction,
+        duration: reduceMotion ? 0 : motionTiming.interaction.duration,
+      },
+    );
+    await animationRef.current;
+    if (dialog.isConnected && dialog.open) dialog.close();
   }
 
   function handleClose() {
+    if (dialogRef.current?.open) return;
+    closingRef.current = false;
     setOpen(false);
     triggerRef.current?.focus({ preventScroll: true });
   }
@@ -126,7 +173,7 @@ export function NewsDialog({
         id={dialogId}
         onCancel={(event) => {
           event.preventDefault();
-          closeNews();
+          void closeNews();
         }}
         onClose={handleClose}
         onKeyDown={handleKeyDown}
@@ -144,7 +191,9 @@ export function NewsDialog({
               <Button
                 aria-label={content.news.closeLabel}
                 className="size-11 shrink-0 px-0"
-                onClick={closeNews}
+                onClick={() => {
+                  void closeNews();
+                }}
                 variant="quiet"
               >
                 <X aria-hidden="true" className="size-5" />

@@ -14,6 +14,8 @@ import { NewsList } from "@/components/sections/NewsList";
 import { LocalizedPageTitle } from "@/components/ui/LocalizedPageTitle";
 import { ja, en } from "@/content";
 
+vi.mock("@/hooks/useReducedMotion", () => ({ useReducedMotion: () => true }));
+
 function renderNews() {
   return render(
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
@@ -70,6 +72,7 @@ describe("full-screen announcement dialog", () => {
 
   afterEach(() => {
     document.documentElement.style.scrollbarGutter = "";
+    document.body.style.paddingRight = "";
   });
 
   it("opens the rendered article without fetching or navigating and restores focus on close", async () => {
@@ -134,13 +137,28 @@ describe("full-screen announcement dialog", () => {
   it("restores the previous document scroll styles when unmounted while open", async () => {
     const user = userEvent.setup();
     document.body.style.overflow = "scroll";
+    document.body.style.paddingRight = "7px";
     document.documentElement.style.scrollbarGutter = "stable both-edges";
     const { unmount } = renderNews();
     await user.click(screen.getByRole("link", { name: /公開のお知らせ/ }));
     unmount();
     expect(document.body.style.overflow).toBe("scroll");
+    expect(document.body.style.paddingRight).toBe("7px");
     expect(document.documentElement.style.scrollbarGutter).toBe(
       "stable both-edges",
     );
+  });
+
+  it("ignores a delayed close event while the dialog is open", async () => {
+    const user = userEvent.setup();
+    renderNews();
+    await user.click(screen.getByRole("link", { name: /公開のお知らせ/ }));
+    const dialog = screen.getByRole("dialog");
+    fireEvent(dialog, new Event("close"));
+    expect(dialog).toHaveAttribute("open");
+    expect(document.body.style.overflow).toBe("hidden");
+    expect(
+      screen.getByRole("link", { name: /公開のお知らせ/ }),
+    ).toHaveAttribute("aria-expanded", "true");
   });
 });

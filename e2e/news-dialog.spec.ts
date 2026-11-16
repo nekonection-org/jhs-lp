@@ -59,12 +59,20 @@ for (const viewport of [
     await page.keyboard.press("Enter");
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
+    expect(
+      await dialog.evaluate(
+        (element) => getComputedStyle(element, "::backdrop").animationName,
+      ),
+    ).toBe("none");
     const bounds = await dialog.boundingBox();
     if (!bounds) throw new Error("The announcement must fill the viewport");
     expect(bounds.x).toBe(0);
     expect(bounds.y).toBe(0);
     expect(bounds.width).toBe(viewport.width);
     expect(bounds.height).toBe(viewport.height);
+    const panel = await dialog.locator(".news-dialog-panel").boundingBox();
+    expect(panel?.width).toBe(viewport.width);
+    expect(panel?.height).toBe(viewport.height);
     const pageScroll = await page.evaluate(() => scrollY);
     if (viewport.height === 400) {
       const scroll = dialog.locator(".news-dialog-scroll");
