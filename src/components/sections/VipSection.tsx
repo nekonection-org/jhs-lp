@@ -28,7 +28,7 @@ export async function VipSection() {
         <Reveal className="vip-introduction">
           <SectionHeading
             index="03"
-            layout="split"
+            layout="stack"
             description={
               <LocalizedText
                 ja={japaneseContent.description}

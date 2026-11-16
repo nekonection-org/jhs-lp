@@ -34,58 +34,61 @@ export async function ModeratorSection() {
   return (
     <section className="section-shell moderator-section" id="moderator">
       <Container>
-        <Reveal>
-          <SectionHeading
-            index="05"
-            description={
-              <LocalizedText
-                ja={japaneseContent.description}
-                en={englishContent.description}
-              />
-            }
-            eyebrow={
-              <LocalizedText
-                ja={japaneseContent.eyebrow}
-                en={englishContent.eyebrow}
-              />
-            }
-            title={
-              <LocalizedText
-                ja={japaneseContent.title}
-                en={englishContent.title}
-              />
-            }
-          />
-        </Reveal>
-
-        <Reveal className="moderator-status">
-          <div className="flex flex-col gap-5 border-l-2 border-[var(--accent)] pl-5 sm:flex-row sm:items-start sm:justify-between">
-            <div className="flex max-w-3xl items-start gap-4">
-              <span className="pt-1 text-[var(--accent-strong)]">
-                <ClipboardCheck aria-hidden="true" className="size-5" />
-              </span>
-              <div>
-                <h3 className="text-lg font-bold">
-                  <LocalizedText
-                    ja={japaneseContent.statusTitle}
-                    en={englishContent.statusTitle}
-                  />
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                  <LocalizedText
-                    ja={japaneseContent.statusDescription}
-                    en={englishContent.statusDescription}
-                  />
-                </p>
-              </div>
-            </div>
-            <StatusBadge
-              en={en.common.statusLabels[englishContent.status]}
-              ja={ja.common.statusLabels[japaneseContent.status]}
-              status={japaneseContent.status}
+        <div className="moderator-introduction">
+          <Reveal>
+            <SectionHeading
+              index="05"
+              layout="stack"
+              description={
+                <LocalizedText
+                  ja={japaneseContent.description}
+                  en={englishContent.description}
+                />
+              }
+              eyebrow={
+                <LocalizedText
+                  ja={japaneseContent.eyebrow}
+                  en={englishContent.eyebrow}
+                />
+              }
+              title={
+                <LocalizedText
+                  ja={japaneseContent.title}
+                  en={englishContent.title}
+                />
+              }
             />
-          </div>
-        </Reveal>
+          </Reveal>
+
+          <Reveal className="moderator-status">
+            <div className="flex flex-col gap-5 border-l-2 border-[var(--accent)] pl-5 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex max-w-3xl items-start gap-4">
+                <span className="pt-1 text-[var(--accent-strong)]">
+                  <ClipboardCheck aria-hidden="true" className="size-5" />
+                </span>
+                <div>
+                  <h3 className="text-lg font-bold">
+                    <LocalizedText
+                      ja={japaneseContent.statusTitle}
+                      en={englishContent.statusTitle}
+                    />
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                    <LocalizedText
+                      ja={japaneseContent.statusDescription}
+                      en={englishContent.statusDescription}
+                    />
+                  </p>
+                </div>
+              </div>
+              <StatusBadge
+                en={en.common.statusLabels[englishContent.status]}
+                ja={ja.common.statusLabels[japaneseContent.status]}
+                status={japaneseContent.status}
+              />
+            </div>
+          </Reveal>
+        </div>
 
         <div className="moderator-grid">
           {japaneseContent.items.map((item, index) => {

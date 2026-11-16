@@ -20,8 +20,8 @@ export function ServerSection() {
               layout="split"
               description={
                 <LocalizedText
-                  ja={ja.server.welcomeDescription}
-                  en={en.server.welcomeDescription}
+                  ja={ja.server.description}
+                  en={en.server.description}
                 />
               }
               eyebrow={
@@ -50,7 +50,7 @@ export function ServerSection() {
                 en={en.server.settingsDescription}
               />
             </p>
-            <dl className="mt-5 divide-y divide-[var(--border)] border-y border-[var(--border)]">
+            <dl className="server-specifications">
               {ja.server.settings.map((setting) => {
                 const englishSetting = getMatchingItem(
                   en.server.settings,
@@ -59,7 +59,7 @@ export function ServerSection() {
 
                 return (
                   <div
-                    className="grid gap-2 py-4 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] sm:items-baseline sm:gap-4"
+                    className="server-specification"
                     key={setting.id}
                     data-reveal-item
                   >
@@ -69,7 +69,7 @@ export function ServerSection() {
                         en={englishSetting.label}
                       />
                     </dt>
-                    <dd className="text-sm font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:text-right">
+                    <dd className="text-sm font-semibold tracking-[-0.01em] text-[var(--text-primary)]">
                       <LocalizedText
                         ja={setting.value}
                         en={englishSetting.value}

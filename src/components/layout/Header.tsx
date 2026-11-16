@@ -12,7 +12,6 @@ import { LocalizedExternalAction } from "@/components/ui/ActionLink";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
-import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { getContent, navigationItemIds } from "@/content";
 import { useActiveSection } from "@/hooks/useActiveSection";
@@ -217,7 +216,6 @@ export function Header() {
         </Button>
       </Container>
 
-      <ScrollProgress />
       <AnimatePresence initial={false}>
         {menuOpen ? (
           <motion.div

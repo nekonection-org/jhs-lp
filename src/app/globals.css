@@ -222,7 +222,9 @@ html[data-locale="en"] [data-locale-content="en"] {
 }
 
 .hero-layout {
+  display: grid;
   min-width: 0;
+  gap: 2rem;
 }
 
 .hero-masthead {
@@ -230,7 +232,6 @@ html[data-locale="en"] [data-locale-content="en"] {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
 
 .hero-brand {
@@ -258,9 +259,9 @@ html[data-locale="en"] [data-locale-content="en"] {
 }
 
 .hero-headline {
-  font-size: clamp(3rem, 14vw, 10.5rem);
+  font-size: clamp(3rem, 13.8vw, 7.5rem);
   font-weight: 500;
-  line-height: 0.9;
+  line-height: 0.94;
   letter-spacing: -0.075em;
   text-transform: uppercase;
 }
@@ -276,7 +277,7 @@ html[data-locale="en"] [data-locale-content="en"] {
 
 .hero-wordmark-last {
   margin-top: 0.08em;
-  text-align: right;
+  text-align: left;
 }
 
 .hero-wordmark-dot {
@@ -284,17 +285,18 @@ html[data-locale="en"] [data-locale-content="en"] {
 }
 
 .hero-introduction {
+  min-width: 0;
   display: grid;
   gap: 1.25rem;
-  margin-top: clamp(2rem, 4vw, 3.5rem);
+  align-content: center;
 }
 
 .hero-tagline {
-  max-width: 32rem;
-  font-size: clamp(1.25rem, 2.6vw, 2.125rem);
+  max-width: 25rem;
+  font-size: clamp(1.375rem, 2.5vw, 2.125rem);
   font-weight: 450;
-  line-height: 1.55;
-  letter-spacing: -0.035em;
+  line-height: 1.6;
+  letter-spacing: -0.04em;
   text-wrap: balance;
 }
 
@@ -321,8 +323,7 @@ html[data-locale="en"] [data-locale-content="en"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 3.5rem;
-  margin-top: 1.5rem;
+  min-height: 4rem;
   color: var(--text-secondary);
   font-size: 0.8125rem;
 }
@@ -336,17 +337,18 @@ html[data-locale="en"] [data-locale-content="en"] {
 }
 
 .server-planner-reveal {
-  margin-top: 2.5rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
 }
 
 .server-planner {
-  padding-block: 1.5rem;
-  border-block: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .server-planner-toolbar {
   display: grid;
   gap: 0.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .server-planner-toolbar > label,
@@ -377,28 +379,16 @@ html[data-locale="en"] [data-locale-content="en"] {
 .server-planner-panels {
   display: grid;
   gap: 2rem;
-  margin-top: 2rem;
 }
 
 .server-planner-panels > div {
   min-width: 0;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-strong);
-  transition:
-    border-color 180ms ease,
-    translate 180ms ease;
 }
 
 .server-planner .wipe-countdown-block {
   margin: 0;
-}
-
-.planner-panel-index {
-  margin-bottom: 1.25rem;
-  color: var(--text-muted);
-  font-family: var(--font-technical);
-  font-size: 0.6875rem;
-  letter-spacing: 0.08em;
+  padding-block: 1.75rem;
+  border-top: 1px solid var(--border-strong);
 }
 
 .raid-current-time {
@@ -451,29 +441,13 @@ html[data-locale="en"] [data-locale-content="en"] {
 
 .server-reference-grid {
   display: grid;
-  gap: 2rem;
-  margin-top: 3rem;
+  gap: 3rem;
+  margin-top: clamp(3rem, 6vw, 5rem);
 }
 
 .server-reference-grid .settings-panel {
   padding: 0;
   border: 0;
-}
-
-.scroll-progress {
-  position: absolute;
-  inset: auto 0 -1px;
-  height: 2px;
-  transform-origin: left;
-  background: var(--accent);
-  pointer-events: none;
-}
-
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .server-planner-panels > div:hover {
-    translate: 0 -3px;
-    border-color: var(--accent);
-  }
 }
 
 .raid-upcoming {
@@ -542,8 +516,9 @@ html[data-locale="en"] [data-locale-content="en"] {
 .connection-strip {
   display: grid;
   gap: 1.25rem;
-  padding-block: 1.75rem;
-  border-bottom: 1px solid var(--border);
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  padding: 1.5rem 0;
+  border-block: 1px solid var(--border);
 }
 
 .connection-controls {
@@ -698,29 +673,35 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 
 .vip-content {
   display: grid;
-  border-block: 1px solid var(--border);
-  background: var(--surface);
+  gap: 2rem;
+  min-width: 0;
 }
 
 .vip-plan {
   display: flex;
   flex-direction: column;
+  height: 100%;
   padding: 1.5rem;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
 }
 
 .vip-benefits {
-  padding: 1.5rem;
-  border-top: 1px solid var(--border);
+  padding-block: 1.5rem;
+}
+
+.vip-plan dl > div {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .faq-layout {
   display: grid;
   gap: 2.5rem;
-  max-width: 58rem;
 }
 
 .faq-heading {
-  text-align: center;
+  text-align: left;
+  min-width: 0;
 }
 
 .faq-answers {
@@ -732,7 +713,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 
 .moderator-status {
-  margin-top: 2.5rem;
+  min-width: 0;
 }
 
 .moderator-grid {
@@ -761,27 +742,24 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 
 .join-panel {
   display: grid;
-  justify-items: center;
-  gap: 2rem;
-  padding-block: clamp(5rem, 9vw, 8rem);
-  text-align: center;
+  gap: 2.5rem;
+  padding-block: clamp(4rem, 8vw, 7rem);
 }
 
 .join-copy {
   width: 100%;
-  max-width: 52rem;
+  max-width: 48rem;
 }
 .join-panel .section-title {
-  margin-inline: auto;
-  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-size: clamp(2.5rem, 5vw, 4.75rem);
   font-weight: 500;
   line-height: 1.3;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.05em;
 }
 
 .join-description {
   max-width: 34rem;
-  margin: 1.5rem auto 0;
+  margin-top: 1.5rem;
   color: var(--text-secondary);
   font-size: 0.9375rem;
   line-height: 1.9;
@@ -790,7 +768,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .join-actions {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: stretch;
   gap: 0.75rem;
 }
 
@@ -800,10 +778,8 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 
 .raid-schedule {
   margin-top: 0;
-  padding: 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--surface);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-strong);
 }
 
 .raid-schedule-table {
@@ -893,8 +869,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     font-size: 0.875rem;
   }
   .settings-panel,
-  .vip-plan,
-  .vip-benefits {
+  .vip-plan {
     padding: 2rem;
   }
   .join-actions {
@@ -903,10 +878,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 
 @media (min-width: 768px) {
-  .hero-introduction {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
-    gap: 4rem;
-  }
   .raid-upcoming li {
     grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr);
     align-items: center;
@@ -936,13 +907,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 @media (min-width: 1024px) {
   .server-overview {
     gap: 3rem;
-  }
-  .vip-content {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  }
-  .vip-benefits {
-    border-top: 0;
-    border-left: 1px solid var(--border);
   }
   .connection-strip {
     grid-template-columns: minmax(0, 0.65fr) minmax(0, 1.35fr);
@@ -1055,42 +1019,105 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 
 /* Wipe and raid use the same clock and selected time zone. */
-.wipe-countdown-block {
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border);
-}
-
-.wipe-countdown-block h3,
-.wipe-countdown > span:first-child,
-.wipe-reference {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+.wipe-countdown-block h3 {
+  max-width: 26rem;
+  font-size: 0.875rem;
+  font-weight: 550;
+  line-height: 1.8;
 }
 
 .wipe-countdown-block > time {
   display: block;
-  margin-top: 0.5rem;
-  font-size: clamp(1.0625rem, 2.2vw, 1.5rem);
+  margin-top: 1.25rem;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  letter-spacing: -0.045em;
   font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+
+.wipe-time-zone,
+.wipe-reference {
+  margin-top: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.8;
 }
 
 .wipe-countdown {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1rem;
-  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
 }
 
-.wipe-countdown > span:last-child {
-  font-family: var(--font-technical);
-  font-size: 0.9375rem;
+.wipe-countdown > span:first-child {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.wipe-countdown-value {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 1.25rem;
   font-variant-numeric: tabular-nums;
 }
 
+.wipe-countdown-days {
+  font-size: clamp(4.5rem, 8vw, 7rem);
+  line-height: 1;
+  font-weight: 450;
+  letter-spacing: -0.07em;
+}
+
+.wipe-countdown-days > span {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  letter-spacing: 0;
+  color: var(--text-secondary);
+}
+
+.wipe-countdown-time {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+  font-family: var(--font-technical);
+}
+
 .wipe-reference {
-  margin-top: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.server-planner-tools {
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.server-planner-checker {
+  padding-top: 1.5rem;
+}
+
+.server-specifications {
+  display: grid;
+  column-gap: 2.5rem;
+}
+
+.server-specification {
+  display: grid;
+  align-content: start;
+  gap: 0.625rem;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.server-specification dd {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.moderator-introduction {
+  display: grid;
+  gap: 2.5rem;
 }
 
 .markdown-content {
@@ -1219,33 +1246,105 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   outline-offset: 3px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
+  .server-planner-tools {
+    padding: 2rem;
+  }
+  .server-specifications {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .server-planner-toolbar {
-    grid-template-columns: auto minmax(12rem, 22rem) minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem 1rem;
   }
   .server-planner-toolbar .raid-current-time {
-    justify-self: end;
+    grid-column: 1 / -1;
   }
 }
 
 @media (min-width: 1024px) {
+  .hero-layout {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
+    gap: 3rem 4rem;
+    align-items: center;
+  }
+  .hero-masthead {
+    grid-column: 1 / -1;
+  }
+  .hero-headline {
+    font-size: clamp(5rem, 7.8vw, 7rem);
+  }
+  .hero-introduction {
+    gap: 1.5rem;
+  }
   .server-planner-panels {
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
-    gap: 4rem;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 5rem;
+    align-items: stretch;
   }
   .server-reference-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
     align-items: start;
+    gap: 4rem;
+  }
+  .rules-layout {
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
+    gap: 6rem;
+    align-items: start;
+  }
+  .rules-introduction {
+    position: sticky;
+    top: 7rem;
+  }
+  .rule-feature {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .rule-feature > div:last-child {
+    padding-left: 2.75rem;
+  }
+  .vip-layout {
+    grid-template-columns: minmax(0, 0.65fr) minmax(0, 1.7fr);
     gap: 3rem;
+    align-items: start;
+  }
+  .vip-content {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .vip-introduction .section-title {
+    font-size: clamp(2rem, 3.4vw, 3.25rem);
+  }
+  .faq-layout {
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
+    gap: 6rem;
+    align-items: start;
+  }
+  .faq-heading {
+    position: sticky;
+    top: 7rem;
+  }
+  .moderator-introduction {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    gap: 5rem;
+    align-items: end;
+  }
+  .news-layout {
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
+    gap: 6rem;
+    align-items: start;
+  }
+  .join-panel {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 5rem;
+    align-items: end;
+  }
+  .join-actions {
+    flex-direction: column;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-progress {
-    display: none;
-  }
   .server-planner [data-reveal-item],
   .raid-japan-equivalent,
   .wipe-countdown-block > time,

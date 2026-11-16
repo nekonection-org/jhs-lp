@@ -34,7 +34,7 @@ describe("ServerSection", () => {
     ).toHaveTextContent("12:00〜24:00 JST");
     expect(screen.queryByText("前哨基地統合")).not.toBeInTheDocument();
     expect(screen.getByText("サーバー情報").closest("h2")).not.toBeNull();
-    expect(screen.getByText(/初心者から上級者まで/)).toBeInTheDocument();
+    expect(screen.getByText(/基本方針と/)).toBeInTheDocument();
   });
 
   it("exposes weekday and weekend raid windows as a labeled table", () => {

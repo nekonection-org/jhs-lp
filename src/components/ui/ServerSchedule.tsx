@@ -105,45 +105,8 @@ export function ServerSchedule() {
 
   return (
     <div className="server-planner">
-      <div className="server-planner-toolbar">
-        <label htmlFor="raid-time-zone">{copy.timeZone}</label>
-        <select
-          id="raid-time-zone"
-          value={timeZone}
-          onChange={(event) => store.setTimeZone(event.target.value)}
-          disabled={now === null}
-        >
-          {zones.map((zone) => (
-            <option key={zone} value={zone}>
-              {zone === deviceZone ? `${zone} · ${copy.deviceZone}` : zone}
-            </option>
-          ))}
-        </select>
-        <p className="raid-current-time">
-          <span>{copy.now}</span>
-          <time
-            dateTime={now === null ? undefined : new Date(now).toISOString()}
-          >
-            {now === null
-              ? "—"
-              : new Intl.DateTimeFormat(locale === "ja" ? "ja-JP" : "en-GB", {
-                  timeZone,
-                  month: "short",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  hourCycle: "h23",
-                  timeZoneName: "shortOffset",
-                }).format(now)}
-          </time>
-        </p>
-      </div>
       <div className="server-planner-panels">
         <div className="wipe-countdown-block" data-reveal-item>
-          <p className="planner-panel-index" aria-hidden="true">
-            01 / WIPE
-          </p>
           <h3>{copy.nextWipe}</h3>
           <motion.time
             key={`${nextWipe}-${timeZone}`}
@@ -158,21 +121,64 @@ export function ServerSchedule() {
           >
             {nextWipe === null ? "—" : dateTime(nextWipe)}
           </motion.time>
-          <p className="wipe-countdown" aria-hidden="true">
+          <p className="wipe-time-zone">{timeZone}</p>
+          <p className="wipe-countdown">
             <span>{copy.untilWipe}</span>
-            <span>
-              {wipeCountdown
-                ? `${wipeCountdown.days}${copy.days} ${wipeCountdown.time}`
-                : "—"}
+            <span className="wipe-countdown-value">
+              <span className="wipe-countdown-days">
+                {wipeCountdown?.days ?? "—"}
+                <span>{copy.days}</span>
+              </span>{" "}
+              <span className="wipe-countdown-time">
+                {wipeCountdown?.time ?? "—"}
+              </span>
             </span>
           </p>
           <p className="wipe-reference">{wipeReference}</p>
         </div>
-        <div className="server-planner-checker" data-reveal-item>
-          <p className="planner-panel-index" aria-hidden="true">
-            02 / RAID
-          </p>
-          <RaidTimeChecker timeZone={timeZone} now={now} />
+        <div className="server-planner-tools" data-reveal-item>
+          <div className="server-planner-toolbar">
+            <label htmlFor="raid-time-zone">{copy.timeZone}</label>
+            <select
+              id="raid-time-zone"
+              value={timeZone}
+              onChange={(event) => store.setTimeZone(event.target.value)}
+              disabled={now === null}
+            >
+              {zones.map((zone) => (
+                <option key={zone} value={zone}>
+                  {zone === deviceZone ? `${zone} · ${copy.deviceZone}` : zone}
+                </option>
+              ))}
+            </select>
+            <p className="raid-current-time">
+              <span>{copy.now}</span>
+              <time
+                dateTime={
+                  now === null ? undefined : new Date(now).toISOString()
+                }
+              >
+                {now === null
+                  ? "—"
+                  : new Intl.DateTimeFormat(
+                      locale === "ja" ? "ja-JP" : "en-GB",
+                      {
+                        timeZone,
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                        hourCycle: "h23",
+                        timeZoneName: "shortOffset",
+                      },
+                    ).format(now)}
+              </time>
+            </p>
+          </div>
+          <div className="server-planner-checker">
+            <RaidTimeChecker timeZone={timeZone} now={now} />
+          </div>
         </div>
       </div>
       <details className="raid-upcoming">

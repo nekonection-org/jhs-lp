@@ -43,7 +43,11 @@ for (const viewport of [
       expect(bounds.x + bounds.width).toBeLessThanOrEqual(viewport.width - 19);
     }
     expect(actions.y + actions.height).toBeLessThanOrEqual(viewport.height);
-    expect(intro.y).toBeGreaterThanOrEqual(headline.y + headline.height);
+    if (viewport.width >= 1024) {
+      expect(intro.x).toBeGreaterThan(headline.x + headline.width);
+    } else {
+      expect(intro.y).toBeGreaterThanOrEqual(headline.y + headline.height);
+    }
     expect(media.y).toBeGreaterThanOrEqual(intro.y + intro.height);
     await expect(page.locator("#top .server-planner")).toHaveCount(0);
     expect(
@@ -89,7 +93,9 @@ test("レイド時間の背景画像を使わず、紹介・参加・ルール�
   await expect(page).toHaveURL(/#rules$/);
 });
 
-test("FAQは中央の導入に続けて質問一覧を縦に配置する", async ({ page }) => {
+test("FAQはデスクトップで案内と質問を分け、モバイルでは読み順に並ぶ", async ({
+  page,
+}) => {
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
@@ -98,7 +104,11 @@ test("FAQは中央の導入に続けて質問一覧を縦に配置する", async
     const answers = await page.locator(".faq-answers").boundingBox();
     if (!heading || !answers)
       throw new Error("FAQ introduction and answers must be rendered");
-    expect(answers.y).toBeGreaterThanOrEqual(heading.y + heading.height);
+    if (width >= 1024) {
+      expect(answers.x).toBeGreaterThan(heading.x + heading.width);
+    } else {
+      expect(answers.y).toBeGreaterThanOrEqual(heading.y + heading.height);
+    }
     await expect(
       page.locator(".faq-heading").getByRole("link", { name: /Discordに参加/ }),
     ).toHaveAttribute("href", e2eEnvironment.discordUrl);
@@ -131,12 +141,12 @@ test("表示中にReduced Motionへ切り替えても本文を表示し、再表
   expect(runtimeErrors).toEqual([]);
 });
 
-test("スクロールでサーバー情報と操作を表示し、Reduced Motionでは進捗バーを隠す", async ({
+test("進捗ラインを設けず、スクロール先の情報と日時操作を表示する", async ({
   page,
 }) => {
   await page.goto("/");
   const progress = page.locator(".scroll-progress");
-  await expect(progress).toHaveCount(1);
+  await expect(progress).toHaveCount(0);
   await page.locator("#server h2").scrollIntoViewIfNeeded();
   await expect(page.locator(".server-introduction")).toHaveAttribute(
     "data-reveal-state",
@@ -147,11 +157,6 @@ test("スクロールでサーバー情報と操作を表示し、Reduced Motion
     "data-reveal-state",
     "entered",
   );
-  await expect
-    .poll(() =>
-      progress.evaluate((element) => getComputedStyle(element).transform),
-    )
-    .not.toBe("matrix(0, 0, 0, 1, 0, 0)");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(progress).toHaveCount(0);
   await expect

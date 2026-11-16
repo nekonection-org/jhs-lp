@@ -16,10 +16,10 @@ export async function NewsSection({ page = 1 }: NewsSectionProps) {
   return (
     <section className="section-shell" id="news">
       <Container className="news-layout">
-        <Reveal>
+        <Reveal className="news-introduction">
           <SectionHeading
             index="06"
-            layout="split"
+            layout="stack"
             description={
               <LocalizedText
                 ja={ja.news.description}
