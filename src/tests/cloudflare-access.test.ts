@@ -173,4 +173,40 @@ describe("administrator request authentication", () => {
       "unauthenticated",
     );
   });
+
+  it("fails closed in production even with the local identity configured", async () => {
+    await expectAccessFailure(
+      authenticateAdminRequest(new Headers(), {
+        NODE_ENV: "production",
+        ADMIN_DEV_BYPASS: "true",
+        ADMIN_DEV_EMAIL: allowedEmail,
+        ADMIN_ALLOWED_EMAILS: allowedEmail,
+      }),
+      "unavailable",
+    );
+  });
+
+  it("does not grant development access without an explicit opt-in", async () => {
+    await expectAccessFailure(
+      authenticateAdminRequest(new Headers(), {
+        NODE_ENV: "development",
+        ADMIN_DEV_BYPASS: "false",
+        ADMIN_DEV_EMAIL: allowedEmail,
+        ADMIN_ALLOWED_EMAILS: allowedEmail,
+      }),
+      "unavailable",
+    );
+  });
+
+  it("rejects a development identity outside the allowlist", async () => {
+    await expectAccessFailure(
+      authenticateAdminRequest(new Headers(), {
+        NODE_ENV: "development",
+        ADMIN_DEV_BYPASS: "true",
+        ADMIN_DEV_EMAIL: "other@example.com",
+        ADMIN_ALLOWED_EMAILS: allowedEmail,
+      }),
+      "forbidden",
+    );
+  });
 });

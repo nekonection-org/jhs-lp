@@ -34,6 +34,10 @@ services:
       DATABASE_URL: ""
       PRISMA_REQUIRE_DATABASE_CONFIG: "true"
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      # Explicit local identity; ignored by authentication in production builds.
+      ADMIN_DEV_BYPASS: "true"
+      ADMIN_DEV_EMAIL: local-admin@example.com
+      ADMIN_ALLOWED_EMAILS: local-admin@example.com
     depends_on:
       mysql:
         condition: service_healthy

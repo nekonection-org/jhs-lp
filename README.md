@@ -94,7 +94,9 @@ pnpm dev --hostname 0.0.0.0
 
 MySQL `8.4.10`はコンテナ内の`mysql:3306`で利用し、開発用`jhs_dev`とテスト用`jhs_test`を分けています。DB接続情報は専用Composeが設定するため、`.env.local`のホスト用DB設定を書き換える必要はありません。ここで使うパスワードは開発専用の固定値です。MySQLのポートはホストへ公開しません。本番Compose・Cloudflare Tunnel・本番のsecretは使用しません。
 
-Discordなどの公開URLや管理画面の開発バイパスを設定したい場合は、既存の`.env.local`を使用します。ファイルがない場合にだけ`cp .env.example .env.local`で作成し、必要な項目を編集してください。管理画面のバイパス設定は後述の「ローカル管理画面開発」を参照してください。
+Dev Containerでは開発専用の管理者`local-admin@example.com`を設定するため、`pnpm dev`で起動した`/admin`へそのままアクセスできます。この開発用認証は本番では無効です。既存のコンテナには、Dev Containerの再ビルドで設定が反映されます。再ビルドせずに利用する場合は、後述の「ローカル管理画面開発」の3項目を`.env.development.local`へ設定し、開発サーバーを再起動してください。
+
+Discordなどの公開URLには、既存の`.env.local`を使用します。ファイルがない場合にだけ`cp .env.example .env.local`で作成し、必要な項目を編集してください。
 
 品質チェックは通常の`pnpm typecheck`、`pnpm lint`、`pnpm format:check`、`pnpm test`、`pnpm build`を使用します。DB統合テストと管理画面のE2Eは、コンテナ内でテストDBを指定します。
 
@@ -377,7 +379,7 @@ DATABASE_PASSWORD_FILE=secrets/mysql-password
 DATABASE_NAME=jhs
 ```
 
-Cloudflareログインを使わないローカル開発に限り、次を設定できます。
+Cloudflareログインを使わないローカル開発に限り、`.env.development.local`へ次を設定できます。このファイルはGitの管理対象外で、`next build`・`next start`では読み込まれません。
 
 ```env
 ADMIN_ALLOWED_EMAILS=local-admin@example.com
@@ -386,6 +388,8 @@ ADMIN_DEV_EMAIL=local-admin@example.com
 ```
 
 環境変数を変更した場合は、起動中の`pnpm dev`を再起動してください。このバイパスは`NODE_ENV=development`以外では必ず無効になります。本番で`ADMIN_DEV_BYPASS=true`を設定しても認証を通過しません。
+
+ローカルの`/admin`に「管理画面の認証を現在確認できません。」と表示される場合は、Cloudflare Access設定も開発用の3項目も読み込まれていない可能性があります。上記の開発用設定とサーバーの再起動を確認してください。本番環境では開発用設定を使わず、後述のCloudflare Access設定を行います。
 
 ### バックアップ
 
