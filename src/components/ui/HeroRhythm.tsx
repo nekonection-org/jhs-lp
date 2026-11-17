@@ -1,21 +1,63 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId } from "react";
+import { useAnimate } from "motion/react";
 
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { motionTiming } from "@/lib/motion";
 
 export function HeroRhythm() {
   const reduceMotion = useReducedMotion();
-  const scene = useRef<HTMLDivElement>(null);
+  const [scene, animate] = useAnimate<HTMLDivElement>();
   const lightId = useId();
+  const daylightId = `${lightId}-day`;
+  const moonlightId = `${lightId}-night`;
+  const sunId = `${lightId}-sun`;
+  const moonId = `${lightId}-moon`;
 
   useEffect(() => {
     const element = scene.current;
     if (!element || reduceMotion || typeof IntersectionObserver === "undefined")
       return;
+    const shelter = element.querySelector<SVGGElement>(".rhythm-shelter");
+    const paths = [
+      ...element.querySelectorAll<SVGPathElement>("[data-scene-draw]"),
+    ];
+    const animations: ReturnType<typeof animate>[] = [];
+    const restore = () => {
+      shelter?.style.removeProperty("opacity");
+      shelter?.style.removeProperty("transform");
+      for (const path of paths) {
+        path.style.removeProperty("stroke-dasharray");
+        path.style.removeProperty("stroke-dashoffset");
+      }
+    };
+    const enter = () => {
+      if (element.dataset.introState === "entered") return;
+      element.dataset.introState = "entered";
+      if (shelter) {
+        const arrival = animate(
+          shelter,
+          { opacity: [0.2, 1], y: [8, 0] },
+          { ...motionTiming.hero, duration: 0.64 },
+        );
+        animations.push(arrival);
+      }
+      paths.forEach((path, index) => {
+        path.style.strokeDasharray = "1";
+        const drawing = animate(
+          path,
+          { strokeDashoffset: [1, 0] },
+          { ...motionTiming.hero, duration: 0.58, delay: index * 0.06 },
+        );
+        animations.push(drawing);
+      });
+      void Promise.all(animations).then(restore);
+    };
     let inView = false;
     const sync = () => {
       element.dataset.active = String(inView && !document.hidden);
+      if (inView && !document.hidden) enter();
     };
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -30,8 +72,10 @@ export function HeroRhythm() {
       observer.disconnect();
       document.removeEventListener("visibilitychange", sync);
       element.dataset.active = "false";
+      animations.forEach((animation) => animation.complete());
+      restore();
     };
-  }, [reduceMotion]);
+  }, [animate, reduceMotion, scene]);
 
   return (
     <div
@@ -51,6 +95,24 @@ export function HeroRhythm() {
             <stop stopColor="var(--warning)" stopOpacity="0.16" />
             <stop offset="1" stopColor="var(--warning)" stopOpacity="0" />
           </radialGradient>
+          <radialGradient id={daylightId} cx="50%" cy="58%" r="60%">
+            <stop stopColor="var(--warning)" stopOpacity="0.22" />
+            <stop offset="0.55" stopColor="var(--warning)" stopOpacity="0.06" />
+            <stop offset="1" stopColor="var(--warning)" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id={moonlightId} cx="54%" cy="32%" r="68%">
+            <stop stopColor="var(--info)" stopOpacity="0.17" />
+            <stop offset="1" stopColor="var(--info)" stopOpacity="0" />
+          </radialGradient>
+          <linearGradient id={sunId} x1="0" y1="0" x2="0.8" y2="1">
+            <stop stopColor="var(--text-primary)" />
+            <stop offset="0.5" stopColor="var(--warning)" />
+            <stop offset="1" stopColor="var(--warning)" stopOpacity="0.5" />
+          </linearGradient>
+          <linearGradient id={moonId} x1="0" y1="0" x2="1" y2="1">
+            <stop stopColor="var(--text-primary)" />
+            <stop offset="1" stopColor="var(--info)" stopOpacity="0.6" />
+          </linearGradient>
         </defs>
         <rect className="rhythm-sky" width="1440" height="560" />
         <rect
@@ -59,6 +121,20 @@ export function HeroRhythm() {
           height="560"
         />
         <g className="rhythm-world">
+          <rect
+            className="rhythm-daylight rhythm-cycle"
+            x="50"
+            width="650"
+            height="560"
+            fill={`url(#${daylightId})`}
+          />
+          <rect
+            className="rhythm-moonlight rhythm-cycle"
+            x="50"
+            width="650"
+            height="560"
+            fill={`url(#${moonlightId})`}
+          />
           <g className="rhythm-stars rhythm-cycle">
             <path d="M259 155v8m-4-4h8M513 269v8m-4-4h8M376 123v6m-3-3h6" />
             <circle cx="313" cy="198" r="1.4" />
@@ -72,12 +148,24 @@ export function HeroRhythm() {
           {/* Opposite phases share one circular path; counter-rotation keeps the discs upright. */}
           <g className="rhythm-sun-orbit rhythm-celestial-orbit rhythm-cycle">
             <g className="rhythm-sun rhythm-celestial-body rhythm-cycle">
-              <circle cx="350" cy="245" r="44" className="rhythm-sun-disc" />
+              <circle
+                cx="350"
+                cy="245"
+                r="44"
+                className="rhythm-sun-disc"
+                style={{ fill: `url(#${sunId})` }}
+              />
             </g>
           </g>
           <g className="rhythm-moon-orbit rhythm-celestial-orbit rhythm-cycle">
             <g className="rhythm-moon rhythm-celestial-body rhythm-cycle">
-              <circle cx="350" cy="245" r="27" className="rhythm-moon-disc" />
+              <circle
+                cx="350"
+                cy="245"
+                r="27"
+                className="rhythm-moon-disc"
+                style={{ fill: `url(#${moonId})` }}
+              />
               <path
                 d="M360 224a23 23 0 0 1-25 35 27 27 0 0 0 25-35Z"
                 className="rhythm-moon-shade"
@@ -99,6 +187,8 @@ export function HeroRhythm() {
             />
             <path
               className="rhythm-ridge-line"
+              pathLength="1"
+              data-scene-draw
               d="M-1000 449C-780 422-625 351-420 385S-180 472 0 449C104 440 151 349 233 358S349 292 401 326 568 422 720 336S1200 392 1600 348"
             />
             <g className="rhythm-distant-ridge">
@@ -136,7 +226,16 @@ export function HeroRhythm() {
                   d="m436 379 62 41m-50-47 62 41"
                   className="rhythm-roof-seams"
                 />
-                <path d="M363 426h123l35-17" className="rhythm-shelter-roof" />
+                <path
+                  d="M363 426h123l35-17"
+                  className="rhythm-shelter-roof"
+                  pathLength="1"
+                  data-scene-draw
+                />
+                <path
+                  d="m424 385 35-17 62 41"
+                  className="rhythm-roof-light rhythm-cycle"
+                />
               </g>
               <path d="M380 439h24v20h-24Z" className="rhythm-window-frame" />
               <path

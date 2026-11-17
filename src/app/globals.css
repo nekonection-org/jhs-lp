@@ -513,9 +513,16 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   opacity: 0;
   animation-name: rhythm-nightfall;
 }
+.rhythm-daylight {
+  animation-name: rhythm-daylight;
+}
+.rhythm-moonlight {
+  opacity: 0;
+  animation-name: rhythm-nightfall;
+}
 .rhythm-sun-disc {
   fill: var(--warning);
-  fill-opacity: 0.28;
+  fill-opacity: 0.62;
 }
 .rhythm-moon-disc {
   fill: var(--text-primary);
@@ -539,14 +546,14 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   animation-name: rhythm-air;
 }
 .rhythm-ridge-far {
-  fill: color-mix(in srgb, var(--text-primary) 7%, var(--background));
+  fill: color-mix(in srgb, var(--text-primary) 10%, var(--background));
 }
 .rhythm-ridge-line {
   stroke: var(--text-primary);
-  stroke-opacity: 0.12;
+  stroke-opacity: 0.2;
 }
 .rhythm-ridge-mid {
-  fill: color-mix(in srgb, var(--text-primary) 4%, var(--background));
+  fill: color-mix(in srgb, var(--text-primary) 6%, var(--background));
 }
 .rhythm-vegetation {
   fill: var(--surface);
@@ -558,7 +565,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   stroke-linejoin: round;
 }
 .rhythm-shelter-wall {
-  fill: color-mix(in srgb, var(--text-secondary) 9%, var(--background));
+  fill: color-mix(in srgb, var(--text-secondary) 14%, var(--background));
   stroke: var(--text-secondary);
   stroke-opacity: 0.5;
 }
@@ -581,6 +588,12 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   fill: none;
   stroke: var(--text-secondary);
   stroke-opacity: 0.6;
+}
+.rhythm-roof-light {
+  stroke: var(--warning);
+  stroke-width: 1.5;
+  opacity: 0.45;
+  animation-name: rhythm-daylight;
 }
 .rhythm-roof-panel {
   fill: color-mix(in srgb, var(--danger) 18%, var(--surface-secondary));
@@ -659,7 +672,22 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .hero-rhythm[data-active="true"] .rhythm-cycle {
   animation-play-state: running;
 }
+.rhythm-stars circle {
+  animation: rhythm-twinkle 4.8s ease-in-out infinite alternate paused;
+}
+.rhythm-stars circle:nth-child(2n) {
+  animation-delay: -1.6s;
+}
+.rhythm-stars circle:nth-child(3n) {
+  animation-delay: -3.2s;
+}
+.hero-rhythm[data-active="true"] .rhythm-stars circle {
+  animation-play-state: running;
+}
 .rhythm-night-sky,
+.rhythm-daylight,
+.rhythm-moonlight,
+.rhythm-roof-light,
 .rhythm-stars,
 .rhythm-window,
 .rhythm-lamplight,
@@ -692,6 +720,28 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   }
   38%,
   62% {
+    opacity: 1;
+  }
+}
+@keyframes rhythm-daylight {
+  0%,
+  14%,
+  100% {
+    opacity: 1;
+  }
+  38%,
+  66% {
+    opacity: 0;
+  }
+  86% {
+    opacity: 0.6;
+  }
+}
+@keyframes rhythm-twinkle {
+  from {
+    opacity: 0.35;
+  }
+  to {
     opacity: 1;
   }
 }
@@ -1714,16 +1764,25 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     transform: none !important;
     clip-path: none !important;
     opacity: 1 !important;
+    filter: none !important;
   }
   .hero-rhythm .rhythm-cycle {
     animation: none !important;
     transform: none !important;
   }
+  .hero-rhythm .rhythm-stars circle {
+    animation: none !important;
+    opacity: 1;
+  }
+  .hero-rhythm :is(.rhythm-daylight, .rhythm-roof-light) {
+    opacity: 0;
+  }
   .hero-rhythm .rhythm-sun,
   .hero-rhythm .rhythm-clouds {
     opacity: 0;
   }
-  .hero-rhythm :is(.rhythm-moon, .rhythm-stars, .rhythm-night-sky) {
+  .hero-rhythm
+    :is(.rhythm-moon, .rhythm-stars, .rhythm-night-sky, .rhythm-moonlight) {
     opacity: 1;
   }
   .hero-rhythm :is(.rhythm-window, .rhythm-lamplight) {

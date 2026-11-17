@@ -34,6 +34,7 @@ export function FadeContent({
     const restore = (target: HTMLElement) => {
       target.style.removeProperty("opacity");
       target.style.removeProperty("transform");
+      target.style.removeProperty("filter");
     };
 
     if (reduceMotion || typeof IntersectionObserver === "undefined") {
@@ -72,13 +73,31 @@ export function FadeContent({
             sequence === "hero" ? motionTiming.hero : motionTiming.entrance;
           const stagger =
             sequence === "hero"
-              ? Math.min(visibleTargets.indexOf(target) * 0.05, 0.2)
+              ? Math.min(visibleTargets.indexOf(target) * 0.035, 0.14)
               : Math.min(visibleTargets.indexOf(target) * 0.035, 0.07);
+          const focusLine =
+            sequence === "hero" &&
+            target.classList.contains("hero-headline-line");
           const animation = animate(
             target,
             {
-              opacity: [initiallyVisible.has(target) ? 0.8 : 0, 1],
-              y: [initiallyVisible.has(target) ? 8 : 12, 0],
+              opacity: [
+                sequence === "hero"
+                  ? 0.3
+                  : initiallyVisible.has(target)
+                    ? 0.8
+                    : 0,
+                1,
+              ],
+              y: [
+                sequence === "hero"
+                  ? 12
+                  : initiallyVisible.has(target)
+                    ? 8
+                    : 12,
+                0,
+              ],
+              ...(focusLine ? { filter: ["blur(6px)", "blur(0px)"] } : {}),
             },
             { ...timing, delay: Math.min(Math.max(delay, 0), 0.08) + stagger },
           );
@@ -105,7 +124,11 @@ export function FadeContent({
   }, [animate, delay, reduceMotion, scope, sequence]);
 
   return (
-    <div ref={scope} className={className} data-motion-profile="fade-up">
+    <div
+      ref={scope}
+      className={className}
+      data-motion-profile={sequence === "hero" ? "hero-focus" : "fade-up"}
+    >
       {children}
     </div>
   );

@@ -1,10 +1,10 @@
 export const motionTiming = {
   entrance: {
-    duration: 0.36,
+    duration: 0.4,
     ease: [0.16, 1, 0.3, 1],
   },
   hero: {
-    duration: 0.44,
+    duration: 0.54,
     ease: [0.16, 1, 0.3, 1],
   },
   menu: {
