@@ -519,9 +519,22 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   overflow: clip;
 }
 .hero-stage {
+  --hero-content-inset: max(1.25rem, calc((100% - 75rem) / 2 + 1.25rem));
   position: relative;
   isolation: isolate;
   overflow: clip;
+}
+.hero-stage::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--background) var(--hero-content-inset),
+    transparent calc(var(--hero-content-inset) + clamp(4rem, 12vw, 10rem))
+  );
 }
 .hero-scroll-scene {
   position: relative;
@@ -534,7 +547,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 .hero-rhythm {
   --rhythm-cycle-duration: 24s;
   --rhythm-world-offset: 815px;
-  --hero-content-inset: max(1.25rem, calc((100% - 75rem) / 2 + 1.25rem));
   --rhythm-right-fade: linear-gradient(
     90deg,
     transparent 68%,
@@ -1662,7 +1674,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
     grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.4fr);
     column-gap: 1.25rem;
   }
-  .hero-rhythm {
+  .hero-stage {
     --hero-content-inset: max(2rem, calc((100% - 75rem) / 2 + 2rem));
   }
   .hero-layout {
@@ -1747,12 +1759,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .hero-rhythm::after {
     background:
       var(--rhythm-right-fade),
-      linear-gradient(
-        90deg,
-        var(--background),
-        color-mix(in srgb, var(--background) 90%, transparent) 30%,
-        transparent 75%
-      ),
       linear-gradient(0deg, var(--background), transparent 25%);
   }
 }
