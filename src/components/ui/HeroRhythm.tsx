@@ -113,10 +113,6 @@ export function HeroRhythm() {
               </g>
             </g>
           </g>
-          <g className="rhythm-clouds rhythm-cycle">
-            <path d="M410 190h170M453 205h80M135 292h115M158 307h140" />
-            <path className="rhythm-cloud-veil" d="M296 270c38-4 78-4 124 0" />
-          </g>
           <g className="rhythm-landscape">
             <path
               className="rhythm-ridge-far"
