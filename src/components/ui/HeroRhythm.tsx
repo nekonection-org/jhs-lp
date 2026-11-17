@@ -8,6 +8,7 @@ export function HeroRhythm() {
   const reduceMotion = useReducedMotion();
   const scene = useRef<HTMLDivElement>(null);
   const lightId = useId();
+  const sunId = `${lightId}-sun-disc`;
   const moonId = `${lightId}-moon`;
 
   useEffect(() => {
@@ -52,6 +53,12 @@ export function HeroRhythm() {
             <stop stopColor="var(--warning)" stopOpacity="0.16" />
             <stop offset="1" stopColor="var(--warning)" stopOpacity="0" />
           </radialGradient>
+          <radialGradient id={sunId}>
+            <stop offset="0" stopColor="var(--sun-disc)" />
+            <stop offset="0.78" stopColor="var(--sun-disc)" />
+            <stop offset="0.92" stopColor="var(--sun-disc)" stopOpacity="0.8" />
+            <stop offset="1" stopColor="var(--sun-disc)" stopOpacity="0" />
+          </radialGradient>
           <linearGradient id={moonId} x1="0" y1="0" x2="1" y2="1">
             <stop stopColor="var(--text-primary)" />
             <stop offset="1" stopColor="var(--info)" stopOpacity="0.6" />
@@ -77,7 +84,13 @@ export function HeroRhythm() {
           {/* Opposite phases share one circular path; counter-rotation keeps the discs upright. */}
           <g className="rhythm-sun-orbit rhythm-celestial-orbit rhythm-cycle">
             <g className="rhythm-sun rhythm-celestial-body rhythm-cycle">
-              <circle cx="350" cy="245" r="32" className="rhythm-sun-disc" />
+              <circle
+                cx="350"
+                cy="245"
+                r="32"
+                className="rhythm-sun-disc"
+                style={{ fill: `url(#${sunId})` }}
+              />
             </g>
           </g>
           <g className="rhythm-moon-orbit rhythm-celestial-orbit rhythm-cycle">
@@ -102,6 +115,7 @@ export function HeroRhythm() {
           </g>
           <g className="rhythm-clouds rhythm-cycle">
             <path d="M410 190h170M453 205h80M135 292h115M158 307h140" />
+            <path className="rhythm-cloud-veil" d="M296 270c38-4 78-4 124 0" />
           </g>
           <g className="rhythm-landscape">
             <path
