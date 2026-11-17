@@ -90,8 +90,8 @@ export const en = {
       title: "Connect to the Server",
       description:
         "Paste the command into the F1 console, or launch Rust through Steam and connect directly.",
-      commandLabel: "F1 connection command",
-      copyLabel: "Copy command",
+      commandLabel: "Connection command",
+      copyLabel: "Copy",
       copiedLabel: "Copied",
       copyErrorLabel: "Could not copy",
       copyErrorHelp:

@@ -217,9 +217,7 @@ test("HeroからF1接続コマンドとSteam起動リンクを利用できる", 
   const steamUrl = `steam://run/252490//+connect%20${e2eEnvironment.rustServerAddress}`;
 
   await expect(page.locator("#top code")).toHaveText(command);
-  await expect(
-    page.getByRole("button", { name: "コマンドをコピー" }),
-  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "コピー" })).toBeVisible();
   await expect(
     page.getByRole("link", {
       name: "Steamを起動してJapan Hideaway Serverへ接続する",

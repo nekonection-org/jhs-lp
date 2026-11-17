@@ -90,8 +90,8 @@ export const ja = {
       title: "サーバーへ接続",
       description:
         "F1コンソールへコマンドを貼り付けるか、SteamからRustを起動して接続できます。",
-      commandLabel: "F1接続コマンド",
-      copyLabel: "コマンドをコピー",
+      commandLabel: "接続コマンド",
+      copyLabel: "コピー",
       copiedLabel: "コピーしました",
       copyErrorLabel: "コピーできませんでした",
       copyErrorHelp:

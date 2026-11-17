@@ -112,7 +112,7 @@ export function HeroSection() {
             aria-labelledby="connection-title"
           >
             <Reveal className="connection-strip">
-              <div data-reveal-item>
+              <div className="connection-introduction" data-reveal-item>
                 <h2 className="text-xl font-semibold" id="connection-title">
                   <LocalizedText
                     ja={ja.hero.connection.title}
@@ -134,16 +134,15 @@ export function HeroSection() {
                       en={en.hero.connection.commandLabel}
                     />
                   </p>
-                  <code
-                    className="connection-command"
-                    data-copy-state={copyState}
-                  >
-                    {rustConnection.command}
-                  </code>
-                  <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                  <div className="connection-command-row">
+                    <code
+                      className="connection-command"
+                      data-copy-state={copyState}
+                    >
+                      {rustConnection.command}
+                    </code>
                     <Button
                       aria-live="polite"
-                      className="w-full sm:w-auto"
                       onClick={copyConnectionCommand}
                       size="compact"
                       variant="secondary"
@@ -177,7 +176,6 @@ export function HeroSection() {
                           : en.hero.connection.steamAriaLabel
                       }
                       className={buttonStyles({
-                        className: "w-full sm:w-auto",
                         variant: "secondary",
                         size: "compact",
                       })}

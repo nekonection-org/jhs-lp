@@ -933,20 +933,31 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 .connection-strip {
   display: grid;
-  gap: 2rem;
+  gap: 1.5rem;
   padding-block: 2rem;
 }
 .connection-controls {
   min-width: 0;
 }
+.connection-command-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.connection-command-row .interactive-button {
+  min-width: 0;
+  font-size: 0.875rem;
+}
 .connection-command {
   display: block;
-  margin-top: 0.75rem;
-  padding: 1rem;
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: var(--surface);
-  font-size: 1rem;
+  font-size: 0.875rem;
   line-height: 1.8;
   overflow-wrap: anywhere;
   transition: border-color 150ms ease;
@@ -1694,6 +1705,22 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   }
 }
 @media (min-width: 768px) {
+  .connection-introduction {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+    align-items: start;
+    gap: 2rem;
+  }
+  .connection-introduction > p {
+    max-width: none;
+    margin-top: 0;
+  }
+  .connection-command-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+  .connection-command {
+    grid-column: auto;
+  }
   .wipe-countdown-block {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1775,10 +1802,6 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   }
   .hero-description {
     max-width: 30rem;
-  }
-  .connection-strip {
-    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1fr);
-    gap: 4rem;
   }
   .section-heading-split {
     display: grid;
