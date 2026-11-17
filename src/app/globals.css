@@ -885,10 +885,10 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   border-block: 1px solid var(--border);
 }
 .wipe-countdown-block h3 {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 500;
   color: var(--text-secondary);
-  line-height: 1.8;
+  line-height: 1.6;
 }
 .wipe-countdown-block > time {
   display: block;
@@ -941,9 +941,9 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   min-width: 0;
 }
 .raid-checker-intro h3 {
-  font-size: 1.25rem;
-  font-weight: 550;
-  line-height: 1.5;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.6;
   letter-spacing: -0.025em;
 }
 .raid-checker-intro p {
@@ -984,7 +984,7 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
 }
 .raid-date-time-fields {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
 .raid-date-time-fields label,
@@ -1539,6 +1539,59 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   }
 }
 @media (min-width: 768px) {
+  .wipe-countdown-block {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "title countdown-label"
+      "date countdown-value"
+      "zone reference";
+    align-items: start;
+    gap: 0.75rem 2.5rem;
+  }
+  .wipe-countdown-block h3 {
+    grid-area: title;
+  }
+  .wipe-countdown-block > time {
+    grid-area: date;
+    margin-top: 0;
+  }
+  .wipe-time-zone {
+    grid-area: zone;
+    margin-top: 0;
+  }
+  .wipe-countdown {
+    display: contents;
+  }
+  .wipe-countdown > span:first-child {
+    grid-area: countdown-label;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+  .wipe-countdown-value {
+    grid-area: countdown-value;
+  }
+  .wipe-countdown-days {
+    font-size: clamp(1.625rem, 2.7vw, 2.25rem);
+    line-height: 1.5;
+  }
+  .wipe-reference {
+    grid-area: reference;
+    margin-top: 0;
+    font-size: 0.875rem;
+  }
+  .raid-checker-controls {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+  .raid-date-time-fields {
+    display: contents;
+  }
+  .raid-time-occurrence,
+  .raid-check-result {
+    grid-column: 1 / -1;
+  }
   .hero-rhythm {
     --rhythm-world-offset: 620px;
   }
@@ -1587,35 +1640,8 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   .section-heading-split .section-description {
     margin: 0;
   }
-  .server-planner-panels {
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: 6rem;
-  }
-  .wipe-countdown-block {
-    padding-block: 0;
-    border: 0;
-  }
-  .wipe-countdown-block > time {
-    margin-top: 1.5rem;
-    max-width: 22rem;
-  }
-  .wipe-countdown {
-    margin-top: 2.5rem;
-  }
   .server-planner-reveal {
     margin-top: 4rem;
-  }
-  .raid-checker-controls {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 1.5rem;
-  }
-  .server-planner-toolbar {
-    grid-column: 1 / -1;
-  }
-  .raid-date-time-fields,
-  .raid-time-occurrence,
-  .raid-check-result {
-    grid-column: 1 / -1;
   }
   .rules-layout {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
