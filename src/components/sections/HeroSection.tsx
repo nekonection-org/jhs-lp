@@ -112,20 +112,16 @@ export function HeroSection() {
             aria-labelledby="connection-title"
           >
             <Reveal className="connection-strip">
-              <div className="connection-introduction" data-reveal-item>
-                <h2 className="text-xl font-semibold" id="connection-title">
-                  <LocalizedText
-                    ja={ja.hero.connection.title}
-                    en={en.hero.connection.title}
-                  />
-                </h2>
-                <p className="mt-2 max-w-md text-sm leading-6 text-[var(--text-secondary)]">
-                  <LocalizedText
-                    ja={ja.hero.connection.description}
-                    en={en.hero.connection.description}
-                  />
-                </p>
-              </div>
+              <h2
+                className="text-xl font-semibold"
+                id="connection-title"
+                data-reveal-item
+              >
+                <LocalizedText
+                  ja={ja.hero.connection.title}
+                  en={en.hero.connection.title}
+                />
+              </h2>
               {rustConnection ? (
                 <div className="connection-controls" data-reveal-item>
                   <p className="text-xs font-bold tracking-[0.08em] text-[var(--text-muted)] uppercase">
@@ -208,6 +204,12 @@ export function HeroSection() {
                   />
                 </p>
               )}
+              <p className="connection-help" data-reveal-item>
+                <LocalizedText
+                  ja={ja.hero.connection.description}
+                  en={en.hero.connection.description}
+                />
+              </p>
             </Reveal>
           </section>
           <a className="hero-explore" href="#server">
