@@ -153,7 +153,7 @@ export async function VipSection() {
                       );
 
                       return (
-                        <div className="py-5" key={benefit.id}>
+                        <div className="py-5" key={benefit.id} data-reveal-item>
                           <div className="flex items-start gap-3">
                             {benefit.icon ? (
                               <ContentIcon

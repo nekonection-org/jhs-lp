@@ -59,3 +59,65 @@ test("Heroの登場が完了すると文字と拠点が鮮明になり、再ス�
   await expect(lines.first()).toHaveCSS("filter", "none");
   expect(errors).toEqual([]);
 });
+
+test("設定行の罫線は一度だけ描画され、動きを減らす設定では静止する", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const row = page.locator(".server-specification").first();
+  await row.scrollIntoViewIfNeeded();
+  await expect(row).toHaveAttribute("data-reveal-state", "entered");
+  await expect
+    .poll(() =>
+      row.evaluate(
+        (element) =>
+          element
+            .getAnimations({ subtree: true })
+            .find(
+              (animation) =>
+                animation instanceof CSSAnimation &&
+                animation.animationName === "section-rule-draw",
+            )?.startTime ?? null,
+      ),
+    )
+    .toEqual(expect.any(Number));
+  const startedAt = await row.evaluate(
+    (element) =>
+      element
+        .getAnimations({ subtree: true })
+        .find(
+          (animation) =>
+            animation instanceof CSSAnimation &&
+            animation.animationName === "section-rule-draw",
+        )?.startTime,
+  );
+  expect(startedAt).toBeDefined();
+  await expect
+    .poll(() =>
+      row.evaluate((element) => getComputedStyle(element, "::after").opacity),
+    )
+    .toBe("0");
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await row.scrollIntoViewIfNeeded();
+  const replayStart = await row.evaluate(
+    (element) =>
+      element
+        .getAnimations({ subtree: true })
+        .find(
+          (animation) =>
+            animation instanceof CSSAnimation &&
+            animation.animationName === "section-rule-draw",
+        )?.startTime,
+  );
+  expect(replayStart).toBe(startedAt);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect
+    .poll(() =>
+      row.evaluate(
+        (element) => getComputedStyle(element, "::after").animationName,
+      ),
+    )
+    .toBe("none");
+  await expect(row).toHaveCSS("opacity", "1");
+  await expect(row).toHaveCSS("transform", "none");
+});
