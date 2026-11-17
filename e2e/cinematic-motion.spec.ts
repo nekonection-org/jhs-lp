@@ -1,13 +1,18 @@
 import { expect, test } from "@playwright/test";
 
-test("Heroの登場が完了すると文字と拠点が鮮明になり、再スクロールで再生し直さない", async ({
+test("Heroの文字は鮮明になり、風景の描画・追加の光演出を表示しない", async ({
   page,
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
   const scene = page.locator(".hero-rhythm");
-  await expect(scene).toHaveAttribute("data-intro-state", "entered");
+  await expect(scene).toHaveAttribute("data-active", "true");
+  await expect(
+    scene.locator(
+      "[data-scene-draw], .rhythm-daylight, .rhythm-moonlight, .rhythm-roof-light",
+    ),
+  ).toHaveCount(0);
   await expect(page.locator(".hero-layout")).toHaveAttribute(
     "data-motion-profile",
     "hero-focus",
@@ -19,26 +24,13 @@ test("Heroの登場が完了すると文字と拠点が鮮明になり、再ス�
     await expect(line).toHaveCSS("transform", "none");
   }
   await expect(scene.locator(".rhythm-shelter")).toHaveCSS("transform", "none");
-  await expect
-    .poll(() =>
-      scene
-        .locator("[data-scene-draw]")
-        .evaluateAll((paths) =>
-          paths.every(
-            (path) =>
-              path.getAttribute("style") === "" ||
-              path.getAttribute("style") === null,
-          ),
-        ),
-    )
-    .toBe(true);
   await page
     .locator("#server h2")
     .evaluate((element) =>
       element.scrollIntoView({ block: "start", behavior: "instant" }),
     );
   await expect(scene).toHaveAttribute("data-active", "false");
-  await expect(scene.locator(".rhythm-daylight")).toHaveCSS(
+  await expect(scene.locator(".rhythm-sun-orbit")).toHaveCSS(
     "animation-play-state",
     "paused",
   );
@@ -50,8 +42,8 @@ test("Heroの登場が完了すると文字と拠点が鮮明になり、再ス�
   await expect(scene).toHaveAttribute("data-active", "true");
   await expect(scene.locator(".rhythm-shelter")).toHaveCSS("transform", "none");
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(scene.locator(".rhythm-daylight")).toHaveCSS("opacity", "0");
-  await expect(scene.locator(".rhythm-moonlight")).toHaveCSS("opacity", "1");
+  await expect(scene.locator(".rhythm-sun")).toHaveCSS("opacity", "0");
+  await expect(scene.locator(".rhythm-moon")).toHaveCSS("opacity", "1");
   await expect(scene.locator(".rhythm-stars circle").first()).toHaveCSS(
     "animation-name",
     "none",

@@ -1,16 +1,15 @@
 # LPの表示・モーション確認
 
-## Heroと各セクションのモーション更新
+## Heroの風景演出の整理
 
-- Source: 既存Hero・SVG風景・コンテンツ構成と、今回のHeroおよび他セクションのアニメーション追加指定。文面、ページ内リンク、拠点の形、24秒の太陽・月の円軌道を維持。
-- Captures: `/tmp/jhs-cinematic-day-1440.png`、`/tmp/jhs-cinematic-night-1440.png`、`/tmp/jhs-cinematic-light-1440.png`（1440 × 900px）、`/tmp/jhs-cinematic-night-390.png`（390 × 844px）。deviceScaleFactor 1。昼0秒・夜12秒の位相で比較。
-- Hero: 見出しのピント・12pxの上下移動・フェードを最大680msで完了。地形と屋根の輪郭の描画、拠点の8pxの登場は最大640ms。終了後はぼかし・変形・描画用のインライン指定を解除。
-- Lighting: 暖色の昼光、寒色の月光、屋根の反射、窓の灯りを同じ24秒周期で連動。星の明滅を追加。天体の周囲の輪・地面の道・新しいパーティクルは追加していない。
-- Sections: 見出しのアイコン、設定・ルール・VIP・お知らせの区切り線に一度だけの登場演出。VIP特典も項目ごとに表示。通常の本文は400msで読める状態になる。
-- Interaction: Heroの主要ボタンの光、ルール・募集詳細の高さと本文の開閉、利用規約の登場、アイコンと矢印のホバー反応を追加。キーボードでも操作できる。
-- Accessibility / performance: 初期HTMLでは本文と風景を表示。画面外・非表示タブで背景と星を停止。Reduced Motionへの途中切替でも、文字のぼかしや変形を残さず静止状態へ移る。スクロール操作とレイアウト位置は変更しない。Canvas・WebGL・新規依存関係なし。
-- Visual findings: ダーク・ライトとPC・モバイルで見出し、CTA、背景の境界、拠点の収まり、文字の読みやすさを確認。対応が必要なP0 / P1 / P2の差異なし。
-- Verification: 型チェック・Lint・フォーマット・単体テスト184件・Production Build・E2E60件が通過。Heroの一度だけの登場、罫線の再生が繰り返されないこと、Reduced Motionへの途中切替を新しいE2Eで検証。
+- Source: 今回の「風景の輪郭描画・昼夜の光が連動する演出をやめる」という指定。
+- Captures: `/tmp/jhs-hero-simple-day-1440.png`、`/tmp/jhs-hero-simple-night-1440.png`、`/tmp/jhs-hero-simple-light-1440.png`（1440 × 900px）、`/tmp/jhs-hero-simple-390.png`（390 × 844px）。deviceScaleFactor 1。
+- Removed: 地形・屋根の線を描く処理、拠点の登場時の上下移動、追加の昼光・月光レイヤー、屋根の反射、および不要になったアニメーション制御・CSSを削除。
+- Preserved: 見出しのフォーカス、太陽・月の24秒の円軌道、従来の風景・昼夜の切替、星の明滅、他セクションと操作時のモーション。
+- Layout / readability: 地形と拠点は初期表示から静止。PC・モバイル、ダーク・ライトで文字、CTA、風景の収まりを確認。文面・リンク・見出しサイズは変更していない。
+- Accessibility: 背景の画面外停止、Reduced Motion、初期HTMLでの本文表示を維持。新しいテストは追加せず、既存のHero検証を削除後の表示へ更新。
+- Visual findings: 対応が必要なP0 / P1 / P2の差異なし。
+- Verification: 型チェック・Lint・フォーマット・単体テスト184件・Production Build・関連E2E19件が通過。
 
 final result: passed
 
