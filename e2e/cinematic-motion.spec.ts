@@ -19,7 +19,8 @@ test("Heroの文字は鮮明になり、風景の描画・追加の光演出を�
   );
   const lines = page.locator(".hero-headline-line:visible");
   for (const line of await lines.all()) {
-    await expect(line).toHaveCSS("filter", "none");
+    // Motion can retain an explicit zero-blur end frame; both values are sharp.
+    await expect(line).toHaveCSS("filter", /^(none|blur\(0px\))$/);
     await expect(line).toHaveCSS("opacity", "1");
     await expect(line).toHaveCSS("transform", "none");
   }

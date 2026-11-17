@@ -8,7 +8,6 @@ export function HeroRhythm() {
   const reduceMotion = useReducedMotion();
   const scene = useRef<HTMLDivElement>(null);
   const lightId = useId();
-  const sunId = `${lightId}-sun`;
   const moonId = `${lightId}-moon`;
 
   useEffect(() => {
@@ -53,11 +52,6 @@ export function HeroRhythm() {
             <stop stopColor="var(--warning)" stopOpacity="0.16" />
             <stop offset="1" stopColor="var(--warning)" stopOpacity="0" />
           </radialGradient>
-          <linearGradient id={sunId} x1="0" y1="0" x2="0.8" y2="1">
-            <stop stopColor="var(--text-primary)" />
-            <stop offset="0.5" stopColor="var(--warning)" />
-            <stop offset="1" stopColor="var(--warning)" stopOpacity="0.5" />
-          </linearGradient>
           <linearGradient id={moonId} x1="0" y1="0" x2="1" y2="1">
             <stop stopColor="var(--text-primary)" />
             <stop offset="1" stopColor="var(--info)" stopOpacity="0.6" />
@@ -83,13 +77,7 @@ export function HeroRhythm() {
           {/* Opposite phases share one circular path; counter-rotation keeps the discs upright. */}
           <g className="rhythm-sun-orbit rhythm-celestial-orbit rhythm-cycle">
             <g className="rhythm-sun rhythm-celestial-body rhythm-cycle">
-              <circle
-                cx="350"
-                cy="245"
-                r="44"
-                className="rhythm-sun-disc"
-                style={{ fill: `url(#${sunId})` }}
-              />
+              <circle cx="350" cy="245" r="32" className="rhythm-sun-disc" />
             </g>
           </g>
           <g className="rhythm-moon-orbit rhythm-celestial-orbit rhythm-cycle">

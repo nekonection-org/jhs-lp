@@ -19,6 +19,7 @@
   --danger: #d87878;
   --info: #8ecae6;
   --warning: #e6b566;
+  --sun-disc: #f4d49b;
   --focus: #b7df9f;
   --header: rgba(12, 13, 15, 0.94);
   --font-technical: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -45,6 +46,7 @@
   --danger: #b84f4f;
   --info: #216a8a;
   --warning: #815d16;
+  --sun-disc: #c88c39;
   --focus: #426b35;
   --header: rgba(245, 245, 246, 0.94);
 }
@@ -590,8 +592,8 @@ body:has(header[data-menu-open="true"]) .mobile-join-bar {
   animation-name: rhythm-nightfall;
 }
 .rhythm-sun-disc {
-  fill: var(--warning);
-  fill-opacity: 0.62;
+  fill: var(--sun-disc);
+  fill-opacity: 0.9;
 }
 .rhythm-moon-disc {
   fill: var(--text-primary);
