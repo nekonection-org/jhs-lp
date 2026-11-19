@@ -327,6 +327,139 @@ pnpm test:e2e
 
 MySQL統合テストはマイグレーション済みのテストDBに対して実行します。`RUN_DATABASE_INTEGRATION=true`を指定しない通常のUnit Testでは、DB統合テストをスキップします。CIではMySQL 8.4.10を起動し、マイグレーション適用後にお知らせ、FAQ、VIP、モデレーター募集、サーバールールの統合テストを自動実行します。
 
+## 本番環境へのデプロイ
+
+本番は`compose.yml`のMySQL・マイグレーター・Web・Cloudflare Tunnelを使用します。以下はLinuxサーバーのBashで、リポジトリ直下から実行する手順です。WindowsでのDocker操作は後述の「Docker」を参照してください。
+
+### 1. サーバーと公開先を準備する
+
+- Git、Docker Engine、Docker Composeプラグイン、OpenSSLを用意し、`docker compose version`で動作を確認します。`up --wait`と`--wait-timeout`を利用できるComposeが必要です。
+- Cloudflareで管理するドメインと、Zero Trustで管理するCloudflare Tunnelを用意します。公開ホスト名の転送先はHTTPの`http://web:3000`です。DNSもそのTunnelへ向けます（[Cloudflareの公開ルート設定](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/)）。
+- 公開前に、後述の「Cloudflare Access」に従って`/admin`と`/admin/*`を保護し、管理者だけを許可します。LP全体へAccess認証を設定する必要はありません。
+- Webの3000番・MySQLの3306番ポートはホストへ公開しません。本番では`compose.dev.yml`やDev Containerを使用しません。サーバーからコンテナレジストリ、Google Fonts、Cloudflareへの外向き通信を許可します。
+
+リポジトリを取得し、GitHub ActionsのCIが成功した`main`のコミットをチェックアウトします。`<repository-url>`と`<verified-commit-sha>`は実際の値に置き換えてください。
+
+```bash
+git clone <repository-url> jhs-lp
+cd jhs-lp
+git checkout --detach <verified-commit-sha>
+```
+
+ホストのNode.js・pnpmはコンテナのビルド・起動には不要です。CIによる品質チェックの内容は「CIとコンテナ公開」を参照してください。
+
+### 2. 本番の環境変数とsecretを設定する
+
+初回のみ、設定ファイルを作成します。既存環境の`.env`やsecretは上書きしません。
+
+```bash
+cp .env.example .env
+chmod 600 .env
+mkdir -p secrets
+chmod 700 secrets
+openssl rand -base64 32 > secrets/mysql-password
+openssl rand -base64 32 > secrets/mysql-root-password
+read -r -s -p 'Cloudflare Tunnel token: ' tunnelToken
+printf '\n'
+printf '%s' "$tunnelToken" > secrets/cloudflare-tunnel-token
+unset tunnelToken
+chmod 444 secrets/mysql-password secrets/mysql-root-password secrets/cloudflare-tunnel-token
+```
+
+トークンはCloudflareで作成したTunnelのものを入力します。secretは各コンテナへファイルとしてマウントされます。非rootのWeb・マイグレーター・MySQLから読めるようファイルは読み取り可能にし、ホスト側では親ディレクトリの`700`で他のユーザーからのアクセスを制限します。ファイル由来のsecretの所有者・権限は[Composeの制約](https://docs.docker.com/reference/compose-file/services/#secrets)に注意してください。`.env`と`secrets/`はGitへ登録しません。
+
+`.env`を編集して、次を設定します。
+
+| 設定                              | 本番で指定する内容                                                     |
+| --------------------------------- | ---------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`            | Tunnelに設定した公開ホストのHTTPS URL                                  |
+| `NEXT_PUBLIC_DISCORD_INVITE_URL`  | 実際のDiscord招待URL                                                   |
+| その他の`NEXT_PUBLIC_`設定        | Rust接続先、提供中のVIP購入先、募集の応募先。任意項目は未使用なら空欄  |
+| `DATABASE_NAME` / `DATABASE_USER` | DB名とアプリ専用ユーザー。既定値は`jhs` / `jhs_app`                    |
+| `CLOUDFLARE_ACCESS_TEAM_DOMAIN`   | `https://<team>.cloudflareaccess.com`                                  |
+| `CLOUDFLARE_ACCESS_AUD`           | 管理画面用Access ApplicationのAUD                                      |
+| `ADMIN_ALLOWED_EMAILS`            | Accessの許可ポリシーと対応する管理者メールアドレス。複数はカンマ区切り |
+| `ADMIN_DEV_BYPASS`                | `false`                                                                |
+
+ComposeはDBホスト・ポート・パスワードファイルを自動設定します。`.env.example`のローカル用`DATABASE_HOST`・`DATABASE_PORT`・`DATABASE_PASSWORD`は本番コンテナでは使用しません。
+
+`NEXT_PUBLIC_`設定はビルド時に固定されるため、変更した場合はWebイメージの再ビルドが必要です。`.env.local`はComposeの設定元になりません。また、初期化済みMySQLのパスワードはsecretを書き換えるだけでは変更されません。
+
+### 3. ビルドして起動する
+
+各コマンドの成功を確認してから次へ進みます。
+
+```bash
+docker compose -f compose.yml config --quiet
+docker compose -f compose.yml build web migrate
+docker compose -f compose.yml up -d --wait --wait-timeout 180
+docker compose -f compose.yml ps -a
+docker compose -f compose.yml logs --tail=100 migrate web cloudflared
+```
+
+`build web`は公開URLを検証し、Production Buildを実行します。起動はMySQLのヘルスチェック、`migrate`の正常終了、Webのヘルスチェック、Tunnelの順です。`migrate`は`Exited (0)`、MySQLとWebは`healthy`、`cloudflared`は稼働中になることを確認します。`--wait`はコンテナの起動・ヘルスチェックを待つためのもので、公開URLやAccess認証の確認は次の手順で行います（[Compose upの仕様](https://docs.docker.com/reference/cli/docker/compose/up/)）。
+
+### 4. 公開後の動作を確認する
+
+- 公開HTTPS URLでLPが表示され、CSS・画像・OGP画像・`robots.txt`・`sitemap.xml`を取得できること。
+- 日本語／英語・ダーク／ライトの切り替えと保存、アンカー移動、モバイルメニュー、FAQ、Discordなどの外部リンクが動作すること。
+- 未ログインのブラウザーで`/admin`とその配下がAccess認証で保護され、許可した管理者でログインできること。許可外のアカウントが利用できないこと。
+- 管理画面から保存した内容が公開側へ反映され、操作ログに残ること。LPはDB障害時も表示されるため、トップページの表示だけでDBの正常性を判断しないでください。
+
+### 5. 更新する
+
+既存のWebを稼働させたまま、バックアップとビルド、マイグレーションを先に行い、成功後にWebを入れ替えます。この手順は旧Webと互換性のあるDB変更を前提とし、Webの入れ替え時には短い停止が発生します。互換性のないDB変更やCompose・MySQL・Tunnelの構成変更は、個別の停止・移行手順を用意してください。
+
+まず現在のコミットを記録し、稼働中のWebイメージを切り戻し用に残します。`jhs-lp:rollback`は直前の1世代分です。
+
+```bash
+git rev-parse HEAD
+docker image tag "$(docker inspect --format '{{.Image}}' "$(docker compose -f compose.yml ps -q web)")" jhs-lp:rollback
+```
+
+DBバックアップはリポジトリ外へ保存します。次のコマンドが失敗した場合は更新を進めず、出力ファイルも正常なバックアップとして扱わないでください。成功後は別ホストなどにも保管します。
+
+```bash
+umask 077
+mkdir -p ../jhs-backups
+backupFile="../jhs-backups/jhs-$(date -u +%Y%m%dT%H%M%SZ).sql"
+docker compose -f compose.yml exec -T mysql sh -c 'MYSQL_PWD="$(cat "$MYSQL_ROOT_PASSWORD_FILE")" mysqldump --single-transaction --routines --triggers --user=root "$MYSQL_DATABASE"' > "$backupFile"
+```
+
+CIが成功した更新先コミットを取得してビルドします。公開設定を変更する場合はビルド前に`.env`を更新し、変更前の設定も安全な場所へ保存してください。
+
+```bash
+git fetch origin main
+git checkout --detach <verified-commit-sha>
+docker compose -f compose.yml config --quiet
+docker compose -f compose.yml build web migrate
+docker compose -f compose.yml run --rm --no-deps migrate
+```
+
+`run --rm --no-deps migrate`は、稼働中のMySQLへ新しいマイグレーターを一度だけ実行します（[Compose runの仕様](https://docs.docker.com/reference/cli/docker/compose/run/)）。ビルドまたはマイグレーションが失敗した場合はここで止め、出力を確認します。既存Webの入れ替えは行いません。MySQLのDDLは失敗しても一部の変更が残る場合があるため、DBの状態も確認してください。
+
+マイグレーションの正常終了後だけWebを入れ替え、「公開後の動作を確認する」を再実施します。
+
+```bash
+docker compose -f compose.yml up -d --no-deps --no-build --wait --wait-timeout 180 web
+docker compose -f compose.yml ps -a
+docker compose -f compose.yml logs --tail=100 web cloudflared
+```
+
+### 6. 障害時に切り戻す
+
+Webの入れ替え後に問題が発生し、適用済みDBスキーマが旧Webと互換性を保っている場合は、記録したコミットと保存済みイメージへ戻します。変更した`.env`も必要に応じて変更前へ戻してください。
+
+```bash
+git checkout --detach <previous-commit-sha>
+docker image tag jhs-lp:rollback jhs-lp:local
+docker compose -f compose.yml up -d --no-deps --no-build --force-recreate --wait --wait-timeout 180 web
+```
+
+Webの切り戻しはDBマイグレーションを元に戻しません。DB復元が必要な場合は、Webを停止して書き込みを止め、復元先とバックアップを確認してから、後述の「バックアップ」の手順で復元します。バックアップ取得後の更新内容は失われるため、通常の切り戻しでは自動復元しません。本番で`prisma migrate dev`や`migrate reset`は実行しません。
+
+通常の更新では`docker compose down`は不要です。`down -v`はMySQLの永続データを削除するため実行しないでください。CIはGHCRへのWebイメージ公開までを担当し、ここで説明したデプロイは手動です。現在のComposeは`jhs-lp:local`とローカルビルドのマイグレーターを使うため、`docker compose pull`だけではGHCRのイメージへ更新されません。
+
 ## Docker
 
 Docker ComposeはMySQL、1回限りのマイグレーター、Next.js、Cloudflare Tunnelを起動します。MySQLとWebのポートはホストへ公開せず、Cloudflare Tunnelだけを本番入口にします。
