@@ -9,13 +9,17 @@ import { brandIcon } from "@/lib/brand";
 import { socialPreviewImage } from "@/lib/social-metadata";
 
 describe("social preview metadata", () => {
-  it("references the committed public banner with its actual dimensions", () => {
+  it("references the current public banner with its actual dimensions and revision", () => {
     const banner = readFileSync(join(process.cwd(), "public/banner.png"));
+    const revision = createHash("sha256")
+      .update(banner)
+      .digest("hex")
+      .slice(0, 12);
 
     expect(banner.subarray(1, 4).toString("ascii")).toBe("PNG");
     expect(banner.readUInt32BE(16)).toBe(socialPreviewImage.width);
     expect(banner.readUInt32BE(20)).toBe(socialPreviewImage.height);
-    expect(socialPreviewImage.url).toBe("/banner.png");
+    expect(socialPreviewImage.url).toBe(`/banner.png?v=${revision}`);
   });
 
   it("keeps the app icon aligned with the public icon and manifest", () => {
