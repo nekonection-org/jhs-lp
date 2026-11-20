@@ -1,13 +1,13 @@
 import type { MetadataRoute } from "next";
 
-import { brandColors, brandIcon } from "@/lib/brand";
+import { en } from "@/content";
+import { brandColors, brandIcon, brandName } from "@/lib/brand";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Japan Hideaway Server",
-    short_name: "JHS",
-    description:
-      "The official website of Japan Hideaway Server, a Rust community server with designated raiding hours.",
+    name: brandName,
+    short_name: brandName,
+    description: en.metadata.description,
     start_url: "/",
     display: "standalone",
     background_color: brandColors.background,

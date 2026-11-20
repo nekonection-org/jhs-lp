@@ -1,3 +1,5 @@
+export const brandName = "JapanHideaway.com";
+
 // Update the revision when replacing public/icon.png to invalidate image caches.
 export const brandIcon = {
   src: "/icon.png?v=ea0af73d70d1",

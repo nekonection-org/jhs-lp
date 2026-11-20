@@ -60,7 +60,7 @@ export function MobileJoinBar() {
           }}
         >
           <span className="text-xs font-semibold leading-5">
-            Japan Hideaway
+            {ja.common.siteName}
             <span className="block text-[0.625rem] font-medium tracking-widest text-[var(--text-muted)] uppercase">
               Rust Server
             </span>

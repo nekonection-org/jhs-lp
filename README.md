@@ -1,6 +1,6 @@
-# Japan Hideaway Server LP
+# JapanHideaway.com LP
 
-Rustコミュニティサーバー「Japan Hideaway Server」の公式案内用ランディングページです。サーバー情報、ルール、VIP、FAQ、モデレーター募集、お知らせ、Discord参加案内、利用規約を1ページ内で案内します。個別のお知らせ本文は全画面ダイアログで表示します。
+Rustコミュニティサーバー「JapanHideaway.com」の公式案内用ランディングページです。サーバー情報、ルール、VIP、FAQ、モデレーター募集、お知らせ、Discord参加案内、利用規約を1ページ内で案内します。個別のお知らせ本文は全画面ダイアログで表示します。
 
 ## 主な機能
 
@@ -127,7 +127,7 @@ Tailscale経由の開発確認では`http://10.96.0.36:3000`を使用できま�
 `.env.example`を`.env.local`へコピーし、実際に管理している公開URLと接続先を設定します。
 
 ```env
-NEXT_PUBLIC_SITE_URL=https://example.com
+NEXT_PUBLIC_SITE_URL=https://japanhideaway.com
 NEXT_PUBLIC_DISCORD_INVITE_URL=https://discord.gg/example
 NEXT_PUBLIC_RUST_SERVER_ADDRESS=play.jhs.nekonection.com
 NEXT_PUBLIC_TEBEX_URL=
@@ -169,6 +169,12 @@ DB接続情報、Cloudflare Access設定、管理者メールアドレスはサ�
 | `ADMIN_ALLOWED_EMAILS`          | 管理を許可するメールアドレスのカンマ区切り一覧                |
 | `ADMIN_DEV_BYPASS`              | 開発環境だけで有効なローカル認証バイパス                      |
 | `ADMIN_DEV_EMAIL`               | 開発バイパスで使用する、許可リスト内のメールアドレス          |
+
+### 名称・公開ドメインの変更
+
+表示名は`src/lib/brand.ts`の`brandName`（`JapanHideaway.com`）で管理し、公開URLは`https://japanhideaway.com`を使用します。既存環境では`.env`とGitHub Repository Variablesの`NEXT_PUBLIC_SITE_URL`を更新して、Webイメージを再ビルドしてください。Cloudflare Tunnelの公開ホスト名とDNS、管理画面を保護するAccess Applicationの対象ホストも合わせて設定します。
+
+通常の`prisma migrate deploy`で、DB内の初期ルール見出しと初期公開告知の旧名称も更新します。管理者が変更した見出し・告知本文、その他の投稿や操作ログは移行処理で書き換えないため、独自に記載した名称は管理画面から確認してください。
 
 ### Discord URLの設定場所
 

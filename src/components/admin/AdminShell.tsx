@@ -13,7 +13,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Container } from "@/components/ui/Container";
-import { brandIcon } from "@/lib/brand";
+import { brandIcon, brandName } from "@/lib/brand";
 
 interface AdminShellProps {
   actorEmail: string;
@@ -40,7 +40,7 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
             </span>
             <span className="hidden lg:block">
               <span className="block text-sm font-bold tracking-[-0.025em]">
-                JHS 管理画面
+                {brandName} 管理画面
               </span>
               <span className="block text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
                 Content Administration

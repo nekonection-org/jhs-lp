@@ -34,9 +34,9 @@ describe("localized content", () => {
   });
 
   it("keeps shared metadata consistent across language changes", () => {
-    const title = "Japan Hideaway Server | Rust Server";
+    const title = "JapanHideaway.com | Rust Server";
     const description =
-      "The official website of Japan Hideaway Server, a Rust community server with designated raiding hours.";
+      "The official website of JapanHideaway.com, a Rust community server with designated raiding hours.";
 
     expect(ja.metadata.title).toBe(title);
     expect(en.metadata.title).toBe(title);

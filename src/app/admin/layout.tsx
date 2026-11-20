@@ -3,9 +3,10 @@ import type { ReactNode } from "react";
 
 import { AdminShell } from "@/components/admin/AdminShell";
 import { requireAdmin } from "@/lib/auth/admin";
+import { brandName } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "コンテンツ管理 | Japan Hideaway Server",
+  title: `コンテンツ管理 | ${brandName}`,
   robots: {
     index: false,
     follow: false,

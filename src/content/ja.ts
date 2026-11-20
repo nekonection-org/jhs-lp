@@ -1,16 +1,17 @@
+import { brandName } from "@/lib/brand";
+
 import { formatRaidHour, raidWindows, wipeSchedule } from "./server";
 import type { SiteContent } from "./types";
 
 export const ja = {
   locale: "ja",
   metadata: {
-    title: "Japan Hideaway Server | Rust Server",
-    description:
-      "The official website of Japan Hideaway Server, a Rust community server with designated raiding hours.",
-    openGraphImageAlt: "Japan Hideaway Server official website preview",
+    title: `${brandName} | Rust Server`,
+    description: `The official website of ${brandName}, a Rust community server with designated raiding hours.`,
+    openGraphImageAlt: `${brandName} official website preview`,
   },
   common: {
-    siteName: "Japan Hideaway Server",
+    siteName: brandName,
     skipToContent: "本文へ移動",
     joinDiscord: "Discordに参加",
     externalLink: "外部リンク",
@@ -42,7 +43,7 @@ export const ja = {
   },
   navigation: {
     ariaLabel: "メインナビゲーション",
-    homeLabel: "Japan Hideaway Serverのトップへ移動",
+    homeLabel: `${brandName}のトップへ移動`,
     openMenu: "メニューを開く",
     closeMenu: "メニューを閉じる",
     mobileMenuLabel: "モバイルナビゲーション",
@@ -57,7 +58,7 @@ export const ja = {
     discordAction: {
       id: "header-discord",
       label: "Discordに参加",
-      ariaLabel: "Japan Hideaway ServerのDiscordに参加する",
+      ariaLabel: `${brandName}のDiscordに参加する`,
       destination: "discord",
     },
   },
@@ -69,14 +70,14 @@ export const ja = {
     headline: ["暮らしのペースで、", "Rustを楽しもう。"],
     id: "top",
     eyebrow: "Rust Community Server",
-    title: "Japan Hideaway Server",
+    title: brandName,
     subtitle: "レイド制限がついたRustサーバー",
     description:
       "社会人・学生向けのRustコミュニティサーバー。レイド可能時間を設け、限られた時間でも遊びやすく。",
     primaryAction: {
       id: "hero-discord",
       label: "Discordに参加",
-      ariaLabel: "Japan Hideaway ServerのDiscordに参加する",
+      ariaLabel: `${brandName}のDiscordに参加する`,
       destination: "discord",
     },
     secondaryAction: {
@@ -97,7 +98,7 @@ export const ja = {
       copyErrorHelp:
         "コピーできない場合は、コマンドを選択して手動でコピーしてください。",
       steamLabel: "Steamで起動",
-      steamAriaLabel: "Steamを起動してJapan Hideaway Serverへ接続する",
+      steamAriaLabel: `Steamを起動して${brandName}へ接続する`,
       unavailable: "接続先の設定後に利用できます。",
     },
   },
@@ -136,12 +137,11 @@ export const ja = {
     id: "server",
     eyebrow: "Server Information",
     title: "サーバー情報",
-    description:
-      "Japan Hideaway Serverの基本方針と、参加前に知っておきたい情報をご案内します。",
+    description: `${brandName}の基本方針と、参加前に知っておきたい情報をご案内します。`,
     settingsTitle: "設定",
     settingsDescription:
       "サーバー設定と運用時刻を項目ごとにご案内します。適用条件と例外は、このページのサーバールール全文をご確認ください。",
-    welcomeTitle: "Japan Hideaway Serverへようこそ！",
+    welcomeTitle: `${brandName}へようこそ！`,
     welcomeDescription:
       "社会人や学生を含む初心者から上級者まで、幅広いプレイヤーがそれぞれのプレイスタイルを尊重しながら楽しめる、公平で快適な環境を目指すRustコミュニティサーバーです。限られた時間でも遊びやすいよう、公式サーバーに近いゲームバランスを基に、生活リズムへ配慮したレイド可能時間と運用ルールを設けています。",
     highlights: [
@@ -255,7 +255,7 @@ export const ja = {
       },
     ],
     rulebook: {
-      title: "Japan Hideaway Server サーバールール",
+      title: `${brandName} サーバールール`,
       openLabel: "サーバールール全文を見る",
       closeLabel: "サーバールール全文を閉じる",
       blocks: [
@@ -563,13 +563,12 @@ export const ja = {
   terms: {
     eyebrow: "Terms of Service",
     title: "利用規約",
-    description:
-      "Japan Hideaway Serverを利用した時点で、本利用規約に同意したものとみなします。必ずご確認ください。",
+    description: `${brandName}を利用した時点で、本利用規約に同意したものとみなします。必ずご確認ください。`,
     openLabel: "利用規約を表示",
     closeLabel: "利用規約を閉じる",
-    dialogLabel: "Japan Hideaway Server 利用規約",
+    dialogLabel: `${brandName} 利用規約`,
     introduction: [
-      "本利用規約（以下「本規約」といいます）は、Japan Hideaway Server（以下「本サーバー」といいます）および関連するDiscordコミュニティの利用条件を定めるものです。",
+      `本利用規約（以下「本規約」といいます）は、${brandName}（以下「本サーバー」といいます）および関連するDiscordコミュニティの利用条件を定めるものです。`,
       "利用者は、本規約の内容に同意した場合に限り、本サーバーを利用できます。同意いただけない場合は、本サーバーへの接続および関連Discordコミュニティの利用をお控えください。",
       "未成年者は、法定代理人（親権者等）の同意を得たうえで本サーバーを利用してください。",
       "RustおよびSteamの利用には、それぞれの提供者が定める規約も適用されます。利用者は各規約を確認し、遵守する責任を負います。",
@@ -672,12 +671,10 @@ export const ja = {
   },
   footer: {
     ariaLabel: "フッター",
-    description:
-      "社会人・学生向けのRustコミュニティサーバー、Japan Hideaway Serverの公式案内サイトです。",
-    communityDisclaimer:
-      "Japan Hideaway Serverはコミュニティ運営のサーバーであり、Facepunch Studiosの公式サイトまたは公式サーバーではありません。",
+    description: `社会人・学生向けのRustコミュニティサーバー、${brandName}の公式案内サイトです。`,
+    communityDisclaimer: `${brandName}はコミュニティ運営のサーバーであり、Facepunch Studiosの公式サイトまたは公式サーバーではありません。`,
     navigationLabel: "フッターナビゲーション",
     backToTopLabel: "ページ上部へ戻る",
-    copyrightName: "Japan Hideaway Server",
+    copyrightName: brandName,
   },
 } satisfies SiteContent;

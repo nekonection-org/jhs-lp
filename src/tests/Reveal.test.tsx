@@ -8,7 +8,7 @@ describe("Reveal", () => {
     const container = document.createElement("div");
     container.innerHTML = renderToStaticMarkup(
       <Reveal delay={0.12}>
-        <h1>Japan Hideaway Server</h1>
+        <h1>JapanHideaway.com</h1>
         <a href="#rules">ルールを見る</a>
       </Reveal>,
     );
@@ -19,7 +19,7 @@ describe("Reveal", () => {
       expect(wrapper).toBeInstanceOf(HTMLElement);
       expect(wrapper).toBeVisible();
       expect(wrapper?.querySelector("h1")).toHaveTextContent(
-        "Japan Hideaway Server",
+        "JapanHideaway.com",
       );
       expect(wrapper?.querySelector("a")).toHaveAttribute("href", "#rules");
     } finally {

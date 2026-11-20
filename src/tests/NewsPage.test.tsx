@@ -76,7 +76,7 @@ describe("public announcement page", () => {
 
   it("uses the article URL and title for metadata", async () => {
     const metadata = await generateMetadata(props("2"));
-    expect(metadata.title).toBe("公開のお知らせ | Japan Hideaway Server");
+    expect(metadata.title).toBe("公開のお知らせ | JapanHideaway.com");
     expect(metadata.alternates?.canonical).toBe("/news/public-notice");
     expect(metadata.openGraph).toMatchObject({
       type: "article",

@@ -150,7 +150,7 @@ test("サーバールール全文をWebサイト上で開閉して確認でき�
   await expect(rulebook).toHaveAttribute("open", "");
   await expect(
     rulebook.getByRole("heading", {
-      name: "Japan Hideaway Server サーバールール",
+      name: "JapanHideaway.com サーバールール",
     }),
   ).toBeVisible();
   await expect(rulebook.getByText("永久BAN", { exact: true })).toBeVisible();
@@ -226,7 +226,7 @@ test("HeroからF1接続コマンドとSteam起動リンクを利用できる", 
   await expect(page.getByRole("button", { name: "コピー" })).toBeVisible();
   await expect(
     page.getByRole("link", {
-      name: "Steamを起動してJapan Hideaway Serverへ接続する",
+      name: "Steamを起動してJapanHideaway.comへ接続する",
     }),
   ).toHaveAttribute("href", steamUrl);
 });

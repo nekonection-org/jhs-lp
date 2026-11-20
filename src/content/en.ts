@@ -1,16 +1,17 @@
+import { brandName } from "@/lib/brand";
+
 import { formatRaidHour, raidWindows, wipeSchedule } from "./server";
 import type { SiteContent } from "./types";
 
 export const en = {
   locale: "en",
   metadata: {
-    title: "Japan Hideaway Server | Rust Server",
-    description:
-      "The official website of Japan Hideaway Server, a Rust community server with designated raiding hours.",
-    openGraphImageAlt: "Japan Hideaway Server official website preview",
+    title: `${brandName} | Rust Server`,
+    description: `The official website of ${brandName}, a Rust community server with designated raiding hours.`,
+    openGraphImageAlt: `${brandName} official website preview`,
   },
   common: {
-    siteName: "Japan Hideaway Server",
+    siteName: brandName,
     skipToContent: "Skip to main content",
     joinDiscord: "Join Discord",
     externalLink: "External link",
@@ -42,7 +43,7 @@ export const en = {
   },
   navigation: {
     ariaLabel: "Main navigation",
-    homeLabel: "Go to the top of Japan Hideaway Server",
+    homeLabel: `Go to the top of ${brandName}`,
     openMenu: "Open menu",
     closeMenu: "Close menu",
     mobileMenuLabel: "Mobile navigation",
@@ -57,7 +58,7 @@ export const en = {
     discordAction: {
       id: "header-discord",
       label: "Join Discord",
-      ariaLabel: "Join the Japan Hideaway Server Discord",
+      ariaLabel: `Join the ${brandName} Discord`,
       destination: "discord",
     },
   },
@@ -69,14 +70,14 @@ export const en = {
     headline: ["Your time.", "Your Rust."],
     id: "top",
     eyebrow: "Rust Community Server",
-    title: "Japan Hideaway Server",
+    title: brandName,
     subtitle: "A Rust server with raid restrictions",
     description:
       "A Rust community for working adults and students. Scheduled raid hours make room for life beyond the game.",
     primaryAction: {
       id: "hero-discord",
       label: "Join Discord",
-      ariaLabel: "Join the Japan Hideaway Server Discord",
+      ariaLabel: `Join the ${brandName} Discord`,
       destination: "discord",
     },
     secondaryAction: {
@@ -97,7 +98,7 @@ export const en = {
       copyErrorHelp:
         "If copying fails, select the command and copy it manually.",
       steamLabel: "Launch with Steam",
-      steamAriaLabel: "Launch Steam and connect to Japan Hideaway Server",
+      steamAriaLabel: `Launch Steam and connect to ${brandName}`,
       unavailable: "Available after the server address is configured.",
     },
   },
@@ -136,12 +137,11 @@ export const en = {
     id: "server",
     eyebrow: "Server Information",
     title: "Server Information",
-    description:
-      "Learn about the guiding principles of Japan Hideaway Server and what to know before joining.",
+    description: `Learn about the guiding principles of ${brandName} and what to know before joining.`,
     settingsTitle: "Settings",
     settingsDescription:
       "Server settings and operating times are listed separately below. Review the complete Server Rules on this page for applicable conditions and exceptions.",
-    welcomeTitle: "Welcome to Japan Hideaway Server!",
+    welcomeTitle: `Welcome to ${brandName}!`,
     welcomeDescription:
       "We are a Rust community server where players from beginners to veterans, including working adults and students, respect each other's playstyles and work toward a fair and comfortable environment. To make limited playtime enjoyable, our game balance stays close to official servers, with raid hours and operating rules designed around everyday schedules.",
     highlights: [
@@ -255,7 +255,7 @@ export const en = {
       },
     ],
     rulebook: {
-      title: "Japan Hideaway Server Rules",
+      title: `${brandName} Rules`,
       openLabel: "View the Complete Server Rules",
       closeLabel: "Close the Complete Server Rules",
       blocks: [
@@ -568,13 +568,12 @@ export const en = {
   terms: {
     eyebrow: "Terms of Service",
     title: "Terms of Service",
-    description:
-      "By using the Japan Hideaway Server, you are deemed to have agreed to these Terms of Service. Please be sure to read them carefully.",
+    description: `By using the ${brandName}, you are deemed to have agreed to these Terms of Service. Please be sure to read them carefully.`,
     openLabel: "View Terms of Service",
     closeLabel: "Close Terms of Service",
-    dialogLabel: "Japan Hideaway Server Terms of Service",
+    dialogLabel: `${brandName} Terms of Service`,
     introduction: [
-      'These Terms of Service (the "Terms") govern the use of Japan Hideaway Server (the "Server") and its related Discord community.',
+      `These Terms of Service (the "Terms") govern the use of ${brandName} (the "Server") and its related Discord community.`,
       "You may use the Server only if you agree to these Terms. If you do not agree, please do not connect to the Server or use its related Discord community.",
       "Minors must obtain consent from a parent or other legal representative before using the Server.",
       "Rust and Steam are also subject to the terms established by their respective providers. You are responsible for reviewing and complying with those terms.",
@@ -677,12 +676,10 @@ export const en = {
   },
   footer: {
     ariaLabel: "Footer",
-    description:
-      "The official information site for Japan Hideaway Server, a Rust community server for working adults and students.",
-    communityDisclaimer:
-      "Japan Hideaway Server is a community-run server and is not an official Facepunch Studios website or server.",
+    description: `The official information site for ${brandName}, a Rust community server for working adults and students.`,
+    communityDisclaimer: `${brandName} is a community-run server and is not an official Facepunch Studios website or server.`,
     navigationLabel: "Footer navigation",
     backToTopLabel: "Back to top",
-    copyrightName: "Japan Hideaway Server",
+    copyrightName: brandName,
   },
 } satisfies SiteContent;

@@ -36,7 +36,7 @@ export function Footer({ homePath = "", idPrefix = "" }: FooterProps) {
                 />
               </span>
               <span className="text-lg font-semibold tracking-[-0.035em] sm:text-2xl">
-                Japan Hideaway Server
+                {ja.common.siteName}
               </span>
             </a>
             <p className="mt-4 text-sm leading-6 text-[var(--text-secondary)]">

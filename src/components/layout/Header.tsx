@@ -181,7 +181,7 @@ export function Header({
           </span>
           <span className="flex flex-col">
             <span className="text-sm font-bold leading-tight tracking-[-0.025em] sm:text-[0.95rem]">
-              Japan Hideaway
+              {content.common.siteName}
             </span>
             <span className="text-[0.64rem] font-semibold uppercase leading-tight tracking-[0.14em] text-[var(--text-muted)]">
               Rust Server
