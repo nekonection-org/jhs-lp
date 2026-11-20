@@ -299,11 +299,10 @@ VIP案内はCloudflare Accessで保護された`/admin/vip`から管理します
 
 Hero背景は`src/components/ui/HeroRhythm.tsx`のSVGと、`globals.css`の`.hero-rhythm`関連スタイル・`rhythm-*`キーフレームで変更します。画像の読み込みやCanvasは不要です。色は既存のテーマ変数を参照します。空と照明のアニメーションは`.rhythm-cycle`で同期させます。Reduced Motionでは月夜の静止画を表示します。
 
-- `public/icon.png`: ヘッダー、Footerで使用する公式アイコン
-- `public/main-image.png`: 以前のHero画像（現在のLPでは未使用）
-- `public/banner.png`: Discordなどのリンク共有で使用するOG/Twitter画像
+- `public/icon.png`: ヘッダー、Footer、管理画面、favicon、Webアプリのmanifestで共通利用する公式アイコン
+- `public/banner.png`: LPと個別のお知らせのOG/Twitterで利用する共有用バナー（1920×640px）
 
-ファイル名を維持して差し替えると、コンポーネント側の変更は不要です。
+透過の白系ロゴが両テーマで読めるよう、サイト内のアイコン背景は暗色に固定しています。アイコンの参照先と寸法は`src/lib/brand.ts`の`brandIcon`、共有用バナーは`src/lib/social-metadata.ts`の`socialPreviewImage`で管理します。画像を差し替えたら、対応する`src`または`url`の`v`をファイルのSHA-256の先頭12文字へ更新し、寸法が変わった場合は`width`と`height`も合わせて更新してください。これにより旧画像のキャッシュを避け、各表示箇所や共有プレビューへ更新を反映します。`pnpm test`で両画像の寸法・リビジョンとmanifestの一致を確認できます。
 
 ## 品質チェック
 
