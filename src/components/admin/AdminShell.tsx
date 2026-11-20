@@ -29,7 +29,7 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
             className="mr-auto inline-flex min-h-11 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
             href="/admin/news"
           >
-            <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--brand-icon-background)]">
+            <span className="relative size-9 overflow-hidden rounded-full border border-[var(--border-strong)] bg-[var(--brand-icon-background)]">
               <Image
                 alt=""
                 className="object-contain"

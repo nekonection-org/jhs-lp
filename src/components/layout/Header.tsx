@@ -170,7 +170,7 @@ export function Header({
           onClick={(event) => navigateToSection(event, "top")}
           ref={brandRef}
         >
-          <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--brand-icon-background)] transition-colors duration-200 group-hover:border-[var(--accent)]">
+          <span className="relative size-9 overflow-hidden rounded-full border border-[var(--border-strong)] bg-[var(--brand-icon-background)] transition-colors duration-200 group-hover:border-[var(--accent)]">
             <Image
               alt=""
               className="object-contain"
