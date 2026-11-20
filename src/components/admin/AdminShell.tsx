@@ -13,6 +13,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Container } from "@/components/ui/Container";
+import { brandIcon } from "@/lib/brand";
 
 interface AdminShellProps {
   actorEmail: string;
@@ -28,8 +29,14 @@ export function AdminShell({ actorEmail, children }: AdminShellProps) {
             className="mr-auto inline-flex min-h-11 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
             href="/admin/news"
           >
-            <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface)]">
-              <Image alt="" fill sizes="36px" src="/icon.png" />
+            <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--brand-icon-background)]">
+              <Image
+                alt=""
+                className="object-contain"
+                fill
+                sizes="36px"
+                src={brandIcon.src}
+              />
             </span>
             <span className="hidden lg:block">
               <span className="block text-sm font-bold tracking-[-0.025em]">

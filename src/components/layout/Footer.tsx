@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { TermsDialog } from "@/components/ui/TermsDialog";
 import { en, ja } from "@/content";
+import { brandIcon } from "@/lib/brand";
 import { getMatchingItem } from "@/lib/content";
 
 interface FooterProps {
@@ -25,13 +26,13 @@ export function Footer({ homePath = "", idPrefix = "" }: FooterProps) {
               className="inline-flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
               href={`${homePath}#top`}
             >
-              <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface-secondary)]">
+              <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--brand-icon-background)]">
                 <Image
                   alt=""
-                  className="object-cover"
+                  className="object-contain"
                   fill
                   sizes="36px"
-                  src="/icon.png"
+                  src={brandIcon.src}
                 />
               </span>
               <span className="text-lg font-semibold tracking-[-0.035em] sm:text-2xl">

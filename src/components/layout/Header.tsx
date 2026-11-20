@@ -16,6 +16,7 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { getContent, navigationItemIds } from "@/content";
 import type { NavigableSectionId } from "@/content/types";
 import { useActiveSection } from "@/hooks/useActiveSection";
+import { brandIcon } from "@/lib/brand";
 import { cn } from "@/lib/cn";
 import { externalUrls } from "@/lib/constants";
 import { motionTiming } from "@/lib/motion";
@@ -169,13 +170,13 @@ export function Header({
           onClick={(event) => navigateToSection(event, "top")}
           ref={brandRef}
         >
-          <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--surface)] transition-colors duration-200 group-hover:border-[var(--accent)]">
+          <span className="relative size-9 overflow-hidden rounded-lg border border-[var(--border-strong)] bg-[var(--brand-icon-background)] transition-colors duration-200 group-hover:border-[var(--accent)]">
             <Image
               alt=""
-              className="object-cover"
+              className="object-contain"
               fill
               sizes="36px"
-              src="/icon.png"
+              src={brandIcon.src}
             />
           </span>
           <span className="flex flex-col">

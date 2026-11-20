@@ -9,7 +9,7 @@ import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import { ThemeColorSync } from "@/components/providers/ThemeColorSync";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ja } from "@/content";
-import { brandColors } from "@/lib/brand";
+import { brandColors, brandIcon } from "@/lib/brand";
 import { siteUrl } from "@/lib/constants";
 import { socialPreviewImage } from "@/lib/social-metadata";
 
@@ -60,8 +60,8 @@ export const metadata: Metadata = {
     ],
   },
   icons: {
-    icon: [{ url: "/icon.png", type: "image/png" }],
-    apple: [{ url: "/icon.png", type: "image/png" }],
+    icon: [{ url: brandIcon.src, type: "image/png" }],
+    apple: [{ url: brandIcon.src, type: "image/png" }],
   },
   manifest: "/manifest.webmanifest",
 };

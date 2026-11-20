@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { brandColors } from "@/lib/brand";
+import { brandColors, brandIcon } from "@/lib/brand";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -15,8 +15,8 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "ja",
     icons: [
       {
-        src: "/icon.png",
-        sizes: "1254x1254",
+        src: brandIcon.src,
+        sizes: `${brandIcon.width}x${brandIcon.height}`,
         type: "image/png",
       },
     ],

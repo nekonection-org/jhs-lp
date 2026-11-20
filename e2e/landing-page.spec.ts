@@ -25,7 +25,13 @@ test("トップページに必須セクションと単一の見出しが表示�
     page.getByRole("heading", { level: 1, name: ja.hero.headline.join(" ") }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
-  await expect(page.locator('header img[src*="icon.png"]')).toBeVisible();
+  const headerIcon = page.locator('header img[src*="icon.png"]');
+  await expect(headerIcon).toBeVisible();
+  await expect
+    .poll(() =>
+      headerIcon.evaluate((image: HTMLImageElement) => image.naturalWidth),
+    )
+    .toBeGreaterThan(0);
   await expect(page.locator('#top img[src*="main-image.png"]')).toHaveCount(0);
   await expect(page.locator(".connection-guide h2")).toBeVisible();
   await expect(page.locator("#top details, #server details")).toHaveCount(0);

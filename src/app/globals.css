@@ -4,6 +4,7 @@
 .dark {
   color-scheme: dark;
   --background: #0c0d0f;
+  --brand-icon-background: var(--background);
   --surface: #141518;
   --surface-secondary: #1b1d21;
   --surface-elevated: #24262b;
@@ -30,6 +31,7 @@
 
 .light {
   color-scheme: light;
+  --brand-icon-background: #0c0d0f;
   --background: #f5f5f6;
   --surface: #ffffff;
   --surface-secondary: #ececee;
